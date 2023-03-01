@@ -1,0 +1,5 @@
+rootProject.name = 'levelup'
+include 'api'
+include 'job'
+include 'notification'
+
