@@ -1,7 +1,7 @@
 package com.levelup.job.domain.VO;
 
-import com.levelup.recruit.domain.entity.JobEntity;
-import com.levelup.recruit.domain.enumeration.Company;
+import com.levelup.job.domain.entity.Job;
+import com.levelup.job.domain.enumeration.Company;
 
 public class CoupangJobVO extends JobVO {
 
@@ -34,7 +34,7 @@ public class CoupangJobVO extends JobVO {
         return new CoupangJobVO(title, url, noticeEndDate);
     }
 
-    public JobEntity toEntity() {
-        return JobEntity.of(title, company, url, noticeEndDate);
+    public Job toEntity() {
+        return Job.of(title, company, url, noticeEndDate);
     }
 }

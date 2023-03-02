@@ -1,7 +1,7 @@
 package com.levelup.job.domain.VO;
 
-import com.levelup.recruit.domain.entity.JobEntity;
-import com.levelup.recruit.domain.enumeration.Company;
+import com.levelup.job.domain.entity.Job;
+import com.levelup.job.domain.enumeration.Company;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,18 +41,18 @@ public class JobVO {
         return new JobVO(null, title, company, url, noticeEndDate, created);
     }
 
-    public static JobVO from(JobEntity jobEntity) {
+    public static JobVO from(Job job) {
         return new JobVO(
-                jobEntity.getId(),
-                jobEntity.getTitle(),
-                jobEntity.getCompany(),
-                jobEntity.getUrl(),
-                jobEntity.getNoticeEndDate(),
-                jobEntity.getCreatedAt());
+                job.getId(),
+                job.getTitle(),
+                job.getCompany(),
+                job.getUrl(),
+                job.getNoticeEndDate(),
+                job.getCreatedAt());
     }
 
-    public JobEntity toEntity() {
-        return JobEntity.of(title, company, url, noticeEndDate);
+    public Job toEntity() {
+        return Job.of(title, company, url, noticeEndDate);
     }
 
     @Override
