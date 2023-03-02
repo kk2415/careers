@@ -1,6 +1,5 @@
 package com.levelup.job.domain.VO;
 
-
 import com.levelup.job.domain.entity.Job;
 import com.levelup.job.domain.enumeration.Company;
 
