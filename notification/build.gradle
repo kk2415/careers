@@ -1,4 +1,6 @@
 dependencies {
+    // Firebase Admin SDK
+    implementation 'com.google.firebase:firebase-admin:8.0.0'
 }
 
 bootJar {
