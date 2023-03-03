@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "notification_template")
 @Entity
-public class NotificationTemplateEntity {
+public class NotificationTemplate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class NotificationTemplateEntity {
     @Column(nullable = false)
     private String body;
 
-    public static NotificationTemplateEntity of(Long id, String title, String body) {
-        return new NotificationTemplateEntity(id, title, body);
+    public static NotificationTemplate of(Long id, String title, String body) {
+        return new NotificationTemplate(id, title, body);
     }
 }

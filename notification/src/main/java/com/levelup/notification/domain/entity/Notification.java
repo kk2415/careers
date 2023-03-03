@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "notification")
 @Entity
-public class NotificationEntity {
+public class Notification {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
@@ -31,9 +31,9 @@ public class NotificationEntity {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "notification_template_id")
-    private NotificationTemplateEntity template;
+    private NotificationTemplate template;
 
-    public static NotificationEntity of(
+    public static Notification of(
             Long id,
             String title,
             Long receiverId,
@@ -42,9 +42,9 @@ public class NotificationEntity {
             Boolean isRead,
             NotificationType notificationType,
             NotificationTemplateType templateType,
-            NotificationTemplateEntity template)
+            NotificationTemplate template)
     {
-        return new NotificationEntity(
+        return new Notification(
                 id,
                 title,
                 receiverId,
