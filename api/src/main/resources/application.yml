@@ -1,6 +1,21 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/job?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3307/job?serverTimezone=Asia/Seoul
     username: root
-    password: Dudrhkd10ck!
+    password: onoffmix
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 100
+    open-in-view: false
+
+webdriver:
+  chrome:
+    driver: C:/tools/chromedriver_win32/chromedriver.exe
