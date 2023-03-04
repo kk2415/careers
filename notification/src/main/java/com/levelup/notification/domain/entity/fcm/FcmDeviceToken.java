@@ -16,6 +16,7 @@ import javax.persistence.*;
 public class FcmDeviceToken extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "fcm_device_token_id")
     private Long id;
     private String token;
 

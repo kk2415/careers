@@ -15,6 +15,6 @@ public record FcmDeviceTokenVO(
         return new FcmDeviceTokenVO(
                 fcmDeviceToken.getId(),
                 fcmDeviceToken.getToken(),
-                fcmDeviceToken.getTopic().getTopicName());
+                fcmDeviceToken.getTopic() == null ? "" : fcmDeviceToken.getTopic().getTopicName());
     }
 }
