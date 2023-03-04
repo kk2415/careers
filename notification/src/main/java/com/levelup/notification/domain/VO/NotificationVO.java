@@ -1,30 +1,23 @@
 package com.levelup.notification.domain.VO;
 
+import com.levelup.notification.domain.VO.notificationTemplate.NotificationTemplateVO;
 import com.levelup.notification.domain.entity.Notification;
 import com.levelup.notification.domain.enumeration.NotificationTemplateType;
 import com.levelup.notification.domain.enumeration.NotificationType;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-public class NotificationVO {
-
-    private Long id;
-    private String title;
-    private Long receiverId;
-    private Long activatorId; /* member who occur notification */
-    private LocalDate readAt;
-    private Boolean isRead;
-    private NotificationType notificationType;
-    private NotificationTemplateType templateType;
-    private NotificationTemplateVO template;
-
+public record NotificationVO(
+        Long id,
+        String title,
+        Long receiverId,
+        Long activatorId /* member who occur notification */,
+        LocalDate readAt,
+        Boolean isRead,
+        NotificationType notificationType,
+        NotificationTemplateType templateType,
+        NotificationTemplateVO template
+) {
     public static NotificationVO of(
             Long receiverId,
             Long activatorId,
@@ -58,7 +51,7 @@ public class NotificationVO {
     }
 
     public Notification toEntity() {
-        Notification entity = Notification.of(
+        return Notification.of(
                 this.id,
                 this.title,
                 this.receiverId,
@@ -69,7 +62,5 @@ public class NotificationVO {
                 this.templateType,
                 this.template.toEntity()
         );
-
-        return entity;
     }
 }

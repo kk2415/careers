@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class FcmTopic extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
     private String topicName;
 

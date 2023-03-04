@@ -1,4 +1,4 @@
-package com.levelup.notification.domain.VO;
+package com.levelup.notification.domain.VO.notificationTemplate;
 
 import com.levelup.notification.domain.entity.NotificationTemplate;
 import com.levelup.notification.domain.enumeration.NotificationTemplateType;

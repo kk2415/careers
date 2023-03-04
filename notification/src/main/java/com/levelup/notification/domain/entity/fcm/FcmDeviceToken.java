@@ -16,8 +16,7 @@ import javax.persistence.*;
 public class FcmDeviceToken extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-
+    private Long id;
     private String token;
 
     @JoinColumn(name = "fcm_topic_id")
