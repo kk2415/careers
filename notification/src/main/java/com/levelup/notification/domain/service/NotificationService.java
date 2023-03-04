@@ -58,7 +58,7 @@ public class NotificationService {
         Notification notification = notificationVO.toEntity();
         notificationRepository.save(notification);
 
-        if (!NotificationType.NONE.equals(notificationVO.getNotificationType())) {
+        if (!NotificationType.NONE.equals(notificationVO.notificationType())) {
             //TODO:: 알림 발송 TO ANDROID, IOS, SMS, EMAIL
         }
 
@@ -68,8 +68,8 @@ public class NotificationService {
     public void push(NotificationVO notificationVO) {
         com.google.firebase.messaging.Notification firebaseMessagingNotification
                 = com.google.firebase.messaging.Notification.builder()
-                .setTitle(notificationVO.getTemplate().getTitle())
-                .setBody(notificationVO.getTemplate().getBody())
+                .setTitle(notificationVO.template().getTitle())
+                .setBody(notificationVO.template().getBody())
                 .build();
 
         Message.Builder builder = Message.builder();
