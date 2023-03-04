@@ -1,5 +1,6 @@
 package com.levelup.notification.domain.entity;
 
+import com.levelup.notification.domain.entity.base.BaseTimeEntity;
 import com.levelup.notification.domain.enumeration.NotificationTemplateType;
 import com.levelup.notification.domain.enumeration.NotificationType;
 import lombok.AccessLevel;
@@ -15,7 +16,7 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "notification")
 @Entity
-public class Notification {
+public class Notification extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")

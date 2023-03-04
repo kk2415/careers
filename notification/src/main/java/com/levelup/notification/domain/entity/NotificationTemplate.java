@@ -1,5 +1,6 @@
 package com.levelup.notification.domain.entity;
 
+import com.levelup.notification.domain.entity.base.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "notification_template")
 @Entity
-public class NotificationTemplate {
+public class NotificationTemplate extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
