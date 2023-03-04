@@ -1,6 +1,6 @@
 drop table if exists `hibernate_sequence`;
 drop table if exists `job`;
-drop table if exists notificationVO;
+drop table if exists notification;
 drop table if exists notification_template;
 
 create table hibernate_sequence
@@ -19,7 +19,7 @@ create table `job` (
     updated_at datetime not null default '2022-01-01 00:00:00'
 ) engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-create table if not exists notificationVO (
+create table if not exists notification (
     notification_id bigint not null auto_increment primary key,
     title text not null,
     receiver_id bigint not null,
