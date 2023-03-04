@@ -1,7 +1,10 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/job?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3307/levelup?serverTimezone=Asia/Seoul
     username: root
     password: onoffmix
 
@@ -18,7 +21,7 @@ spring:
 
 webdriver:
   chrome:
-    driver: C:/tools/chromedriver_win32/chromedriver.exe
+    driver: C:\Task\tools\chromedriver_win32\chromedriver.exe
 
 project:
   properties:

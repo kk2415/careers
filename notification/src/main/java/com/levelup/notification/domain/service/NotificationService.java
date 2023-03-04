@@ -40,7 +40,7 @@ public class NotificationService {
 
     @PostConstruct
     public void pushNotification() throws IOException {
-        InputStream serviceAccount = new ClassPathResource("firebase/level-up-516d8-firebase-adminsdk-2ffux-34f85d5ae0.json").getInputStream();
+        InputStream serviceAccount = new ClassPathResource("firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json").getInputStream();
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials
