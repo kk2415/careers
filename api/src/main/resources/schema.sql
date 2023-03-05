@@ -1,7 +1,6 @@
 drop table if exists `hibernate_sequence`;
 drop table if exists `job`;
 drop table if exists notification;
-drop table if exists notification_template;
 drop table if exists fcm_topic;
 drop table if exists fcm_device_token;
 
@@ -24,21 +23,11 @@ create table `job` (
 create table if not exists notification (
     notification_id bigint not null auto_increment primary key,
     title text not null,
+    body text not null,
     receiver_id bigint not null,
     activator_id bigint not null,
     read_at datetime null,
     is_read boolean not null,
-    notification_type varchar(255) not null,
-    template_type varchar(255) not null,
-    notification_template_id bigint not null,
-    created_at datetime not null default '2022-01-01 00:00:00',
-    updated_at datetime not null default '2022-01-01 00:00:00'
-) engine=InnoDB default charset=utf8 collate=utf8_general_ci;
-
-create table if not exists notification_template (
-    notification_template_id bigint not null auto_increment primary key,
-    title text not null,
-    `body` longtext not null,
     created_at datetime not null default '2022-01-01 00:00:00',
     updated_at datetime not null default '2022-01-01 00:00:00'
 ) engine=InnoDB default charset=utf8 collate=utf8_general_ci;

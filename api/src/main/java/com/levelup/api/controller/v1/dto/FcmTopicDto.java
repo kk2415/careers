@@ -1,6 +1,6 @@
 package com.levelup.api.controller.v1.dto;
 
-import com.levelup.notification.domain.VO.FcmTopicVO;
+import com.levelup.notification.domain.vo.FcmTopicVO;
 
 public class FcmTopicDto {
 

@@ -1,7 +1,7 @@
 package com.levelup.api.controller.v1.fcm;
 
 import com.levelup.api.controller.v1.dto.FcmTopicDto;
-import com.levelup.notification.domain.VO.FcmTopicVO;
+import com.levelup.notification.domain.vo.FcmTopicVO;
 import com.levelup.notification.domain.service.fcm.FcmService;
 import com.levelup.notification.domain.service.fcm.FcmTopicService;
 import io.swagger.v3.oas.annotations.Operation;

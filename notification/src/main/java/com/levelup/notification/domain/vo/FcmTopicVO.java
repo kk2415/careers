@@ -1,4 +1,4 @@
-package com.levelup.notification.domain.VO;
+package com.levelup.notification.domain.vo;
 
 import com.levelup.notification.domain.entity.fcm.FcmTopic;
 

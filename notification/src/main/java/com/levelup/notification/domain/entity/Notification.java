@@ -1,8 +1,6 @@
 package com.levelup.notification.domain.entity;
 
 import com.levelup.notification.domain.entity.base.BaseTimeEntity;
-import com.levelup.notification.domain.enumeration.NotificationTemplateType;
-import com.levelup.notification.domain.enumeration.NotificationType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,37 +21,29 @@ public class Notification extends BaseTimeEntity {
     private Long id;
 
     private String title;
+    private String body;
     private Long receiverId;
     private Long activatorId; /* member who occur notification */
     private LocalDate readAt;
     private Boolean isRead;
-    private NotificationType notificationType;
-    private NotificationTemplateType templateType;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "notification_template_id")
-    private NotificationTemplate template;
 
     public static Notification of(
             Long id,
             String title,
+            String body,
             Long receiverId,
             Long activatorId,
             LocalDate readAt,
-            Boolean isRead,
-            NotificationType notificationType,
-            NotificationTemplateType templateType,
-            NotificationTemplate template)
-    {
+            Boolean isRead
+    ) {
         return new Notification(
                 id,
                 title,
+                body,
                 receiverId,
                 activatorId,
                 readAt,
-                isRead,
-                notificationType,
-                templateType,
-                template);
+                isRead
+        );
     }
 }

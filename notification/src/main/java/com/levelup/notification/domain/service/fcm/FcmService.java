@@ -1,7 +1,7 @@
 package com.levelup.notification.domain.service.fcm;
 
-import com.levelup.notification.domain.VO.FcmDeviceTokenVO;
-import com.levelup.notification.domain.VO.FcmTopicVO;
+import com.levelup.notification.domain.vo.FcmDeviceTokenVO;
+import com.levelup.notification.domain.vo.FcmTopicVO;
 import com.levelup.notification.domain.entity.fcm.FcmDeviceToken;
 import com.levelup.notification.domain.entity.fcm.FcmTopic;
 import com.levelup.notification.domain.repository.FcmDeviceTokenRepository;

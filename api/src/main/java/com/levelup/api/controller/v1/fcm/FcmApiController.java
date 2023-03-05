@@ -1,6 +1,6 @@
 package com.levelup.api.controller.v1.fcm;
 
-import com.levelup.notification.domain.VO.FcmDeviceTokenVO;
+import com.levelup.notification.domain.vo.FcmDeviceTokenVO;
 import com.levelup.notification.domain.entity.fcm.FcmTopic;
 import com.levelup.notification.domain.exception.EntityNotFoundException;
 import com.levelup.notification.domain.exception.ErrorCode;
