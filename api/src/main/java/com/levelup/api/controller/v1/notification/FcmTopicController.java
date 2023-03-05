@@ -1,10 +1,14 @@
-package com.levelup.api.controller.v1.fcm;
+package com.levelup.api.controller.v1.notification;
 
 import com.levelup.api.controller.v1.dto.FcmTopicDto;
 import com.levelup.api.controller.v1.dto.FcmTopicDto.FcmTopicCreateRequest;
-import com.levelup.notification.domain.vo.FcmTopicVO;
-import com.levelup.notification.domain.service.fcm.DeviceTokenService;
+import com.levelup.notification.domain.entity.fcm.FcmTopic;
+import com.levelup.notification.domain.exception.EntityNotFoundException;
+import com.levelup.notification.domain.exception.ErrorCode;
+import com.levelup.notification.domain.repository.FcmTopicRepository;
+import com.levelup.notification.domain.service.fcm.SendMessageService;
 import com.levelup.notification.domain.service.fcm.TopicService;
+import com.levelup.notification.domain.vo.FcmTopicVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +23,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/fcm/topics")
 @RestController
-public class FcmTopicApiController {
+public class FcmTopicController {
 
-    private final DeviceTokenService deviceTokenService;
     private final TopicService fcmTopicService;
+    private final SendMessageService fcmSendMessageService;
+    private final FcmTopicRepository fcmTopicRepository;
 
     @Operation(summary = "FCM 토픽 생성")
     @PostMapping
@@ -33,7 +38,7 @@ public class FcmTopicApiController {
     }
 
     @Operation(summary = "토픽 구독 관리", description = "토픽이 구독되어 있으면 해제, 아니면 구독")
-    @PostMapping("/handle-topic-subscription")
+    @PostMapping("/handle-subscription")
     public ResponseEntity<Void> handleTopic(@RequestParam Long topicId, @RequestParam String deviceToken) {
         fcmTopicService.handleTopicSubscription(topicId, deviceToken);
 
@@ -48,5 +53,19 @@ public class FcmTopicApiController {
         return ResponseEntity.ok().body(topics.stream()
                 .map(FcmTopicDto.FcmTopicResponse::from)
                 .toList());
+    }
+
+    @Operation(summary = "테스트 임시 API ^^")
+    @PostMapping("/message")
+    public ResponseEntity<Void> test(@RequestParam Long topicId) {
+        FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));
+
+        fcmSendMessageService.sendMessageToTopic(
+                findFcmTopic.getTopicName(),
+                "test message",
+                "test message body");
+
+        return ResponseEntity.ok().build();
     }
 }

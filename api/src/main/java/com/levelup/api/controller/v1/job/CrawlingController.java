@@ -19,7 +19,7 @@ import java.util.List;
 @Tag(name = "채용 사이트 크롤링 API")
 @RequestMapping("/api/v1/jobs/crawling")
 @RestController
-public class CrawlingApiController {
+public class CrawlingController {
 
     private final Crawler kakaoCrawler;
     private final Crawler LineCrawler;
@@ -30,7 +30,7 @@ public class CrawlingApiController {
     private final JobService jobService;
 
     @Autowired
-    public CrawlingApiController(
+    public CrawlingController(
             @Qualifier("KakaoCrawler") Crawler kakaoCrawler,
             @Qualifier("LineCrawler") Crawler lineCrawler,
             @Qualifier("NaverCrawler") Crawler naverCrawler,

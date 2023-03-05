@@ -2,6 +2,7 @@ package com.levelup.api.config;
 
 import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.service.JobService;
+import com.levelup.job.domain.vo.JobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -26,13 +27,13 @@ public class SpringApplicationListener implements ApplicationListener<ContextRef
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("Starting ContextRefreshedEvent of SpringApplicationListener");
 
-//        crawlers.forEach(crawler -> {
-//            List<JobVO> jobs = crawler.crawling();
-//
-//            jobService.saveIfAbsent(jobs, crawler.getCompany());
-//
-//            List<JobVO> deleteJobs = jobService.getNotMatched(jobs, crawler.getCompany());
-//            jobService.deleteAll(deleteJobs);
-//        });
+        crawlers.forEach(crawler -> {
+            List<JobVO> jobs = crawler.crawling();
+
+            jobService.saveIfAbsent(jobs, crawler.getCompany());
+
+            List<JobVO> deleteJobs = jobService.getNotMatched(jobs, crawler.getCompany());
+            jobService.deleteAll(deleteJobs);
+        });
     }
 }

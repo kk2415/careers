@@ -58,8 +58,7 @@ public class JobVO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof JobVO)) return false;
-        JobVO jobVO = (JobVO) o;
+        if (!(o instanceof JobVO jobVO)) return false;
 
         return (company != null && company.equals(jobVO.company)) && (url != null && url.equals(jobVO.url));
     }
