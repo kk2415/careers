@@ -1,4 +1,4 @@
-package com.levelup.api.controller.v1;
+package com.levelup.api.controller.v1.job;
 
 import com.levelup.api.controller.v1.dto.JobDto;
 import com.levelup.job.domain.VO.JobFilterCondition;
