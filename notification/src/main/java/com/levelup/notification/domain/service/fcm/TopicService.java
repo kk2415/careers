@@ -28,6 +28,13 @@ public class TopicService {
     private final FirebaseMessaging firebaseMessaging;
 
     @Transactional
+    public FcmTopicVO saveFcmTopic(String topicName) {
+        FcmTopic saveFcmTopic = fcmTopicRepository.save(FcmTopic.of(topicName));
+
+        return FcmTopicVO.from(saveFcmTopic);
+    }
+
+    @Transactional
     public void handleTopicSubscription(Long topicId, String deviceToken) {
         FcmTopic findTopic = fcmTopicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));

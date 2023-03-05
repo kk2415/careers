@@ -6,7 +6,7 @@ import com.levelup.notification.domain.exception.EntityNotFoundException;
 import com.levelup.notification.domain.exception.ErrorCode;
 import com.levelup.notification.domain.repository.FcmTopicRepository;
 import com.levelup.notification.domain.service.fcm.SendMessageService;
-import com.levelup.notification.domain.service.FcmService;
+import com.levelup.notification.domain.service.fcm.DeviceTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FcmApiController {
 
-    private final FcmService fcmService;
+    private final DeviceTokenService fcmService;
     private final SendMessageService fcmSendMessageService;
     private final FcmTopicRepository fcmTopicRepository;
 

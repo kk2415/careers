@@ -2,7 +2,7 @@ package com.levelup.api.controller.v1.fcm;
 
 import com.levelup.api.controller.v1.dto.FcmTopicDto;
 import com.levelup.notification.domain.vo.FcmTopicVO;
-import com.levelup.notification.domain.service.FcmService;
+import com.levelup.notification.domain.service.fcm.DeviceTokenService;
 import com.levelup.notification.domain.service.fcm.TopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,13 +19,13 @@ import java.util.List;
 @RestController
 public class FcmTopicApiController {
 
-    private final FcmService fcmService;
+    private final DeviceTokenService deviceTokenService;
     private final TopicService fcmTopicService;
 
     @Operation(summary = "FCM 토픽 생성")
     @PostMapping
     public ResponseEntity<FcmTopicVO> createTopic(@RequestParam String topicName) {
-        FcmTopicVO fcmTopicVO = fcmService.saveFcmTopic(topicName);
+        FcmTopicVO fcmTopicVO = fcmTopicService.saveFcmTopic(topicName);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(fcmTopicVO);
     }
