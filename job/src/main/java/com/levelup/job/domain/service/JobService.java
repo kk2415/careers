@@ -1,7 +1,7 @@
 package com.levelup.job.domain.service;
 
-import com.levelup.job.domain.VO.JobFilterCondition;
-import com.levelup.job.domain.VO.JobVO;
+import com.levelup.job.domain.vo.JobFilterCondition;
+import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.entity.Job;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.enumeration.OrderBy;

@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
-import com.levelup.job.domain.VO.JobVO;
-import com.levelup.job.domain.VO.KakaoJobVO;
+import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.vo.KakaoJobVO;
 import com.levelup.job.domain.enumeration.Company;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

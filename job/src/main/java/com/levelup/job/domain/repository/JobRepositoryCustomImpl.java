@@ -1,6 +1,6 @@
 package com.levelup.job.domain.repository;
 
-import com.levelup.job.domain.VO.JobFilterCondition;
+import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.entity.Job;
 import com.levelup.job.domain.entity.QJob;
 import com.levelup.job.domain.enumeration.Company;

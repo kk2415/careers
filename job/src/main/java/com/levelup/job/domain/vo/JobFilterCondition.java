@@ -1,4 +1,4 @@
-package com.levelup.job.domain.VO;
+package com.levelup.job.domain.vo;
 
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.enumeration.OpenStatus;

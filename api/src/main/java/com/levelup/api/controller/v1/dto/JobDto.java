@@ -1,6 +1,6 @@
 package com.levelup.api.controller.v1.dto;
 
-import com.levelup.job.domain.VO.JobVO;
+import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
 
 import javax.validation.constraints.NotBlank;

@@ -1,11 +1,11 @@
-package com.levelup.job.domain.VO;
+package com.levelup.job.domain.vo;
 
 import com.levelup.job.domain.entity.Job;
 import com.levelup.job.domain.enumeration.Company;
 
-public class LineJobVO extends JobVO {
+public class NaverJobVO extends JobVO {
 
-    private LineJobVO(
+    private NaverJobVO(
             String title,
             Company company,
             String url,
@@ -14,24 +14,24 @@ public class LineJobVO extends JobVO {
         super(null, title, company, url, noticeEndDate);
     }
 
-    private LineJobVO(
+    private NaverJobVO(
             String title,
             String url,
             String noticeEndDate
     ) {
         super(null,
                 title,
-                Company.LINE,
+                Company.NAVER,
                 url,
                 noticeEndDate);
     }
 
-    public static LineJobVO of(
+    public static NaverJobVO of(
             String title,
             String url,
             String noticeEndDate
     ) {
-        return new LineJobVO(title, url, noticeEndDate);
+        return new NaverJobVO(title, url, noticeEndDate);
     }
 
     public Job toEntity() {

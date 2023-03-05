@@ -1,8 +1,8 @@
 package com.levelup.api.controller.v1.job;
 
 import com.levelup.api.controller.v1.dto.JobDto;
-import com.levelup.job.domain.VO.JobFilterCondition;
-import com.levelup.job.domain.VO.JobVO;
+import com.levelup.job.domain.vo.JobFilterCondition;
+import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.enumeration.OpenStatus;
 import com.levelup.job.domain.enumeration.OrderBy;

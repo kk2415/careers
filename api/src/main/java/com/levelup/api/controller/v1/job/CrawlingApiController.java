@@ -2,7 +2,7 @@ package com.levelup.api.controller.v1.job;
 
 import com.levelup.api.controller.v1.dto.JobDto;
 import com.levelup.job.crawler.Crawler;
-import com.levelup.job.domain.VO.JobVO;
+import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;

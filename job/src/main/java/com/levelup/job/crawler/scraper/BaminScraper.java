@@ -1,8 +1,8 @@
 package com.levelup.job.crawler.scraper;
 
 import com.levelup.job.crawler.jsoupConnetion.JsoupConnectionMaker;
-import com.levelup.job.domain.VO.BaminJobVO;
-import com.levelup.job.domain.VO.JobVO;
+import com.levelup.job.domain.vo.BaminJobVO;
+import com.levelup.job.domain.vo.JobVO;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

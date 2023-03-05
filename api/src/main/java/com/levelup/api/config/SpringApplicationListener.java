@@ -1,7 +1,6 @@
 package com.levelup.api.config;
 
 import com.levelup.job.crawler.Crawler;
-import com.levelup.job.domain.VO.JobVO;
 import com.levelup.job.domain.service.JobService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
