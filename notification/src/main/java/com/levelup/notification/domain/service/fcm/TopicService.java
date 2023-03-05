@@ -2,6 +2,7 @@ package com.levelup.notification.domain.service.fcm;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.TopicManagementResponse;
+import com.levelup.notification.domain.enumeration.FcmTopicName;
 import com.levelup.notification.domain.vo.FcmTopicVO;
 import com.levelup.notification.domain.entity.fcm.FcmDeviceToken;
 import com.levelup.notification.domain.entity.fcm.FcmTopic;
@@ -28,8 +29,8 @@ public class TopicService {
     private final FirebaseMessaging firebaseMessaging;
 
     @Transactional
-    public FcmTopicVO saveFcmTopic(String topicName) {
-        FcmTopic saveFcmTopic = fcmTopicRepository.save(FcmTopic.of(topicName));
+    public FcmTopicVO saveFcmTopic(FcmTopicName topicName) {
+        FcmTopic saveFcmTopic = fcmTopicRepository.save(FcmTopic.of(topicName.name()));
 
         return FcmTopicVO.from(saveFcmTopic);
     }

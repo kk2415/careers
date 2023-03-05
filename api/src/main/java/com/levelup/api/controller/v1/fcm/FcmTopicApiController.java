@@ -1,6 +1,7 @@
 package com.levelup.api.controller.v1.fcm;
 
 import com.levelup.api.controller.v1.dto.FcmTopicDto;
+import com.levelup.api.controller.v1.dto.FcmTopicDto.FcmTopicCreateRequest;
 import com.levelup.notification.domain.vo.FcmTopicVO;
 import com.levelup.notification.domain.service.fcm.DeviceTokenService;
 import com.levelup.notification.domain.service.fcm.TopicService;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Tag(name = "FCM 토픽 API")
@@ -24,8 +26,8 @@ public class FcmTopicApiController {
 
     @Operation(summary = "FCM 토픽 생성")
     @PostMapping
-    public ResponseEntity<FcmTopicVO> createTopic(@RequestParam String topicName) {
-        FcmTopicVO fcmTopicVO = fcmTopicService.saveFcmTopic(topicName);
+    public ResponseEntity<FcmTopicVO> createTopic(@RequestParam @Valid FcmTopicCreateRequest request) {
+        FcmTopicVO fcmTopicVO = fcmTopicService.saveFcmTopic(request.topicName());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(fcmTopicVO);
     }

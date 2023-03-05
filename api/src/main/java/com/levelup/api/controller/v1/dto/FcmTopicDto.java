@@ -1,8 +1,18 @@
 package com.levelup.api.controller.v1.dto;
 
+import com.levelup.notification.domain.enumeration.FcmTopicName;
 import com.levelup.notification.domain.vo.FcmTopicVO;
 
+import javax.validation.constraints.NotNull;
+
 public class FcmTopicDto {
+
+    public record FcmTopicCreateRequest(
+            @NotNull
+            FcmTopicName topicName
+    ) {
+
+    }
 
     public record FcmTopicResponse(
             Long id,
