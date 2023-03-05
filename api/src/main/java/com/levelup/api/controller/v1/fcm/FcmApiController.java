@@ -5,8 +5,8 @@ import com.levelup.notification.domain.entity.fcm.FcmTopic;
 import com.levelup.notification.domain.exception.EntityNotFoundException;
 import com.levelup.notification.domain.exception.ErrorCode;
 import com.levelup.notification.domain.repository.FcmTopicRepository;
-import com.levelup.notification.domain.service.fcm.FcmSendMessageService;
-import com.levelup.notification.domain.service.fcm.FcmService;
+import com.levelup.notification.domain.service.fcm.SendMessageService;
+import com.levelup.notification.domain.service.FcmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FcmApiController {
 
     private final FcmService fcmService;
-    private final FcmSendMessageService fcmSendMessageService;
+    private final SendMessageService fcmSendMessageService;
     private final FcmTopicRepository fcmTopicRepository;
 
     @Operation(summary = "FCM 디바이스 토큰 DB에 저장")

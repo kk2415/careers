@@ -2,8 +2,8 @@ package com.levelup.api.controller.v1.fcm;
 
 import com.levelup.api.controller.v1.dto.FcmTopicDto;
 import com.levelup.notification.domain.vo.FcmTopicVO;
-import com.levelup.notification.domain.service.fcm.FcmService;
-import com.levelup.notification.domain.service.fcm.FcmTopicService;
+import com.levelup.notification.domain.service.FcmService;
+import com.levelup.notification.domain.service.fcm.TopicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.List;
 public class FcmTopicApiController {
 
     private final FcmService fcmService;
-    private final FcmTopicService fcmTopicService;
+    private final TopicService fcmTopicService;
 
     @Operation(summary = "FCM 토픽 생성")
     @PostMapping

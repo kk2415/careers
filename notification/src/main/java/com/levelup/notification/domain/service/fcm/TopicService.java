@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class FcmTopicService {
+public class TopicService {
 
     private final FcmDeviceTokenRepository fcmDeviceTokenRepository;
     private final FcmTopicRepository fcmTopicRepository;

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class FcmSendMessageService {
+public class SendMessageService {
 
     private final FirebaseMessaging firebaseMessaging;
 
