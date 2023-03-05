@@ -2,6 +2,7 @@ package com.levelup.notification.domain.service.fcm;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.TopicManagementResponse;
+import com.levelup.notification.domain.VO.FcmTopicVO;
 import com.levelup.notification.domain.entity.fcm.FcmDeviceToken;
 import com.levelup.notification.domain.entity.fcm.FcmTopic;
 import com.levelup.notification.domain.exception.EntityNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -106,5 +108,11 @@ public class FcmTopicService {
         }
 
         return true;
+    }
+
+    public List<FcmTopicVO> getAll() {
+        return fcmTopicRepository.findAll().stream()
+                .map(FcmTopicVO::from)
+                .toList();
     }
 }
