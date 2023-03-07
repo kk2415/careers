@@ -9,14 +9,16 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class NotificationService {
+public class JobNotificationService {
 
-    private final String NEW_JOB_NOTIFICATION_TITLE = "신규 공고 알림";
+    public static final String NEW_JOB_NOTIFICATION_TITLE = "신규 공고 알림";
 
     private final SendMessageService fcmSendMessageService;
 
     public void pushNewJobsNotification(FcmTopicName topicName, List<String> bodies) {
+        String notificationBody = createNotificationBody(bodies);
 
+        fcmSendMessageService.sendMessageToTopic(topicName.name(), NEW_JOB_NOTIFICATION_TITLE, notificationBody);
     }
 
     private String createNotificationBody(List<String> bodies) {

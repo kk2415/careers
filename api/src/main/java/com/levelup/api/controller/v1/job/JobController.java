@@ -24,20 +24,10 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
-//    private final NotificationService notificationService;
 
-//    @GetMapping("/test")
-//    public void test() {
-//        NotificationTemplateEntity notificationTemplateEntity = NotificationTemplateEntity.of(1L, "test push alram title", "test push alram body");
-//        NotificationTemplate notificationTemplate = NotificationTemplate.from(notificationTemplateEntity);
-//
-//        notificationService.push(Notification.of(
-//                1L,
-//                1L,
-//                NotificationType.ANDROID,
-//                NotificationTemplateType.NEW_JOB,
-//                notificationTemplate));
-//    }
+    @GetMapping("/test")
+    public void test() {
+    }
 
     @Operation(summary = "채용 공고 생성")
     @PostMapping("")
