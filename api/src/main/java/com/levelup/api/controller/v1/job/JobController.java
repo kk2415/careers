@@ -27,6 +27,7 @@ public class JobController {
 
     @GetMapping("/test")
     public void test() {
+        jobService.test();
     }
 
     @Operation(summary = "채용 공고 생성")

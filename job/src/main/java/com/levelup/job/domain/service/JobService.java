@@ -6,17 +6,26 @@ import com.levelup.job.domain.enumeration.OrderBy;
 import com.levelup.job.domain.repository.JobRepository;
 import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.vo.JobVO;
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -102,6 +111,24 @@ public class JobService {
     }
 
     public void test() {
+        HttpClient httpClient = HttpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
+                .responseTimeout(Duration.ofMillis(5000))
+                .doOnConnected(conn ->
+                        conn.addHandlerLast(new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS))
+                                .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)));
 
+        WebClient webClient = WebClient.builder()
+                .baseUrl("http://localhost:8080")
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
+                .build();
+
+        Mono<String> mono = webClient.get()
+                .uri("/api/v1/notifications/test")
+                .retrieve()
+                .bodyToMono(String.class);
+
+        String response = mono.block();
+        System.out.println("response: " + response);
     }
 }
