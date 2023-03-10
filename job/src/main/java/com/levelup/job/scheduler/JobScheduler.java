@@ -3,6 +3,7 @@ package com.levelup.job.scheduler;
 import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.web.api.NotificationApiClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ public class JobScheduler {
 
     private final List<Crawler> crawlers;
     private final JobService jobService;
+    private final NotificationApiClient notificationApiClient;
 
     @Scheduled(cron = "0 0 0 0 */1 * ")
     public void crawlingJobs() {
@@ -32,5 +34,8 @@ public class JobScheduler {
         });
 
         //TODO:: 새로운 공고 알림
+        notificationApiClient.sendPushAlarm(newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
     }
 }

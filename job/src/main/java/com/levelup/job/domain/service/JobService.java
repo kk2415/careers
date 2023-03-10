@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class JobService {
 
     private final JobRepository jobRepository;
+    private final WebClient webClient;
 
     @Transactional
     public JobVO save(JobVO jobVO) {
@@ -111,18 +112,6 @@ public class JobService {
     }
 
     public void test() {
-        HttpClient httpClient = HttpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-                .responseTimeout(Duration.ofMillis(5000))
-                .doOnConnected(conn ->
-                        conn.addHandlerLast(new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS))
-                                .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)));
-
-        WebClient webClient = WebClient.builder()
-                .baseUrl("http://localhost:8080")
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-
         Mono<String> mono = webClient.get()
                 .uri("/api/v1/notifications/test")
                 .retrieve()

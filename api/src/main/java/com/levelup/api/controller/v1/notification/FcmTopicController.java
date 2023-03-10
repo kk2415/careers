@@ -39,7 +39,10 @@ public class FcmTopicController {
 
     @Operation(summary = "토픽 구독 관리", description = "토픽이 구독되어 있으면 해제, 아니면 구독")
     @PostMapping("/handle-subscription")
-    public ResponseEntity<Void> handleTopic(@RequestParam Long topicId, @RequestParam String deviceToken) {
+    public ResponseEntity<Void> handleTopic(
+            @RequestParam Long topicId,
+            @RequestParam String deviceToken
+    ) {
         fcmTopicService.handleTopicSubscription(topicId, deviceToken);
 
         return ResponseEntity.ok().build();

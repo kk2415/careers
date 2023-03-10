@@ -56,7 +56,8 @@ public class TopicService {
         }
     }
 
-    private FcmDeviceToken findFcmDeviceTokenOrCreate(String deviceToken) {
+    @Transactional
+    public FcmDeviceToken findFcmDeviceTokenOrCreate(String deviceToken) {
         return fcmDeviceTokenRepository.findByToken(deviceToken)
                 .orElseGet(() -> fcmDeviceTokenRepository.save(FcmDeviceToken.of(deviceToken)));
     }
