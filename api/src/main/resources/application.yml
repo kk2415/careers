@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/levelup?serverTimezone=Asia/Seoul
     username: root
-    password: root
+    password: onoffmix
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -21,7 +21,7 @@ spring:
 
 webdriver:
   chrome:
-    driver: C:\Task\tools\chromedriver_win32\chromedriver.exe
+    driver: C:\tools\chromedriver_win32\chromedriver.exe
 
 project:
   properties:

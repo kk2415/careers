@@ -3,26 +3,22 @@ package com.levelup.job.crawler.scraper;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.vo.TossJobVO;
 import com.levelup.job.domain.enumeration.Company;
+import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Component
 public class TossScraper {
 
-    @Value("${webdriver.chrome.driver}")
-    private String chromeDriver;
+    private final WebDriver driver;
 
     public List<JobVO> findJobs() {
-        System.setProperty("webdriver.chrome.driver", chromeDriver);
-        WebDriver driver = new ChromeDriver();
-
         List<JobVO> jobs = new ArrayList<>();
 
         List<String> categories = List.of("core-system", "data", "design", "engineering-platform", "engineering-product");
@@ -45,7 +41,7 @@ public class TossScraper {
             jobs.addAll(tossJobList);
         });
 
-        driver.quit();
+        driver.close();
 
         return jobs;
     }

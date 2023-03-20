@@ -27,13 +27,13 @@ public class SpringApplicationListener implements ApplicationListener<ContextRef
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("Starting ContextRefreshedEvent of SpringApplicationListener");
 
-//        crawlers.forEach(crawler -> {
-//            List<JobVO> jobs = crawler.crawling();
-//
-//            jobService.saveIfAbsent(jobs, crawler.getCompany());
-//
-//            List<JobVO> deleteJobs = jobService.getNotMatched(jobs, crawler.getCompany());
-//            jobService.deleteAll(deleteJobs);
-//        });
+        crawlers.forEach(crawler -> {
+            List<JobVO> jobs = crawler.crawling();
+
+            jobService.saveIfAbsent(jobs, crawler.getCompany());
+
+            List<JobVO> deleteJobs = jobService.getNotMatched(jobs, crawler.getCompany());
+            jobService.deleteAll(deleteJobs);
+        });
     }
 }
