@@ -15,7 +15,7 @@ public class NotificationApiClient {
     private final WebClient webClient;
 
     public void sendPushAlarm(List<String> bodies) {
-        NotificationDto.NotificationRequest request = NotificationDto.NotificationRequest.of(bodies);
+        NotificationDto.NotificationRequest request = NotificationDto.NotificationRequest.from(bodies);
 
         webClient.post()
                 .uri("/api/v1/notifications")
