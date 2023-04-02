@@ -97,11 +97,9 @@ public class JobService {
 
     @Transactional
     public void deleteAll(List<JobVO> jobs) {
-        jobRepository.deleteAll(
-                jobs.stream()
-                        .map(JobVO::toEntity)
-                        .toList()
-        );
+        jobRepository.deleteAllById(jobs.stream()
+                .map(JobVO::getId)
+                .toList());
     }
 
     public void test() {
