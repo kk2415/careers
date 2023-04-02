@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,13 +17,14 @@ import java.util.List;
 @Component
 public class CoupangScraper {
 
-    private final WebDriver driver;
+    private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<JobVO> findJobs() {
         int page = 1;
         int lastPage = 5;
         String params;
 
+        WebDriver driver = prototypeBeanProvider.getObject();
         List<JobVO> jobs = new ArrayList<>();
         for (; page <= lastPage; ++page) {
             params = "?search=Software+engineer+backend+frontend&location=Seoul%2C+South+Korea&location=South+Korea&pagesize=20#results&page=" + page;

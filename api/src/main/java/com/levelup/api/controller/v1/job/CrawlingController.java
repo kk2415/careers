@@ -52,7 +52,6 @@ public class CrawlingController {
         List<JobVO> jobs = kakaoCrawler.crawling();
 
         List<JobVO> savedJobs = jobService.saveIfAbsent(jobs, Company.KAKAO);
-
         List<JobVO> notExistsJobs = jobService.getNotMatched(jobs, Company.KAKAO);
         jobService.deleteAll(notExistsJobs);
 

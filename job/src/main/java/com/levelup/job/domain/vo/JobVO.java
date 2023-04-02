@@ -22,12 +22,12 @@ public class JobVO {
     protected String noticeEndDate;
     protected LocalDateTime createdAt;
 
-    public JobVO(Long id, String title, Company company, String url, String noticeEndDate) {
+    protected JobVO(Long id, String title, Company company, String url, String noticeEndDate) {
         this.id = id;
-        this.title = title;
+        this.title = title.trim();
         this.company = company;
-        this.url = url;
-        this.noticeEndDate = noticeEndDate;
+        this.url = url.trim();
+        this.noticeEndDate = noticeEndDate.trim();
         this.createdAt = LocalDateTime.now();
     }
 

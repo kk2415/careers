@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,11 +17,12 @@ import java.util.List;
 @Component
 public class TossScraper {
 
-    private final WebDriver driver;
+    private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<JobVO> findJobs() {
-        List<JobVO> jobs = new ArrayList<>();
+        WebDriver driver = prototypeBeanProvider.getObject();
 
+        List<JobVO> jobs = new ArrayList<>();
         List<String> categories = List.of("core-system", "data", "design", "engineering-platform", "engineering-product");
         categories.forEach((category) -> {
             String params = "?isNewCareer=true&category=" + category;
