@@ -21,7 +21,7 @@ spring:
 
 webdriver:
   chrome:
-    driver: /home/ec2-user/level-up/tools/chromedriver/chromedriver.exe
+    driver: /home/ec2-user/level-up/tools/chromedriver/chromedriver
 
 project:
   properties:
