@@ -5,6 +5,9 @@ import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.service.JobService;
+import com.levelup.job.web.api.NotificationApiClient;
+import com.levelup.notification.domain.enumeration.FcmTopicName;
+import com.levelup.notification.domain.service.JobNotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,9 @@ public class CrawlingController {
 
     private final JobService jobService;
 
+    private final NotificationApiClient notificationApiClient;
+    private final JobNotificationService jobNotificationService;
+
     @Autowired
     public CrawlingController(
             @Qualifier("KakaoCrawler") Crawler kakaoCrawler,
@@ -36,7 +42,9 @@ public class CrawlingController {
             @Qualifier("NaverCrawler") Crawler naverCrawler,
             @Qualifier("TossCrawler") Crawler tossCrawler,
             @Qualifier("CoupangCrawler") Crawler coupangCrawler,
-            JobService jobService
+            JobService jobService,
+            NotificationApiClient notificationApiClient,
+            JobNotificationService jobNotificationService
     ) {
         this.kakaoCrawler = kakaoCrawler;
         this.LineCrawler = lineCrawler;
@@ -44,75 +52,76 @@ public class CrawlingController {
         this.tossCrawler = tossCrawler;
         this.coupangCrawler = coupangCrawler;
         this.jobService = jobService;
+        this.notificationApiClient = notificationApiClient;
+        this.jobNotificationService = jobNotificationService;
     }
 
     @Operation(summary = "카카오 채용 크롤링")
     @PostMapping("/kakao")
     public ResponseEntity<List<JobDto.Response>> crawlingKakao() {
-        List<JobVO> jobs = kakaoCrawler.crawling();
+        List<JobVO> crawledJobs = kakaoCrawler.crawling();
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.KAKAO);
 
-        List<JobVO> savedJobs = jobService.saveIfAbsent(jobs, Company.KAKAO);
-
-        List<JobVO> notExistsJobs = jobService.getNotMatched(jobs, Company.KAKAO);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.KAKAO);
         jobService.deleteAll(notExistsJobs);
 
-        return ResponseEntity.ok().body(savedJobs.stream()
+        return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
     }
 
     @Operation(summary = "라인 채용 크롤링")
     @PostMapping("/line")
     public ResponseEntity<List<JobDto.Response>> crawlingLine() {
-        List<JobVO> jobs = LineCrawler.crawling();
+        List<JobVO> crawledJobs = LineCrawler.crawling();
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.LINE);
 
-        List<JobVO> savedJobs = jobService.saveIfAbsent(jobs, Company.LINE);
-
-        List<JobVO> notExistsJobs = jobService.getNotMatched(jobs, Company.LINE);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.LINE);
         jobService.deleteAll(notExistsJobs);
 
-        return ResponseEntity.ok().body(savedJobs.stream()
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
+
+        return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
     }
 
     @Operation(summary = "네이버 채용 크롤링")
     @PostMapping("/naver")
     public ResponseEntity<List<JobDto.Response>> crawlingNaver() {
-        List<JobVO> jobs = naverCrawler.crawling();
+        List<JobVO> crawledJobs = naverCrawler.crawling();
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.NAVER);
 
-        List<JobVO> savedJobs = jobService.saveIfAbsent(jobs, Company.NAVER);
-
-        List<JobVO> notExistsJobs = jobService.getNotMatched(jobs, Company.NAVER);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.NAVER);
         jobService.deleteAll(notExistsJobs);
 
-        return ResponseEntity.ok().body(savedJobs.stream()
+        return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
     }
 
     @Operation(summary = "쿠팡 채용 크롤링")
     @PostMapping("/coupang")
     public ResponseEntity<List<JobDto.Response>> crawlingCoupang() {
-        List<JobVO> jobs = coupangCrawler.crawling();
+        List<JobVO> crawledJobs = coupangCrawler.crawling();
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.COUPANG);
 
-        List<JobVO> savedJobs = jobService.saveIfAbsent(jobs, Company.COUPANG);
-
-        List<JobVO> notExistsJobs = jobService.getNotMatched(jobs, Company.COUPANG);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.COUPANG);
         jobService.deleteAll(notExistsJobs);
 
-        return ResponseEntity.ok().body(savedJobs.stream()
+        return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
     }
 
     @Operation(summary = "토스 채용 크롤링")
     @PostMapping("/toss")
     public ResponseEntity<List<JobDto.Response>> crawlingToss() {
-        List<JobVO> jobs = tossCrawler.crawling();
+        List<JobVO> crawledJobs = tossCrawler.crawling();
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.TOSS);
 
-        List<JobVO> savedJobs = jobService.saveIfAbsent(jobs, Company.TOSS);
-
-        List<JobVO> notExistsJobs = jobService.getNotMatched(jobs, Company.TOSS);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.TOSS);
         jobService.deleteAll(notExistsJobs);
 
-        return ResponseEntity.ok().body(savedJobs.stream()
+        return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
     }
 }

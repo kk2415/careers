@@ -23,6 +23,9 @@ public class BeanConfig {
     @Value("${webdriver.chrome.driver}")
     private String chromeDriver;
 
+    @Value("${baseurl}")
+    private String baseUrl;
+
     @Bean
     public WebClient webClient() {
         HttpClient httpClient = HttpClient.create()
@@ -33,7 +36,7 @@ public class BeanConfig {
                                 .addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS)));
 
         return WebClient.builder()
-                .baseUrl("http://localhost:8080")
+                .baseUrl(baseUrl)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

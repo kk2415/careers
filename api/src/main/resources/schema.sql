@@ -39,6 +39,8 @@ create table if not exists fcm_topic (
     updated_at datetime not null default '2022-01-01 00:00:00'
 ) engine=InnoDB default charset=utf8 collate=utf8_general_ci;
 
+insert into fcm_topic value (1, 'JOB', CURRENT_TIMESTAMP, current_timestamp);
+
 create table if not exists fcm_device_token (
     fcm_device_token_id bigint not null auto_increment primary key,
     token varchar(255) not null,

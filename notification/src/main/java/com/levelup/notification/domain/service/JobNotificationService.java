@@ -25,7 +25,7 @@ public class JobNotificationService {
         //카카오 공채 공고 외 3건 신규 공고가 등록됐어요.
 
         if (bodies.isEmpty()) {
-            throw new IllegalArgumentException("알림을 보내려는 채용 공고가 0건입니다.");
+            return "";
         }
 
         if (bodies.size() == 1) {

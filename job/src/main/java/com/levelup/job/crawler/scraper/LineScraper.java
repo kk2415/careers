@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,13 +17,15 @@ import java.util.stream.Collectors;
 @Component
 public class LineScraper {
 
-    private final WebDriver driver;
+    private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<JobVO> findJobs() {
         String params = "?ca=Engineering&ci=Bundang,Seoul";
-        driver.get(Company.LINE.getUrl() + params);
-        List<WebElement> elements = driver.findElements(By.cssSelector("ul.job_list > li"));
 
+        WebDriver driver = prototypeBeanProvider.getObject();
+        driver.get(Company.LINE.getUrl() + params);
+
+        List<WebElement> elements = driver.findElements(By.cssSelector("ul.job_list > li"));
         List<JobVO> jobs = elements.stream().map(element -> {
             String title = element.findElement(By.cssSelector("a h3.title")).getText();
 

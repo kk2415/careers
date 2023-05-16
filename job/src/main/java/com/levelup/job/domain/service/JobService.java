@@ -6,26 +6,19 @@ import com.levelup.job.domain.enumeration.OrderBy;
 import com.levelup.job.domain.repository.JobRepository;
 import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.vo.JobVO;
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import reactor.netty.http.client.HttpClient;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -104,11 +97,9 @@ public class JobService {
 
     @Transactional
     public void deleteAll(List<JobVO> jobs) {
-        jobRepository.deleteAll(
-                jobs.stream()
-                        .map(JobVO::toEntity)
-                        .toList()
-        );
+        jobRepository.deleteAllById(jobs.stream()
+                .map(JobVO::getId)
+                .toList());
     }
 
     public void test() {

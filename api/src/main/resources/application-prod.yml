@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/levelup?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://level-up-database.cdbjs5p1unct.ap-northeast-2.rds.amazonaws.com:3306/levelup?serverTimezone=Asia/Seoul
     username: root
-    password: root
+    password: leveluprds!
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -21,7 +21,7 @@ spring:
 
 webdriver:
   chrome:
-    driver: C:\Task\tools\chromedriver_win32\chromedriver.exe
+    driver: /home/ec2-user/level-up/tools/chromedriver/chromedriver
 
 project:
   properties:

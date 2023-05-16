@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,33 +17,25 @@ import java.util.List;
 @Component
 public class TossScraper {
 
-    private final WebDriver driver;
+    private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<JobVO> findJobs() {
-        List<JobVO> jobs = new ArrayList<>();
+        String params = "?category=engineering-product&category=engineering-platform&category=core-system&category=engineering-product-platform&category=infra&category=qa&category=engineering&category=design";
 
-        List<String> categories = List.of("core-system", "data", "design", "engineering-platform", "engineering-product");
-        categories.forEach((category) -> {
-            String params = "?isNewCareer=true&category=" + category;
-            driver.get(Company.TOSS.getUrl() + params);
+        WebDriver driver = prototypeBeanProvider.getObject();
+        driver.get(Company.TOSS.getUrl() + params);
 
-            List<WebElement> elements = driver.findElements(By.cssSelector("a.css-g65o95"));
-            List<TossJobVO> tossJobList = elements.stream().map(element -> {
-                String detailCompany = element.findElement(By.cssSelector("div.css-1xr69i7 > div.css-wp89al div.css-g3elji:last-child")).getText();
-                String title = element.findElement(By.cssSelector("span.css-16tmfdr")).getText();
-                title = "[" + detailCompany + "]" + title;
+        List<WebElement> aTagElements = driver.findElements(By.cssSelector("div.css-64lvsl > a.css-g65o95"));
+        List<TossJobVO> tossJobList = aTagElements.stream()
+                .map(aTagElement -> {
+                    String title = aTagElement.findElement(By.cssSelector("span.typography.typography--h5.typography--bold.color--grey700.css-4bd2r9")).getText();
+                    String url = aTagElement.getAttribute("href");
+                    String noticedEndedDate = "채용 마감시";
 
-                String url = element.getAttribute("href");
-                String noticedEndedDate = "채용 마감시";
-
-                return TossJobVO.of(title, url, noticedEndedDate);
-            }).toList();
-
-            jobs.addAll(tossJobList);
-        });
+                    return TossJobVO.of(title, url, noticedEndedDate);
+                }).toList();
 
         driver.close();
-
-        return jobs;
+        return new ArrayList<>(tossJobList);
     }
 }
