@@ -2,11 +2,6 @@ package com.levelup.api.controller.v1.notification;
 
 import com.levelup.api.controller.v1.dto.FcmTopicDto;
 import com.levelup.api.controller.v1.dto.FcmTopicDto.FcmTopicCreateRequest;
-import com.levelup.notification.domain.entity.fcm.FcmTopic;
-import com.levelup.notification.domain.exception.EntityNotFoundException;
-import com.levelup.notification.domain.exception.ErrorCode;
-import com.levelup.notification.domain.repository.FcmTopicRepository;
-import com.levelup.notification.domain.service.fcm.SendMessageService;
 import com.levelup.notification.domain.service.fcm.TopicService;
 import com.levelup.notification.domain.vo.FcmTopicVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,8 +21,6 @@ import java.util.List;
 public class FcmTopicController {
 
     private final TopicService fcmTopicService;
-    private final SendMessageService fcmSendMessageService;
-    private final FcmTopicRepository fcmTopicRepository;
 
     @Operation(summary = "FCM 토픽 생성")
     @PostMapping
@@ -37,7 +30,7 @@ public class FcmTopicController {
         return ResponseEntity.status(HttpStatus.CREATED).body(fcmTopicVO);
     }
 
-    @Operation(summary = "토픽 구독 관리", description = "토픽이 구독되어 있으면 해제, 아니면 구독")
+    @Operation(summary = "토픽 구독 토글링", description = "토픽이 구독되어 있으면 해제, 아니면 구독")
     @PostMapping("/handle-subscription")
     public ResponseEntity<Void> handleTopic(
             @RequestParam Long topicId,
@@ -58,17 +51,25 @@ public class FcmTopicController {
                 .toList());
     }
 
-    @Operation(summary = "테스트 임시 API ^^")
-    @PostMapping("/message")
-    public ResponseEntity<Void> test(@RequestParam Long topicId) {
-        FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));
+    @Operation(summary = "토픽 구독")
+    @PatchMapping("/subscription")
+    public ResponseEntity<FcmTopicDto.FcmTopicSubscriptionResponse> subscription(
+            @RequestParam Long topicId,
+            @RequestParam String deviceToken
+    ) {
+        boolean result = fcmTopicService.subscribeToTopic(topicId, deviceToken);
 
-        fcmSendMessageService.sendMessageToTopic(
-                findFcmTopic.getTopicName(),
-                "test message",
-                "test message body");
+        return ResponseEntity.ok().body(FcmTopicDto.FcmTopicSubscriptionResponse.from(result));
+    }
 
-        return ResponseEntity.ok().build();
+    @Operation(summary = "토픽 구독 해제")
+    @PatchMapping("/unsubscription")
+    public ResponseEntity<FcmTopicDto.FcmTopicSubscriptionResponse> unsubscription(
+            @RequestParam Long topicId,
+            @RequestParam String deviceToken
+    ) {
+        boolean result = fcmTopicService.unsubscribeToTopic(topicId, deviceToken);
+
+        return ResponseEntity.ok().body(FcmTopicDto.FcmTopicSubscriptionResponse.from(result));
     }
 }

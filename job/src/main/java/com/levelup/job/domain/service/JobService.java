@@ -84,7 +84,8 @@ public class JobService {
                 .toList();
 
         return findJobs.stream()
-                .filter(findJob -> !jobs.contains(findJob)).toList();
+                .filter(findJob -> !jobs.contains(findJob))
+                .toList();
     }
 
     @Transactional

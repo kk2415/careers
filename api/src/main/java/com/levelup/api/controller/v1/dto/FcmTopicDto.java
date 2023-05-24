@@ -26,4 +26,12 @@ public class FcmTopicDto {
             return new FcmTopicResponse(VO.id(), VO.topicName());
         }
     }
+
+    public record FcmTopicSubscriptionResponse(
+            Boolean result
+    ) {
+        public static FcmTopicSubscriptionResponse from(Boolean result) {
+            return new FcmTopicSubscriptionResponse(result);
+        }
+    }
 }

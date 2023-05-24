@@ -5,7 +5,6 @@ import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.service.JobService;
-import com.levelup.job.web.api.NotificationApiClient;
 import com.levelup.notification.domain.enumeration.FcmTopicName;
 import com.levelup.notification.domain.service.JobNotificationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,7 +31,6 @@ public class CrawlingController {
 
     private final JobService jobService;
 
-    private final NotificationApiClient notificationApiClient;
     private final JobNotificationService jobNotificationService;
 
     @Autowired
@@ -43,7 +41,6 @@ public class CrawlingController {
             @Qualifier("TossCrawler") Crawler tossCrawler,
             @Qualifier("CoupangCrawler") Crawler coupangCrawler,
             JobService jobService,
-            NotificationApiClient notificationApiClient,
             JobNotificationService jobNotificationService
     ) {
         this.kakaoCrawler = kakaoCrawler;
@@ -52,7 +49,6 @@ public class CrawlingController {
         this.tossCrawler = tossCrawler;
         this.coupangCrawler = coupangCrawler;
         this.jobService = jobService;
-        this.notificationApiClient = notificationApiClient;
         this.jobNotificationService = jobNotificationService;
     }
 
@@ -64,6 +60,10 @@ public class CrawlingController {
 
         List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.KAKAO);
         jobService.deleteAll(notExistsJobs);
+
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
@@ -95,6 +95,10 @@ public class CrawlingController {
         List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.NAVER);
         jobService.deleteAll(notExistsJobs);
 
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
+
         return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
     }
@@ -108,6 +112,10 @@ public class CrawlingController {
         List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.COUPANG);
         jobService.deleteAll(notExistsJobs);
 
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
+
         return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
     }
@@ -120,6 +128,10 @@ public class CrawlingController {
 
         List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.TOSS);
         jobService.deleteAll(notExistsJobs);
+
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
