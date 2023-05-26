@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -70,28 +71,55 @@ public class TopicService {
     }
 
     @Transactional
+    public boolean subscribeToTopic(Long topicId, String deviceToken) {
+        FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));
+        FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
+
+        boolean result = subscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
+        if (result) {
+            findDeviceToken.subscribeToTopic(findFcmTopic);
+        }
+
+        return result;
+    }
+
+    @Transactional
     public boolean subscribeToTopic(String topic, String deviceToken) {
         TopicManagementResponse response;
 
         try {
             response = firebaseMessaging.subscribeToTopic(Collections.singletonList(deviceToken), topic);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("{} 토큰을 {} 토픽에 등록하지 못했습니다.", deviceToken, topic);
+            log.error("{} 토큰을 {} 토픽에 등록하지 못했습니다. {}", deviceToken, topic, e.getMessage());
             return false;
         }
 
         if (response.getSuccessCount() == 0) {
-            log.error("{} 토큰을 {} 토픽에 등록하지 못했습니다.", deviceToken, topic);
+            String reason = response.getErrors().stream()
+                    .map(TopicManagementResponse.Error::getReason)
+                    .collect(Collectors.joining(", "));
 
-            for (TopicManagementResponse.Error error : response.getErrors()) {
-                log.error("reason: {}", error.getReason());
-            }
+            log.error("{} 토큰을 {} 토픽에 등록하지 못했습니다. {}", deviceToken, topic, reason);
 
             return false;
         }
 
         return true;
+    }
+
+    @Transactional
+    public boolean unsubscribeToTopic(Long topicId, String deviceToken) {
+        FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));
+        FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
+
+        boolean result = unsubscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
+        if (result) {
+            findDeviceToken.subscribeToTopic(null);
+        }
+
+        return unsubscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
     }
 
     @Transactional
@@ -101,17 +129,16 @@ public class TopicService {
         try {
             response = firebaseMessaging.unsubscribeFromTopic(Collections.singletonList(deviceToken), topic);
         } catch (Exception e) {
-            e.printStackTrace();
-            log.error("{} 토큰을 {} 토픽에서 해제하지 못했습니다.", deviceToken, topic);
+            log.error("{} 토큰을 {} 토픽에서 해제하지 못했습니다. {}", deviceToken, topic, e.getMessage());
             return false;
         }
 
         if (response.getSuccessCount() == 0) {
-            log.error("{} 토큰을 {} 토픽에서 해제하지 못했습니다.", deviceToken, topic);
+            String reason = response.getErrors().stream()
+                    .map(TopicManagementResponse.Error::getReason)
+                    .collect(Collectors.joining(", "));
 
-            for (TopicManagementResponse.Error error : response.getErrors()) {
-                log.error("reason: {}", error.getReason());
-            }
+            log.error("{} 토큰을 {} 토픽에서 해제하지 못했습니다. {}", deviceToken, topic, reason);
 
             return false;
         }
