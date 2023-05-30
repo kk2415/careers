@@ -1,7 +1,8 @@
 package com.levelup.api.controller.v1.dto;
 
-import com.levelup.notification.domain.enumeration.FcmTopicName;
+import com.levelup.notification.enumeration.FcmTopicName;
 import com.levelup.notification.domain.vo.FcmTopicVO;
+import com.levelup.notification.enumeration.FcmTopicSubscription;
 
 import javax.validation.constraints.NotNull;
 
@@ -28,10 +29,10 @@ public class FcmTopicDto {
     }
 
     public record FcmTopicSubscriptionResponse(
-            Boolean result
+            String result
     ) {
-        public static FcmTopicSubscriptionResponse from(Boolean result) {
-            return new FcmTopicSubscriptionResponse(result);
+        public static FcmTopicSubscriptionResponse from(FcmTopicSubscription result) {
+            return new FcmTopicSubscriptionResponse(result.name());
         }
     }
 }

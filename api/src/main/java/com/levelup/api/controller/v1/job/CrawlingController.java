@@ -5,7 +5,7 @@ import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.service.JobService;
-import com.levelup.notification.domain.enumeration.FcmTopicName;
+import com.levelup.notification.enumeration.FcmTopicName;
 import com.levelup.notification.domain.service.JobNotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

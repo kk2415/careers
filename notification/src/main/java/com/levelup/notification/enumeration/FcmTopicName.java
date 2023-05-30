@@ -1,4 +1,4 @@
-package com.levelup.notification.domain.enumeration;
+package com.levelup.notification.enumeration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;

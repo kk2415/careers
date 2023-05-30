@@ -4,6 +4,7 @@ import com.levelup.api.controller.v1.dto.FcmTopicDto;
 import com.levelup.api.controller.v1.dto.FcmTopicDto.FcmTopicCreateRequest;
 import com.levelup.notification.domain.service.fcm.TopicService;
 import com.levelup.notification.domain.vo.FcmTopicVO;
+import com.levelup.notification.enumeration.FcmTopicSubscription;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +33,13 @@ public class FcmTopicController {
 
     @Operation(summary = "토픽 구독 토글링", description = "토픽이 구독되어 있으면 해제, 아니면 구독")
     @PostMapping("/handle-subscription")
-    public ResponseEntity<Void> handleTopic(
+    public ResponseEntity<FcmTopicDto.FcmTopicSubscriptionResponse> handleTopic(
             @RequestParam Long topicId,
             @RequestParam String deviceToken
     ) {
-        fcmTopicService.handleTopicSubscription(topicId, deviceToken);
+        FcmTopicSubscription result = fcmTopicService.handleTopicSubscription(topicId, deviceToken);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(FcmTopicDto.FcmTopicSubscriptionResponse.from(result));
     }
 
     @Operation(summary = "FCM 토픽 전체 조회")
@@ -57,7 +58,7 @@ public class FcmTopicController {
             @RequestParam Long topicId,
             @RequestParam String deviceToken
     ) {
-        boolean result = fcmTopicService.subscribeToTopic(topicId, deviceToken);
+        FcmTopicSubscription result = fcmTopicService.subscribeToTopic(topicId, deviceToken);
 
         return ResponseEntity.ok().body(FcmTopicDto.FcmTopicSubscriptionResponse.from(result));
     }
@@ -68,7 +69,7 @@ public class FcmTopicController {
             @RequestParam Long topicId,
             @RequestParam String deviceToken
     ) {
-        boolean result = fcmTopicService.unsubscribeToTopic(topicId, deviceToken);
+        FcmTopicSubscription result = fcmTopicService.unsubscribeToTopic(topicId, deviceToken);
 
         return ResponseEntity.ok().body(FcmTopicDto.FcmTopicSubscriptionResponse.from(result));
     }

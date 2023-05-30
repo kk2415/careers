@@ -2,7 +2,7 @@ package com.levelup.notification.domain.service.fcm;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.TopicManagementResponse;
-import com.levelup.notification.domain.enumeration.FcmTopicName;
+import com.levelup.notification.enumeration.FcmTopicName;
 import com.levelup.notification.domain.vo.FcmTopicVO;
 import com.levelup.notification.domain.entity.fcm.FcmDeviceToken;
 import com.levelup.notification.domain.entity.fcm.FcmTopic;
@@ -10,6 +10,7 @@ import com.levelup.notification.domain.exception.EntityNotFoundException;
 import com.levelup.notification.domain.exception.ErrorCode;
 import com.levelup.notification.domain.repository.FcmDeviceTokenRepository;
 import com.levelup.notification.domain.repository.FcmTopicRepository;
+import com.levelup.notification.enumeration.FcmTopicSubscription;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,24 +38,29 @@ public class TopicService {
     }
 
     @Transactional
-    public void handleTopicSubscription(Long topicId, String deviceToken) {
+    public FcmTopicSubscription handleTopicSubscription(Long topicId, String deviceToken) {
         FcmTopic findTopic = fcmTopicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));
         FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
 
         if (isSubscribeToTopic(topicId, deviceToken)) {
-            boolean result = unsubscribeToTopic(findTopic.getTopicName(), deviceToken);
+            FcmTopicSubscription result = unsubscribeToTopic(findTopic.getTopicName(), deviceToken);
 
-            if (result) {
+            if (FcmTopicSubscription.UNSUBSCRIPTION.equals(result)) {
                 findDeviceToken.subscribeToTopic(null);
+                return FcmTopicSubscription.UNSUBSCRIPTION;
             }
-        } else {
-            boolean result = subscribeToTopic(findTopic.getTopicName(), deviceToken);
 
-            if (result) {
-                findDeviceToken.subscribeToTopic(findTopic);
-            }
+            return FcmTopicSubscription.SUBSCRIPTION;
         }
+
+        FcmTopicSubscription result = subscribeToTopic(findTopic.getTopicName(), deviceToken);
+        if (FcmTopicSubscription.SUBSCRIPTION.equals(result)) {
+            findDeviceToken.subscribeToTopic(findTopic);
+            return FcmTopicSubscription.SUBSCRIPTION;
+        }
+
+        return FcmTopicSubscription.UNSUBSCRIPTION;
     }
 
     @Transactional
@@ -71,13 +77,13 @@ public class TopicService {
     }
 
     @Transactional
-    public boolean subscribeToTopic(Long topicId, String deviceToken) {
+    public FcmTopicSubscription subscribeToTopic(Long topicId, String deviceToken) {
         FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));
         FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
 
-        boolean result = subscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
-        if (result) {
+        FcmTopicSubscription result = subscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
+        if (FcmTopicSubscription.SUBSCRIPTION.equals(result)) {
             findDeviceToken.subscribeToTopic(findFcmTopic);
         }
 
@@ -85,14 +91,14 @@ public class TopicService {
     }
 
     @Transactional
-    public boolean subscribeToTopic(String topic, String deviceToken) {
+    public FcmTopicSubscription subscribeToTopic(String topic, String deviceToken) {
         TopicManagementResponse response;
 
         try {
             response = firebaseMessaging.subscribeToTopic(Collections.singletonList(deviceToken), topic);
         } catch (Exception e) {
             log.error("{} 토큰을 {} 토픽에 등록하지 못했습니다. {}", deviceToken, topic, e.getMessage());
-            return false;
+            return FcmTopicSubscription.UNSUBSCRIPTION;
         }
 
         if (response.getSuccessCount() == 0) {
@@ -102,35 +108,35 @@ public class TopicService {
 
             log.error("{} 토큰을 {} 토픽에 등록하지 못했습니다. {}", deviceToken, topic, reason);
 
-            return false;
+            return FcmTopicSubscription.UNSUBSCRIPTION;
         }
 
-        return true;
+        return FcmTopicSubscription.SUBSCRIPTION;
     }
 
     @Transactional
-    public boolean unsubscribeToTopic(Long topicId, String deviceToken) {
+    public FcmTopicSubscription unsubscribeToTopic(Long topicId, String deviceToken) {
         FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.FCM_TOPIC_NOT_FOUND));
         FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
 
-        boolean result = unsubscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
-        if (result) {
+        FcmTopicSubscription result = unsubscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
+        if (FcmTopicSubscription.UNSUBSCRIPTION.equals(result)) {
             findDeviceToken.subscribeToTopic(null);
         }
 
-        return unsubscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
+        return result;
     }
 
     @Transactional
-    public boolean unsubscribeToTopic(String topic, String deviceToken) {
+    public FcmTopicSubscription unsubscribeToTopic(String topic, String deviceToken) {
         TopicManagementResponse response;
 
         try {
             response = firebaseMessaging.unsubscribeFromTopic(Collections.singletonList(deviceToken), topic);
         } catch (Exception e) {
             log.error("{} 토큰을 {} 토픽에서 해제하지 못했습니다. {}", deviceToken, topic, e.getMessage());
-            return false;
+            return FcmTopicSubscription.SUBSCRIPTION;
         }
 
         if (response.getSuccessCount() == 0) {
@@ -140,10 +146,10 @@ public class TopicService {
 
             log.error("{} 토큰을 {} 토픽에서 해제하지 못했습니다. {}", deviceToken, topic, reason);
 
-            return false;
+            return FcmTopicSubscription.SUBSCRIPTION;
         }
 
-        return true;
+        return FcmTopicSubscription.UNSUBSCRIPTION;
     }
 
     public List<FcmTopicVO> getAll() {

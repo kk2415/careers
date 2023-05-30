@@ -1,7 +1,7 @@
 package com.levelup.api.controller.v1.notification;
 
 import com.levelup.api.controller.v1.dto.NotificationDto.NotificationRequest;
-import com.levelup.notification.domain.enumeration.FcmTopicName;
+import com.levelup.notification.enumeration.FcmTopicName;
 import com.levelup.notification.domain.service.JobNotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

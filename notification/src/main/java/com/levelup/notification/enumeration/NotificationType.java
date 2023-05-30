@@ -1,4 +1,4 @@
-package com.levelup.notification.domain.enumeration;
+package com.levelup.notification.enumeration;
 
 public enum NotificationType {
 
