@@ -2,43 +2,47 @@ package com.levelup.job.domain.repository;
 
 import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.entity.Job;
-import com.levelup.job.domain.entity.QJob;
 import com.levelup.job.domain.enumeration.Company;
-import com.levelup.job.domain.enumeration.OrderBy;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-@RequiredArgsConstructor
+import static com.levelup.job.domain.entity.QJob.job;
+
 public class JobRepositoryCustomImpl implements JobRepositoryCustom {
 
-    private final EntityManager em;
+    private final JPAQueryFactory queryFactory;
+
+    public JobRepositoryCustomImpl(@Autowired EntityManager em) {
+        this.queryFactory = new JPAQueryFactory(em);;
+    }
 
     @Override
-    public Page<Job> findByFilterCondition(JobFilterCondition filterCondition, OrderBy orderBy, Pageable pageable) {
-        QJob job = QJob.job;
+    public List<Job> findByFilterCondition(JobFilterCondition filterCondition, Long size, Long page) {
+        JPAQuery<Job> query = findByFilterCondition(filterCondition);
 
-        final JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        if (page != null && size != null) {
+            query = query
+                    .offset(page)
+                    .limit(size);
+        }
 
-        List<Job> jobs = queryFactory
+        return query.fetch();
+    }
+
+    private JPAQuery<Job> findByFilterCondition(JobFilterCondition filterCondition) {
+        return queryFactory
                 .select(job)
                 .from(job)
                 .where(filterCompany(filterCondition.getCompany()))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(job.createdAt.desc())
-                .fetch();
-
-        return new PageImpl<>(jobs, pageable, jobs.size());
+                .orderBy(job.createdAt.desc());
     }
 
     private BooleanExpression filterCompany(Company company) {
-        return company == null ? null : QJob.job.company.eq(company);
+        return company == null ? null : job.company.eq(company);
     }
 }

@@ -10,7 +10,6 @@ import com.levelup.job.domain.service.JobService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +23,6 @@ import java.util.List;
 public class JobController {
 
     private final JobService jobService;
-
-    @GetMapping("/test")
-    public void test() {
-        jobService.test();
-    }
 
     @Operation(summary = "채용 공고 생성")
     @PostMapping("")
@@ -44,10 +38,10 @@ public class JobController {
             @RequestParam(required = false) Company company,
             @RequestParam(required = false) OpenStatus openStatus,
             @RequestParam(defaultValue = "CREATED_AT") OrderBy orderBy,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "0") int page
+            @RequestParam(required = false) Long size,
+            @RequestParam(required = false) Long page
     ) {
-        List<JobVO> jobs = jobService.filtering(JobFilterCondition.of(company, openStatus), orderBy, PageRequest.of(page, size));
+        List<JobVO> jobs = jobService.filtering(JobFilterCondition.of(company, openStatus), orderBy, size,page);
 
         return ResponseEntity.ok().body(jobs.stream()
                 .map(JobDto.Response::from).toList());

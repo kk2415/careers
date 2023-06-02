@@ -53,10 +53,9 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobVO> filtering(JobFilterCondition filterCondition, OrderBy orderBy, Pageable pageable) {
-        return jobRepository.findByFilterCondition(filterCondition, orderBy, pageable)
+    public List<JobVO> filtering(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
+        return jobRepository.findByFilterCondition(filterCondition, size, page).stream()
                 .map(JobVO::from)
-                .stream()
                 .toList();
     }
 

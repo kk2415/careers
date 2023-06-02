@@ -2,11 +2,10 @@ package com.levelup.job.domain.repository;
 
 import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.entity.Job;
-import com.levelup.job.domain.enumeration.OrderBy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface JobRepositoryCustom {
 
-    Page<Job> findByFilterCondition(JobFilterCondition filterCondition, OrderBy orderBy, Pageable pageable);
+    List<Job> findByFilterCondition(JobFilterCondition filterCondition, Long size, Long page);
 }
