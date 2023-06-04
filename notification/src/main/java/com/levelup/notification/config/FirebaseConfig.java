@@ -18,9 +18,12 @@ public class FirebaseConfig {
     @Value("${project.properties.firebase-create-scoped}")
     String fireBaseCreateScoped;
 
+    @Value("${project.properties.secret-key}")
+    String fireBaseSecretKeyPath;
+
     @Bean
     public FirebaseMessaging firebaseMessaging() throws IOException {
-        InputStream serviceAccount = new ClassPathResource("firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json").getInputStream();
+        InputStream serviceAccount = new ClassPathResource(fireBaseSecretKeyPath).getInputStream();
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(
