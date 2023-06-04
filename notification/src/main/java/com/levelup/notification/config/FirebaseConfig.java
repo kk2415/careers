@@ -7,7 +7,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +23,7 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseMessaging firebaseMessaging() throws IOException {
-        InputStream serviceAccount = new ClassPathResource(fireBaseSecretKeyPath).getInputStream();
+        InputStream serviceAccount = new FileSystemResource(fireBaseSecretKeyPath).getInputStream();
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(
