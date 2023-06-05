@@ -8,4 +8,5 @@ import java.util.List;
 public interface JobRepositoryCustom {
 
     List<Job> findByFilterCondition(JobFilterCondition filterCondition, Long size, Long page);
+    Long countByFilterCondition(JobFilterCondition filterCondition);
 }

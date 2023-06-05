@@ -6,6 +6,7 @@ import com.levelup.job.domain.enumeration.OrderBy;
 import com.levelup.job.domain.repository.JobRepository;
 import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.vo.PagingJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -53,10 +54,13 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobVO> filtering(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
-        return jobRepository.findByFilterCondition(filterCondition, size, page).stream()
+    public PagingJob filtering(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
+        List<JobVO> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
                 .map(JobVO::from)
                 .toList();
+        Long totalCount = jobRepository.countByFilterCondition(filterCondition);
+
+        return PagingJob.of(jobs, totalCount);
     }
 
     @Transactional(readOnly = true)

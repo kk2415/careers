@@ -1,12 +1,13 @@
 package com.levelup.api.controller.v1.job;
 
 import com.levelup.api.controller.v1.dto.JobDto;
-import com.levelup.job.domain.vo.JobFilterCondition;
-import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.enumeration.OpenStatus;
 import com.levelup.job.domain.enumeration.OrderBy;
 import com.levelup.job.domain.service.JobService;
+import com.levelup.job.domain.vo.JobFilterCondition;
+import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.vo.PagingJob;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -34,17 +35,16 @@ public class JobController {
 
     @Operation(summary = "채용 공고 페이징 조회")
     @GetMapping("")
-    public ResponseEntity<List<JobDto.Response>> gets(
+    public ResponseEntity<JobDto.PagingResponse> gets(
             @RequestParam(required = false) Company company,
             @RequestParam(required = false) OpenStatus openStatus,
             @RequestParam(defaultValue = "CREATED_AT") OrderBy orderBy,
             @RequestParam(required = false) Long size,
             @RequestParam(required = false) Long page
     ) {
-        List<JobVO> jobs = jobService.filtering(JobFilterCondition.of(company, openStatus), orderBy, size,page);
+        PagingJob pagingJob = jobService.filtering(JobFilterCondition.of(company, openStatus), orderBy, size, page);
 
-        return ResponseEntity.ok().body(jobs.stream()
-                .map(JobDto.Response::from).toList());
+        return ResponseEntity.ok().body(JobDto.PagingResponse.from(pagingJob));
     }
 
     @GetMapping("/today")

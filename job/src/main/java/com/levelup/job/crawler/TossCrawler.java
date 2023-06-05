@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component("TossCrawler")
+@Component("tossCrawler")
 public class TossCrawler implements Crawler {
 
     private final TossScraper tossScraper;

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component("CoupangCrawler")
+@Component("coupangCrawler")
 public class CoupangCrawler implements Crawler {
 
     private final CoupangScraper coupangScraper;

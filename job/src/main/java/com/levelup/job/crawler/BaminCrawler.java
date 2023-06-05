@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component("BaminCrawler")
+@Component("baminCrawler")
 public class BaminCrawler implements Crawler {
 
     private final BaminScraper baminScraper;

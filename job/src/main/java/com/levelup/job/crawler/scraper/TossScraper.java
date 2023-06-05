@@ -26,7 +26,6 @@ public class TossScraper {
         driver.get(Company.TOSS.getUrl() + params);
 
         List<WebElement> aTagElements = driver.findElements(By.cssSelector("div.css-64lvsl > a[href^='/career/job-detail']"));
-        System.out.println("aTagElements: " + aTagElements.size());
         List<TossJobVO> tossJobList = aTagElements.stream()
                 .map(aTagElement -> {
                     String title = aTagElement.findElement(By.cssSelector("a.css-g65o95 > div.css-1xr69i7 > div.css-1g4e5jn.e1esrqlj0 > span.typography.typography--h5.typography--bold.color--grey700 > div > span")).getText();

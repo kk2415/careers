@@ -1,12 +1,12 @@
 package com.levelup.job.domain.repository;
 
-import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.entity.Job;
 import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.domain.vo.JobFilterCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -23,23 +23,32 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom {
 
     @Override
     public List<Job> findByFilterCondition(JobFilterCondition filterCondition, Long size, Long page) {
-        JPAQuery<Job> query = findByFilterCondition(filterCondition);
-
         if (page != null && size != null) {
-            query = query
-                    .offset(page)
-                    .limit(size);
-        }
+            PageRequest pageRequest = PageRequest.of(Math.toIntExact(page), Math.toIntExact(size));
 
-        return query.fetch();
+            return queryFactory
+                    .select(job)
+                    .from(job)
+                    .where(filterCompany(filterCondition.getCompany()))
+                    .offset(pageRequest.getOffset())
+                    .limit(pageRequest.getPageSize())
+                    .fetch();
+        } else {
+            return queryFactory
+                    .select(job)
+                    .from(job)
+                    .where(filterCompany(filterCondition.getCompany()))
+                    .fetch();
+        }
     }
 
-    private JPAQuery<Job> findByFilterCondition(JobFilterCondition filterCondition) {
+    @Override
+    public Long countByFilterCondition(JobFilterCondition filterCondition) {
         return queryFactory
                 .select(job)
                 .from(job)
                 .where(filterCompany(filterCondition.getCompany()))
-                .orderBy(job.createdAt.desc());
+                .fetchCount();
     }
 
     private BooleanExpression filterCompany(Company company) {

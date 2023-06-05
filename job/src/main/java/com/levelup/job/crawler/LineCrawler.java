@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component("LineCrawler")
+@Component("lineCrawler")
 public class LineCrawler implements Crawler {
 
     private final LineScraper lineScraper;

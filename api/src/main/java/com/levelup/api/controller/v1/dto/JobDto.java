@@ -1,11 +1,13 @@
 package com.levelup.api.controller.v1.dto;
 
-import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.vo.PagingJob;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class JobDto {
 
@@ -47,6 +49,15 @@ public class JobDto {
                     jobVO.getUrl(),
                     jobVO.getNoticeEndDate(),
                     jobVO.getCreatedAt());
+        }
+    }
+
+    public record PagingResponse(
+            List<Response> jobs,
+            Long totalCount
+    ) {
+        public static PagingResponse from(PagingJob pagingJob) {
+            return new PagingResponse(pagingJob.jobs().stream().map(Response::from).toList(), pagingJob.totalCount());
         }
     }
 }

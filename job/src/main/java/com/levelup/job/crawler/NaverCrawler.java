@@ -11,7 +11,7 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component("NaverCrawler")
+@Component("naverCrawler")
 public class NaverCrawler implements Crawler {
 
     private final NaverScraper naverScraper;
