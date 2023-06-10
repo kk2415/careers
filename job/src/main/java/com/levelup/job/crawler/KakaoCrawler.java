@@ -14,7 +14,7 @@ import java.util.List;
 @Component("kakaoCrawler")
 public class KakaoCrawler implements Crawler {
 
-    private final KakaoScraper kakaoScraper;
+    private final KakaoScraper scraper;
 
     @Override
     public Company getCompany() {
@@ -23,7 +23,7 @@ public class KakaoCrawler implements Crawler {
 
     @Override
     public List<JobVO> crawling() {
-        return kakaoScraper.findJobs();
+        return scraper.scrape();
     }
 }
 

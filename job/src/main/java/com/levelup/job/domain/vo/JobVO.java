@@ -35,10 +35,9 @@ public class JobVO {
             String title,
             Company company,
             String url,
-            String noticeEndDate,
-            LocalDateTime created)
-    {
-        return new JobVO(null, title, company, url, noticeEndDate, created);
+            String noticeEndDate
+    ) {
+        return new JobVO(null, title, company, url, noticeEndDate);
     }
 
     public static JobVO from(Job job) {

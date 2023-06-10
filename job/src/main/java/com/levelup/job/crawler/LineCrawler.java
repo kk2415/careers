@@ -14,7 +14,7 @@ import java.util.List;
 @Component("lineCrawler")
 public class LineCrawler implements Crawler {
 
-    private final LineScraper lineScraper;
+    private final LineScraper scraper;
 
     @Override
     public Company getCompany() {
@@ -23,7 +23,7 @@ public class LineCrawler implements Crawler {
 
     @Override
     public List<JobVO> crawling() {
-        return lineScraper.findJobs();
+        return scraper.scrape();
     }
 }
 

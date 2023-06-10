@@ -29,7 +29,7 @@ public class JobDto {
         }
 
         public JobVO toDomain() {
-            return JobVO.of(title, company, url, noticeEndDate, LocalDateTime.now());
+            return JobVO.of(title, company, url, noticeEndDate);
         }
     }
 

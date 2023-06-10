@@ -14,7 +14,7 @@ import java.util.List;
 @Component("baminCrawler")
 public class BaminCrawler implements Crawler {
 
-    private final BaminScraper baminScraper;
+    private final BaminScraper scraper;
 
     @Override
     public Company getCompany() {
@@ -23,7 +23,7 @@ public class BaminCrawler implements Crawler {
 
     @Override
     public List<JobVO> crawling() {
-        return baminScraper.findJobs();
+        return scraper.scrape();
     }
 }
 

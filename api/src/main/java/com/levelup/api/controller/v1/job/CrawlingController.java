@@ -2,7 +2,6 @@ package com.levelup.api.controller.v1.job;
 
 import com.levelup.api.controller.v1.dto.JobDto;
 import com.levelup.job.crawler.Crawler;
-import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.notification.domain.service.JobNotificationService;
@@ -29,6 +28,7 @@ public class CrawlingController {
     private final Crawler coupangCrawler;
     private final Crawler tossCrawler;
     private final Crawler baminCrawler;
+    private final Crawler carrotMarketCrawler;
 
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;
@@ -37,9 +37,9 @@ public class CrawlingController {
     @PostMapping("/kakao")
     public ResponseEntity<List<JobDto.Response>> crawlKakao() {
         List<JobVO> crawledJobs = kakaoCrawler.crawling();
-        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.KAKAO);
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, kakaoCrawler.getCompany());
 
-        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.KAKAO);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, kakaoCrawler.getCompany());
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
@@ -54,9 +54,9 @@ public class CrawlingController {
     @PostMapping("/line")
     public ResponseEntity<List<JobDto.Response>> crawlLine() {
         List<JobVO> crawledJobs = lineCrawler.crawling();
-        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.LINE);
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, lineCrawler.getCompany());
 
-        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.LINE);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, lineCrawler.getCompany());
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
@@ -71,9 +71,9 @@ public class CrawlingController {
     @PostMapping("/naver")
     public ResponseEntity<List<JobDto.Response>> crawlNaver() {
         List<JobVO> crawledJobs = naverCrawler.crawling();
-        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.NAVER);
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, naverCrawler.getCompany());
 
-        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.NAVER);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, naverCrawler.getCompany());
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
@@ -88,9 +88,9 @@ public class CrawlingController {
     @PostMapping("/coupang")
     public ResponseEntity<List<JobDto.Response>> crawlCoupang() {
         List<JobVO> crawledJobs = coupangCrawler.crawling();
-        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.COUPANG);
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, coupangCrawler.getCompany());
 
-        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.COUPANG);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, coupangCrawler.getCompany());
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
@@ -105,9 +105,9 @@ public class CrawlingController {
     @PostMapping("/toss")
     public ResponseEntity<List<JobDto.Response>> crawlToss() {
         List<JobVO> crawledJobs = tossCrawler.crawling();
-        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.TOSS);
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, tossCrawler.getCompany());
 
-        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.TOSS);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, tossCrawler.getCompany());
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
@@ -122,9 +122,26 @@ public class CrawlingController {
     @PostMapping("/bamin")
     public ResponseEntity<List<JobDto.Response>> crawlBamin() {
         List<JobVO> crawledJobs = baminCrawler.crawling();
-        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, Company.BAMIN);
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, baminCrawler.getCompany());
 
-        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, Company.BAMIN);
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, baminCrawler.getCompany());
+        jobService.deleteAll(notExistsJobs);
+
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
+
+        return ResponseEntity.ok().body(newJobs.stream()
+                .map(JobDto.Response::from).toList());
+    }
+
+    @Operation(summary = "당근마켓 채용 크롤링")
+    @PostMapping("/carrot-market")
+    public ResponseEntity<List<JobDto.Response>> crawlCarrotMarket() {
+        List<JobVO> crawledJobs = carrotMarketCrawler.crawling();
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, carrotMarketCrawler.getCompany());
+
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, carrotMarketCrawler.getCompany());
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()

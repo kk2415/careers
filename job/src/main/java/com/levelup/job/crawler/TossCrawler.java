@@ -14,7 +14,7 @@ import java.util.List;
 @Component("tossCrawler")
 public class TossCrawler implements Crawler {
 
-    private final TossScraper tossScraper;
+    private final TossScraper scraper;
 
     @Override
     public Company getCompany() {
@@ -23,7 +23,7 @@ public class TossCrawler implements Crawler {
 
     @Override
     public List<JobVO> crawling() {
-        return tossScraper.findJobs();
+        return scraper.scrape();
     }
 }
 

@@ -14,7 +14,7 @@ import java.util.List;
 @Component("naverCrawler")
 public class NaverCrawler implements Crawler {
 
-    private final NaverScraper naverScraper;
+    private final NaverScraper scraper;
 
     @Override
     public Company getCompany() {
@@ -23,7 +23,7 @@ public class NaverCrawler implements Crawler {
 
     @Override
     public List<JobVO> crawling() {
-        return naverScraper.findJobs();
+        return scraper.scrape();
     }
 }
 

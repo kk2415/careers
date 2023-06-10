@@ -15,21 +15,20 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-public class BaminScraper {
+public class CarrotMarketScraper {
 
-    private final static Company company = Company.BAMIN;
+    private final static Company company = Company.CARROT_MARKET;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<JobVO> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
 
-        List<WebElement> jobElements = scrollToEnd(driver);
-
-        List<JobVO> jobs = jobElements.stream().map(jobElement -> {
-            String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
-            String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
-            String noticeEndDate = "영업 종료시";
+        List<WebElement> elements = driver.findElements(By.cssSelector("ul.c-jpGEAj > div"));
+        List<JobVO> jobs = elements.stream().map(element -> {
+            String title = element.findElement(By.cssSelector("li.c-deAcZv > a.c-hCDnza > div.c-MPFyP > h3.c-boyXyq")).getAccessibleName();
+            String url = element.findElement(By.cssSelector("li.c-deAcZv > a.c-hCDnza")).getAttribute("href");
+            String noticeEndDate = "영업마감일";
 
             return JobVO.of(title, company, url, noticeEndDate);
         }).collect(Collectors.toList());
@@ -40,7 +39,7 @@ public class BaminScraper {
     }
 
     private List<WebElement> scrollToEnd(WebDriver driver) {
-        List<WebElement> elements = driver.findElements(By.cssSelector("div.recruit-list > ul.recruit-type-list li:not(.loading-observer)"));
+        List<WebElement> elements = driver.findElements(By.cssSelector("ul.c-jpGEAj > div"));
         int prevSize = elements.size();
 
         for (int i = 0; i < 100; i++) {
@@ -52,7 +51,7 @@ public class BaminScraper {
                 e.printStackTrace();
             }
 
-            elements = driver.findElements(By.cssSelector("div.recruit-list > ul.recruit-type-list li:not(.loading-observer)"));
+            elements = driver.findElements(By.cssSelector("ul.c-jpGEAj > div"));
             int curSize = elements.size();
 
             // 스크롤을 끝까지 내리고 조회한 리스트 길이가 예전 리스트와 같다면 스크롤 끝에 도달했다는 의미

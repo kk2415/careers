@@ -1,8 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
-import com.levelup.job.domain.vo.JobVO;
-import com.levelup.job.domain.vo.LineJobVO;
 import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.domain.vo.JobVO;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -17,13 +16,14 @@ import java.util.stream.Collectors;
 @Component
 public class LineScraper {
 
+    private final static Company company = Company.LINE;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
-    public List<JobVO> findJobs() {
+    public List<JobVO> scrape() {
         String params = "?ca=Engineering&ci=Bundang,Seoul";
 
         WebDriver driver = prototypeBeanProvider.getObject();
-        driver.get(Company.LINE.getUrl() + params);
+        driver.get(company.getUrl() + params);
 
         List<WebElement> elements = driver.findElements(By.cssSelector("ul.job_list > li"));
         List<JobVO> jobs = elements.stream().map(element -> {
@@ -31,10 +31,10 @@ public class LineScraper {
 
             String jobNoticeUri = element.findElement(By.cssSelector("a")).getAttribute("href");
             String jobNoticePath = jobNoticeUri.substring(jobNoticeUri.lastIndexOf("/"));
+            String noticeEndDate = element.findElement(By.cssSelector("a span.date")).getText();
             String url = Company.LINE.getUrl() + jobNoticePath;
 
-            String noticeEndDate = element.findElement(By.cssSelector("a span.date")).getText();
-            return LineJobVO.of(title, url, noticeEndDate);
+            return JobVO.of(title, company, url, noticeEndDate);
         }).collect(Collectors.toList());
 
         driver.quit();

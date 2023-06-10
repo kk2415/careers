@@ -1,8 +1,8 @@
 package com.levelup.job.crawler;
 
-import com.levelup.job.crawler.scraper.CoupangScraper;
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.crawler.scraper.CarrotMarketScraper;
 import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.domain.vo.JobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,19 +11,19 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component("coupangCrawler")
-public class CoupangCrawler implements Crawler {
+@Component("carrotMarketCrawler")
+public class CarrotMarketCrawler implements Crawler {
 
-    private final CoupangScraper coupangScraper;
+    private final CarrotMarketScraper scraper;
 
     @Override
     public Company getCompany() {
-        return Company.COUPANG;
+        return Company.CARROT_MARKET;
     }
 
     @Override
     public List<JobVO> crawling() {
-        return coupangScraper.scrape();
+        return scraper.scrape();
     }
 }
 
