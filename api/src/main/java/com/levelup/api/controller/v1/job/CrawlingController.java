@@ -29,6 +29,7 @@ public class CrawlingController {
     private final Crawler tossCrawler;
     private final Crawler baminCrawler;
     private final Crawler carrotMarketCrawler;
+    private final Crawler bucketPlaceCrawler;
 
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;
@@ -142,6 +143,23 @@ public class CrawlingController {
         List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, carrotMarketCrawler.getCompany());
 
         List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, carrotMarketCrawler.getCompany());
+        jobService.deleteAll(notExistsJobs);
+
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(JobVO::getTitle)
+                .toList());
+
+        return ResponseEntity.ok().body(newJobs.stream()
+                .map(JobDto.Response::from).toList());
+    }
+
+    @Operation(summary = "오늘의 집 채용 크롤링")
+    @PostMapping("/bucket-place")
+    public ResponseEntity<List<JobDto.Response>> crawlBucketPlace() {
+        List<JobVO> crawledJobs = bucketPlaceCrawler.crawling();
+        List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, bucketPlaceCrawler.getCompany());
+
+        List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, bucketPlaceCrawler.getCompany());
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()

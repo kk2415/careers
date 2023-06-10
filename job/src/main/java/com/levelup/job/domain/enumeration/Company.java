@@ -13,15 +13,17 @@ public enum Company {
     TOSS("https://toss.im/career/jobs"),
     CARROT_MARKET("https://team.daangn.com/jobs/"),
     BUCKET_PLACE("https://www.bucketplace.com/careers/"),
-    NC("https://careers.ncsoft.com/apply/list"),
-//recruit-page__job-list__list__wrap
     OTHER("url"),
     ;
 
     /*채용 공고 사이트 주소*/
-    private String url;
+    private final String url;
 
     Company(String url) {
         this.url = url;
+    }
+
+    public String getUrl(String param) {
+        return url + "?" + param;
     }
 }

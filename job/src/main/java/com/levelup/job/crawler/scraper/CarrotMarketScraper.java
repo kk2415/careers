@@ -28,7 +28,7 @@ public class CarrotMarketScraper {
         List<JobVO> jobs = elements.stream().map(element -> {
             String title = element.findElement(By.cssSelector("li.c-deAcZv > a.c-hCDnza > div.c-MPFyP > h3.c-boyXyq")).getAccessibleName();
             String url = element.findElement(By.cssSelector("li.c-deAcZv > a.c-hCDnza")).getAttribute("href");
-            String noticeEndDate = "영업마감일";
+            String noticeEndDate = "채용 마감시";
 
             return JobVO.of(title, company, url, noticeEndDate);
         }).collect(Collectors.toList());
