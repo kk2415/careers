@@ -4,8 +4,7 @@ drop table if exists notification;
 drop table if exists fcm_topic;
 drop table if exists fcm_device_token;
 
-create table hibernate_sequence
-(
+create table hibernate_sequence (
     next_val bigint null
 ) engine=InnoDB;
 insert into hibernate_sequence values (1);
@@ -16,6 +15,8 @@ create table `job` (
     url text not null,
     company varchar(50) not null,
     notice_end_date varchar(50) not null,
+    job_group varchar(50) not null,
+    active boolean not null,
     created_at datetime not null default '2022-01-01 00:00:00',
     updated_at datetime not null default '2022-01-01 00:00:00'
 ) engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

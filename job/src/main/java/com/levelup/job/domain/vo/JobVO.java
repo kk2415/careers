@@ -20,6 +20,8 @@ public class JobVO {
     protected Company company;
     protected String url;
     protected String noticeEndDate;
+    protected String jobGroup;
+    private Boolean active;
     protected LocalDateTime createdAt;
 
     protected JobVO(Long id, String title, Company company, String url, String noticeEndDate) {
@@ -28,6 +30,19 @@ public class JobVO {
         this.company = company;
         this.url = url.trim();
         this.noticeEndDate = noticeEndDate.trim();
+        this.jobGroup = "";
+        this.active = true;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    protected JobVO(Long id, String title, Company company, String url, String noticeEndDate, String jobGroup) {
+        this.id = id;
+        this.title = title.trim();
+        this.company = company;
+        this.url = url.trim();
+        this.noticeEndDate = noticeEndDate.trim();
+        this.jobGroup = jobGroup;
+        this.active = true;
         this.createdAt = LocalDateTime.now();
     }
 
@@ -37,7 +52,30 @@ public class JobVO {
             String url,
             String noticeEndDate
     ) {
-        return new JobVO(null, title, company, url, noticeEndDate);
+        return new JobVO(
+                null,
+                title,
+                company,
+                url,
+                noticeEndDate
+        );
+    }
+
+    public static JobVO of(
+            String title,
+            Company company,
+            String url,
+            String noticeEndDate,
+            String jobGroup
+    ) {
+        return new JobVO(
+                null,
+                title,
+                company,
+                url,
+                noticeEndDate,
+                jobGroup
+        );
     }
 
     public static JobVO from(Job job) {
@@ -47,11 +85,12 @@ public class JobVO {
                 job.getCompany(),
                 job.getUrl(),
                 job.getNoticeEndDate(),
-                job.getCreatedAt());
+                ""
+        );
     }
 
     public Job toEntity() {
-        return Job.of(title, company, url, noticeEndDate);
+        return Job.of(title, company, url, noticeEndDate, jobGroup);
     }
 
     @Override

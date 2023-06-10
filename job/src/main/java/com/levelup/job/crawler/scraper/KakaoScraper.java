@@ -27,8 +27,8 @@ public class KakaoScraper {
         WebDriver driver = prototypeBeanProvider.getObject();
         List<JobVO> jobs = new ArrayList<>();
         for (; page <= lastPage; ++page) {
-            params = "?skilset=Android,iOS,Windows,Web_front,DB,Cloud,Server,Hadoop_eco_system,Algorithm_Ranking,System&company=ALL&page=" + page;
-            driver.get(company.getUrl() + params);
+            params = "skilset=Android,iOS,Windows,Web_front,DB,Cloud,Server,Hadoop_eco_system,Algorithm_Ranking,System&company=ALL&page=" + page;
+            driver.get(company.getUrl(params));
 
             try {
                 Thread.sleep(1000);
@@ -37,13 +37,16 @@ public class KakaoScraper {
             }
 
             List<WebElement> jobList = driver.findElements(By.cssSelector("ul.list_jobs a"));
-            List<JobVO> scrapedJobs = jobList.stream().map(job -> {
-                String title = job.findElement(By.cssSelector("h4.tit_jobs")).getText();
-                final String url = job.getAttribute("href");
-                final String noticeEndDate = job.findElement(By.cssSelector("dl.list_info > dd")).getText();
+            List<JobVO> scrapedJobs = jobList.stream()
+                    .map(job -> {
+                        String title = job.findElement(By.cssSelector("h4.tit_jobs")).getText();
+                        final String url = job.getAttribute("href");
+                        final String noticeEndDate = job.findElement(By.cssSelector("dl.list_info > dd")).getText();
 
-                return JobVO.of(title, company, url, noticeEndDate);
-            }).toList();
+                        return JobVO.of(title, company, url, noticeEndDate);
+                    })
+                    .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                    .toList();
 
             jobs.addAll(scrapedJobs);
         }

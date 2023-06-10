@@ -31,7 +31,9 @@ public class CarrotMarketScraper {
             String noticeEndDate = "채용 마감시";
 
             return JobVO.of(title, company, url, noticeEndDate);
-        }).collect(Collectors.toList());
+        })
+        .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+        .collect(Collectors.toList());
 
         driver.quit();
 

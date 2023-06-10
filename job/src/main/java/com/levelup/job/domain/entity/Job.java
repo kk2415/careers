@@ -28,20 +28,25 @@ public class Job extends BaseTimeEntity {
     private Company company;
 
     private String noticeEndDate;
+    private String jobGroup;
+    private Boolean active;
 
     public static Job of(
             String title,
             Company company,
             String url,
-            String noticeEndDate
+            String noticeEndDate,
+            String jobGroup
     ) {
-        return new Job(null, title, url, company, noticeEndDate);
+        return new Job(null, title, url, company, noticeEndDate, jobGroup, true);
     }
 
-    public void update(String title, String url, Company company, String noticeEndDate) {
+    public void update(String title, String url, Company company, String noticeEndDate, String jobGroup, Boolean active) {
         this.title = title;
         this.url = url;
         this.company = company;
         this.noticeEndDate = noticeEndDate;
+        this.jobGroup = jobGroup;
+        this.active = active;
     }
 }

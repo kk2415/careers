@@ -96,7 +96,14 @@ public class JobService {
         Job findJob = jobRepository.findById(findJobId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 ID의 채용 공고를 찾을 수 없습니다."));
 
-        findJob.update(updateJob.getTitle(), updateJob.getUrl(), updateJob.getCompany(), updateJob.getNoticeEndDate());
+        findJob.update(
+                updateJob.getTitle(),
+                updateJob.getUrl(),
+                updateJob.getCompany(),
+                updateJob.getNoticeEndDate(),
+                updateJob.getJobGroup(),
+                updateJob.getActive()
+        );
     }
 
     @Transactional
@@ -113,6 +120,5 @@ public class JobService {
                 .bodyToMono(String.class);
 
         String response = mono.block();
-        System.out.println("response: " + response);
     }
 }

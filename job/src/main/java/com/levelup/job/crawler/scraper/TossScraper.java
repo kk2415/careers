@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -20,10 +19,10 @@ public class TossScraper {
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<JobVO> scrape() {
-        String params = "?category=engineering-product&category=engineering-platform&category=core-system&category=engineering-product-platform&category=infra&category=qa&category=engineering&category=design";
-
         WebDriver driver = prototypeBeanProvider.getObject();
-        driver.get(company.getUrl() + params);
+
+        String params = "category=engineering-product&category=engineering-platform&category=core-system&category=engineering-product-platform&category=infra&category=qa&category=engineering&category=design";
+        driver.get(company.getUrl(params));
 
         List<WebElement> aTagElements = driver.findElements(By.cssSelector("div.css-64lvsl > a[href^='/career/job-detail']"));
         List<JobVO> tossJobList = aTagElements.stream()
@@ -33,9 +32,12 @@ public class TossScraper {
                     String noticedEndedDate = "채용 마감시";
 
                     return JobVO.of(title, company, url, noticedEndedDate);
-                }).toList();
+                })
+                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .toList();
 
         driver.close();
-        return new ArrayList<>(tossJobList);
+
+        return tossJobList;
     }
 }

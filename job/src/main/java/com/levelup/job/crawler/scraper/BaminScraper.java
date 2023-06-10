@@ -25,14 +25,20 @@ public class BaminScraper {
         driver.get(company.getUrl());
 
         List<WebElement> jobElements = scrollToEnd(driver);
+        List<JobVO> jobs = jobElements.stream()
+                .map(jobElement -> {
+                    String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
+                    String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
+                    String noticeEndDate = "영업 종료시";
 
-        List<JobVO> jobs = jobElements.stream().map(jobElement -> {
-            String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
-            String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
-            String noticeEndDate = "영업 종료시";
+                    driver.get(url);
+                    WebElement element = driver.findElement(By.cssSelector("div.fr-view"));
+                    System.out.println(element);
 
-            return JobVO.of(title, company, url, noticeEndDate);
-        }).collect(Collectors.toList());
+                    return JobVO.of(title, company, url, noticeEndDate);
+                })
+                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .collect(Collectors.toList());
 
         driver.quit();
 

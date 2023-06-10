@@ -27,17 +27,20 @@ public class CoupangScraper {
         WebDriver driver = prototypeBeanProvider.getObject();
         List<JobVO> jobs = new ArrayList<>();
         for (; page <= lastPage; ++page) {
-            params = "?search=Software+engineer+backend+frontend&location=Seoul%2C+South+Korea&location=South+Korea&pagesize=20#results&page=" + page;
-            driver.get(company.getUrl() + params);
+            params = "search=Software+engineer+backend+frontend&location=Seoul%2C+South+Korea&location=South+Korea&pagesize=20#results&page=" + page;
+            driver.get(company.getUrl(params));
 
             List<WebElement> elements = driver.findElements(By.cssSelector("div.job-listing > div.card-job"));
-            List<JobVO> scrapedJobs = elements.stream().map((element) -> {
-                final String title = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getText();
-                final String url = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getAttribute("href");
-                final String noticeEndDate = "채용 마감시";
+            List<JobVO> scrapedJobs = elements.stream()
+                    .map((element) -> {
+                        final String title = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getText();
+                        final String url = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getAttribute("href");
+                        final String noticeEndDate = "채용 마감시";
 
-                return JobVO.of(title, company, url, noticeEndDate);
-            }).toList();
+                        return JobVO.of(title, company, url, noticeEndDate);
+                    })
+                    .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                    .toList();
 
             jobs.addAll(scrapedJobs);
         }

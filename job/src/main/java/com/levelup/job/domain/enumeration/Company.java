@@ -1,8 +1,5 @@
 package com.levelup.job.domain.enumeration;
 
-import lombok.Getter;
-
-@Getter
 public enum Company {
 
     NAVER("https://recruit.navercorp.com/rcrt/list.do"),
@@ -13,6 +10,7 @@ public enum Company {
     TOSS("https://toss.im/career/jobs"),
     CARROT_MARKET("https://team.daangn.com/jobs/"),
     BUCKET_PLACE("https://www.bucketplace.com/careers/"),
+    YANOLJA("https://careers.yanolja.co"),
     OTHER("url"),
     ;
 
@@ -21,6 +19,10 @@ public enum Company {
 
     Company(String url) {
         this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public String getUrl(String param) {
