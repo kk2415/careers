@@ -63,4 +63,11 @@ public class User implements UserDetails {
                         .map((role) -> new SimpleGrantedAuthority(role.toString()))
                         .toList());
     }
+
+    public static User createMock() {
+        return new User(
+                null,
+                null,
+                null);
+    }
 }
