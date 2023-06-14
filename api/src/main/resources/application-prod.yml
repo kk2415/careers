@@ -29,4 +29,8 @@ project:
     firebase-create-scoped: "https://www.googleapis.com/auth/firebase.messaging"
     firebase-topic: "diet_record_notification"
 
+jwt:
+  access-token:
+    expiration: 10080 #분 단위
+
 baseurl: http://localhost:8080
