@@ -7,7 +7,7 @@ import lombok.Getter;
 public enum LoginType {
 
     NONE,
-    ATTENDER,
+    USER,
     ADMIN
     ;
 
@@ -19,6 +19,6 @@ public enum LoginType {
             }
         }
 
-        return ATTENDER;
+        return USER;
     }
 }
