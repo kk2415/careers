@@ -3,6 +3,7 @@ drop table if exists `job`;
 drop table if exists notification;
 drop table if exists fcm_topic;
 drop table if exists fcm_device_token;
+drop table if exists `admin`;
 
 create table hibernate_sequence (
     next_val bigint null
@@ -49,3 +50,12 @@ create table if not exists fcm_device_token (
     created_at datetime not null default '2022-01-01 00:00:00',
     updated_at datetime not null default '2022-01-01 00:00:00'
 ) engine=InnoDB default charset=utf8 collate=utf8_general_ci;
+
+create table if not exists `admin` (
+    admin_id bigint not null auto_increment primary key,
+    username varchar(255) not null,
+    `password`  varchar(255) not null,
+    created_at datetime not null default '2022-01-01 00:00:00',
+    updated_at datetime not null default '2022-01-01 00:00:00'
+) engine=InnoDB default charset=utf8 collate=utf8_general_ci;
+insert into `admin` (username, `password`, created_at, updated_at) value ('admin', '{noop}Aa123456!', current_timestamp, current_timestamp);
