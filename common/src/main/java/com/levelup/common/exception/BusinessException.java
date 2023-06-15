@@ -5,17 +5,20 @@ import lombok.Getter;
 @Getter
 public class BusinessException extends RuntimeException {
 
+    protected String code;
     protected String message;
     protected int httpStatus;
 
-    public BusinessException(ExceptionCode errorCode) {
-        super(errorCode.getMessage());
-        this.message = errorCode.getMessage();
-        this.httpStatus = errorCode.getHttpStatus();
+    public BusinessException(ExceptionCode exceptionCode) {
+        super(exceptionCode.getMessage());
+        this.code = exceptionCode.name();
+        this.message = exceptionCode.getMessage();
+        this.httpStatus = exceptionCode.getHttpStatus();
     }
 
-    public BusinessException(String message, int httpStatus) {
+    public BusinessException(String code, String message, int httpStatus) {
         super(message);
+        this.code = code;
         this.message = message;
         this.httpStatus = httpStatus;
     }

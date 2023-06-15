@@ -7,6 +7,6 @@ public class JobException extends BusinessException {
     }
 
     public JobException(String message, int httpStatus) {
-        super(message, httpStatus);
+        super("JOB_EXCEPTION", message, httpStatus);
     }
 }

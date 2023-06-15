@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ExceptionCode {
+    EXCEPTION(500, "서버 작업 중 예외가 발생하였습니다."),
 
     EMAIL_NOT_FOUND(400, "존재하지 않는 이메일입니다."),
     PASSWORD_NOT_FOUND(400, "패스워드를 잘못 입력하셨습니다."),
@@ -36,6 +37,10 @@ public enum ExceptionCode {
 
     FCM_TOPIC_NOT_FOUND(400, "존재하지 않는 FCM 토픽입니다."),
     FCM_DEVICE_TOKEN_NOT_FOUND(400, "존재하지 않는 FCM 디바이스 토큰입니다."),
+
+    FILE_EXCEPTION(500,"파일 처리 중 예외가 발생하였습니다."),
+    FILE_DELETE_FAILURE_EXCEPTION(500, "파일 삭제에 실패하였습니다."),
+    FILE_SIZE_LIMIT_EXCEEDED(500, "요청하신 파일은 크기가 너무 큽니다."),
     ;
 
     private final int httpStatus;
