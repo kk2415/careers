@@ -3,4 +3,5 @@ dependencies {
 
     implementation project(':job')
     implementation project(':notification')
+    implementation project(':common')
 }

@@ -1,4 +1,4 @@
-package com.levelup.notification.domain.exception;
+package com.levelup.common.exception;
 
 import lombok.Getter;
 
@@ -8,7 +8,7 @@ public class BusinessException extends RuntimeException {
     protected String message;
     protected int httpStatus;
 
-    public BusinessException(ErrorCode errorCode) {
+    public BusinessException(ExceptionCode errorCode) {
         super(errorCode.getMessage());
         this.message = errorCode.getMessage();
         this.httpStatus = errorCode.getHttpStatus();

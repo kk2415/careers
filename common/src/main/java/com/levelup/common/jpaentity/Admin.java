@@ -1,5 +1,6 @@
-package com.levelup.api.security.userdetails.jpaentity;
+package com.levelup.common.jpaentity;
 
+import com.levelup.common.jpaentity.base.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

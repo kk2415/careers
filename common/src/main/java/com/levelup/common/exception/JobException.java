@@ -1,9 +1,9 @@
-package com.levelup.job.exception;
+package com.levelup.common.exception;
 
 public class JobException extends BusinessException {
 
-    public JobException(ErrorCode errorCode) {
-        super(errorCode);
+    public JobException(ExceptionCode exceptionCode) {
+        super(exceptionCode);
     }
 
     public JobException(String message, int httpStatus) {

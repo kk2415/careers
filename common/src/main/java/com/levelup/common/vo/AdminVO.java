@@ -1,6 +1,6 @@
-package com.levelup.api.security.userdetails.vo;
+package com.levelup.common.vo;
 
-import com.levelup.api.security.userdetails.jpaentity.Admin;
+import com.levelup.common.jpaentity.Admin;
 
 public record AdminVO(
         Long id,

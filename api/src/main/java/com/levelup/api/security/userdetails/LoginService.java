@@ -1,7 +1,9 @@
 package com.levelup.api.security.userdetails;
 
-import com.levelup.api.security.userdetails.jpaentity.Admin;
-import com.levelup.api.security.userdetails.repository.AdminRepository;
+import com.levelup.common.exception.EntityNotFoundException;
+import com.levelup.common.exception.ExceptionCode;
+import com.levelup.common.jpaentity.Admin;
+import com.levelup.common.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +21,7 @@ public class LoginService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Admin admin = adminRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자 계정입니다."));
+                .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.ADMIN_NOT_FOUND));
 
         return User.of(
                 admin.getUsername(),

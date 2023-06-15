@@ -1,4 +1,4 @@
-package com.levelup.api.security.userdetails.jpaentity;
+package com.levelup.common.jpaentity.base;
 
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;

@@ -1,5 +1,7 @@
 package com.levelup.job.domain.service;
 
+import com.levelup.common.exception.EntityNotFoundException;
+import com.levelup.common.exception.ExceptionCode;
 import com.levelup.job.domain.entity.Job;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.enumeration.OrderBy;
@@ -16,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -94,7 +95,7 @@ public class JobService {
     @Transactional
     public void update(Long findJobId, JobVO updateJob) {
         Job findJob = jobRepository.findById(findJobId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 ID의 채용 공고를 찾을 수 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.JOB_NOT_FOUND));
 
         findJob.update(
                 updateJob.getTitle(),
