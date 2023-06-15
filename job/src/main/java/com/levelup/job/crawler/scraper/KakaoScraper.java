@@ -3,6 +3,7 @@ package com.levelup.job.crawler.scraper;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.vo.JobVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class KakaoScraper {
@@ -36,23 +38,24 @@ public class KakaoScraper {
                 throw new RuntimeException(e);
             }
 
-            List<WebElement> jobList = driver.findElements(By.cssSelector("ul.list_jobs a"));
-            List<JobVO> scrapedJobs = jobList.stream()
-                    .map(job -> {
-                        String title = job.findElement(By.cssSelector("h4.tit_jobs")).getText();
-                        final String url = job.getAttribute("href");
-                        final String noticeEndDate = job.findElement(By.cssSelector("dl.list_info > dd")).getText();
+            List<WebElement> elements = driver.findElements(By.cssSelector("ul.list_jobs a"));
+            for (WebElement element : elements) {
+                try {
+                    String title = element.findElement(By.cssSelector("h4.tit_jobs")).getText();
+                    final String url = element.getAttribute("href");
+                    final String noticeEndDate = element.findElement(By.cssSelector("dl.list_info > dd")).getText();
 
-                        return JobVO.of(title, company, url, noticeEndDate);
-                    })
-                    .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
-                    .toList();
-
-            jobs.addAll(scrapedJobs);
+                    jobs.add(JobVO.of(title, company, url, noticeEndDate));
+                } catch (Exception e) {
+                    log.error("{} - {}", e.getClass(), e.getMessage());
+                }
+            }
         }
 
         driver.quit();
 
-        return jobs;
+        return jobs.stream()
+                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .toList();
     }
 }

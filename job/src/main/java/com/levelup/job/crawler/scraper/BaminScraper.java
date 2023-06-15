@@ -3,16 +3,15 @@ package com.levelup.job.crawler.scraper;
 import com.levelup.job.domain.enumeration.Company;
 import com.levelup.job.domain.vo.JobVO;
 import lombok.RequiredArgsConstructor;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.*;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class BaminScraper {
@@ -25,20 +24,19 @@ public class BaminScraper {
         driver.get(company.getUrl());
 
         List<WebElement> jobElements = scrollToEnd(driver);
-        List<JobVO> jobs = jobElements.stream()
-                .map(jobElement -> {
-                    String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
-                    String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
-                    String noticeEndDate = "영업 종료시";
 
-                    driver.get(url);
-                    WebElement element = driver.findElement(By.cssSelector("div.fr-view"));
-                    System.out.println(element);
+        ArrayList<JobVO> jobs = new ArrayList<>();
+        for (WebElement jobElement : jobElements) {
+            try {
+                String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
+                String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
+                String noticeEndDate = "영업 종료시";
 
-                    return JobVO.of(title, company, url, noticeEndDate);
-                })
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
-                .collect(Collectors.toList());
+                jobs.add(JobVO.of(title, company, url, noticeEndDate));
+            } catch (Exception e) {
+                log.error("{} - {}", e.getClass(), e.getMessage());
+            }
+        }
 
         driver.quit();
 
