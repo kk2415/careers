@@ -16,18 +16,14 @@ public class JobNotificationService {
     private final SendMessageService fcmSendMessageService;
 
     public void pushNewJobsNotification(FcmTopicName topicName, List<String> bodies) {
-        String notificationBody = createNotificationBody(bodies);
+        if (bodies.isEmpty()) {
+            return ;
+        }
 
-        fcmSendMessageService.sendMessageToTopic(topicName.name(), NEW_JOB_NOTIFICATION_TITLE, notificationBody);
+        fcmSendMessageService.sendMessageToTopic(topicName.name(), NEW_JOB_NOTIFICATION_TITLE, createNotificationBody(bodies));
     }
 
     private String createNotificationBody(List<String> bodies) {
-        //카카오 공채 공고 외 3건 신규 공고가 등록됐어요.
-
-        if (bodies.isEmpty()) {
-            return "";
-        }
-
         if (bodies.size() == 1) {
             return bodies.get(0) + " 공고가 등록됐어요";
         }
