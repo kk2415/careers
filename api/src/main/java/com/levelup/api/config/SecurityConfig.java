@@ -59,7 +59,7 @@ public class SecurityConfig {
         JwtAuthenticationFilter authenticationFilter = new JwtAuthenticationFilter(objectMapper, tokenProvider);
 
         authenticationFilter.setAuthenticationManager(authenticationConfiguration.getAuthenticationManager());
-        authenticationFilter.setFilterProcessesUrl("/api/v1/**/login");
+        authenticationFilter.setFilterProcessesUrl("/api/*/login");
         return authenticationFilter;
     }
 

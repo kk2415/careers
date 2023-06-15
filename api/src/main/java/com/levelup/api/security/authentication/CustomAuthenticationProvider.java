@@ -1,7 +1,6 @@
 package com.levelup.api.security.authentication;
 
 import com.levelup.api.security.userdetails.LoginService;
-import com.levelup.api.security.userdetails.LoginType;
 import com.levelup.api.security.userdetails.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         return CustomAuthenticationToken.authenticated(
                 user,
                 authentication,
-                customAuthenticationToken.getLoginType(),
                 user.getAuthorities()
         );
     }
@@ -46,7 +44,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String username = authentication.getName();
 
         try {
-            return retrieveUser(username, authentication.getLoginType());
+            return retrieveUser(username);
         }
         catch (UsernameNotFoundException ex) {
             log.debug("Failed to find user '" + username + "'");
@@ -54,15 +52,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    private UserDetails retrieveUser(String username, LoginType loginType) throws AuthenticationException {
+    private UserDetails retrieveUser(String username) throws AuthenticationException {
         try {
-            User loadedUser;
-
-            if (LoginType.ADMIN.equals(loginType)) {
-                loadedUser = (User) loginService.loadUserByUsername(username);
-            } else {
-                loadedUser = (User) loginService.loadUserByUsername(username);
-            }
+            User loadedUser = (User) loginService.loadUserByUsername(username);
 
             if (loadedUser == null) {
                 throw new InternalAuthenticationServiceException(

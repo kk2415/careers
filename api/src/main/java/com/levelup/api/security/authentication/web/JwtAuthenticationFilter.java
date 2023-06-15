@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.levelup.api.controller.exception.ExceptionResponse;
 import com.levelup.api.controller.v1.dto.LoginDto;
-import com.levelup.api.security.LoginException;
 import com.levelup.api.security.authentication.CustomAuthenticationToken;
-import com.levelup.api.security.userdetails.LoginType;
 import com.levelup.api.security.userdetails.Role;
 import com.levelup.api.security.userdetails.User;
 import com.levelup.api.util.jwt.AccessToken;
@@ -17,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -48,7 +45,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             AuthenticationManager authenticationManager = getAuthenticationManager();
 
             return authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
+                    new CustomAuthenticationToken(
                             loginRequest.username(),
                             loginRequest.password(),
                             new ArrayList<>(10)
@@ -66,29 +63,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         AccessToken accessToken = AccessToken.of(
                 token,
                 tokenProvider.getExpiration(token),
-                tokenProvider.getIssuedAt(token));
+                tokenProvider.getIssuedAt(token)
+        );
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.getWriter().write(getResponseBody((CustomAuthenticationToken) authResult, user, accessToken));
+        response.getWriter().write(getResponseBody(user, accessToken));
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authResult);
         SecurityContextHolder.setContext(context);
     }
 
-    private String getResponseBody(CustomAuthenticationToken authenticationToken, User user, AccessToken accessToken) throws JsonProcessingException {
+    private String getResponseBody(User user, AccessToken accessToken) throws JsonProcessingException {
         String role = user.getRoles().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst()
                 .orElse(Role.ANONYMOUS.toString());
-
-        if (LoginType.USER.equals(authenticationToken.getLoginType())) {
-            return objectMapper.writeValueAsString(LoginDto.LoginResponse.of(
-                    accessToken,
-                    role));
-        }
 
         return objectMapper.writeValueAsString(LoginDto.LoginResponse.of(accessToken, role));
     }
@@ -98,15 +90,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String exceptionMsg = "비밀번호가 일치하지 않습니다.";
         if (exception instanceof InternalAuthenticationServiceException) {
             exceptionMsg = "아이디가 일치하지 않습니다.";
-        } else if (exception instanceof LoginException) {
-            exceptionMsg = "잘못된 로그인 URI 입니다.";
         }
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.getWriter().write(objectMapper.writeValueAsString(ExceptionResponse.of(
-                exceptionMsg,
+                "LOGIN_EXCEPTION",
                 exceptionMsg,
                 HttpStatus.UNAUTHORIZED.value())));
 
