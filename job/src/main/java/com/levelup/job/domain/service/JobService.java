@@ -58,6 +58,7 @@ public class JobService {
     public PagingJob search(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
         List<JobVO> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
                 .map(JobVO::from)
+                .filter(JobVO::getActive)
                 .toList();
         Long totalCount = jobRepository.countByFilterCondition(filterCondition);
 
@@ -73,11 +74,13 @@ public class JobService {
         if (company == null) {
             return jobRepository.findByCreatedAt(startOfDay, endOfDay, pageable).stream()
                     .map(JobVO::from)
+                    .filter(JobVO::getActive)
                     .toList();
         }
 
         return jobRepository.findByCompanyAndCreatedAt(company, startOfDay, endOfDay, pageable).stream()
                 .map(JobVO::from)
+                .filter(JobVO::getActive)
                 .toList();
     }
 
