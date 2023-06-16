@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @ToString
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class JobVO {
 
@@ -24,28 +24,6 @@ public class JobVO {
     private Boolean active;
     protected LocalDateTime createdAt;
 
-    protected JobVO(Long id, String title, Company company, String url, String noticeEndDate) {
-        this.id = id;
-        this.title = title.trim();
-        this.company = company;
-        this.url = url.trim();
-        this.noticeEndDate = noticeEndDate.trim();
-        this.jobGroup = "";
-        this.active = true;
-        this.createdAt = LocalDateTime.now();
-    }
-
-    protected JobVO(Long id, String title, Company company, String url, String noticeEndDate, String jobGroup) {
-        this.id = id;
-        this.title = title.trim();
-        this.company = company;
-        this.url = url.trim();
-        this.noticeEndDate = noticeEndDate.trim();
-        this.jobGroup = jobGroup;
-        this.active = true;
-        this.createdAt = LocalDateTime.now();
-    }
-
     public static JobVO of(
             String title,
             Company company,
@@ -57,7 +35,10 @@ public class JobVO {
                 title,
                 company,
                 url,
-                noticeEndDate
+                noticeEndDate,
+                "",
+                true,
+                LocalDateTime.now()
         );
     }
 
@@ -74,7 +55,9 @@ public class JobVO {
                 company,
                 url,
                 noticeEndDate,
-                jobGroup
+                jobGroup,
+                true,
+                LocalDateTime.now()
         );
     }
 
@@ -85,7 +68,9 @@ public class JobVO {
                 job.getCompany(),
                 job.getUrl(),
                 job.getNoticeEndDate(),
-                ""
+                job.getJobGroup(),
+                job.getActive(),
+                job.getCreatedAt()
         );
     }
 

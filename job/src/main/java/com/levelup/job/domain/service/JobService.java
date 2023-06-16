@@ -57,8 +57,8 @@ public class JobService {
     @Transactional(readOnly = true)
     public PagingJob search(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
         List<JobVO> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
+                .filter(Job::getActive)
                 .map(JobVO::from)
-                .filter(JobVO::getActive)
                 .toList();
         Long totalCount = jobRepository.countByFilterCondition(filterCondition);
 
