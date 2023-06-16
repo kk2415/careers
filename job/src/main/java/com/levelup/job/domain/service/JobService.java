@@ -55,7 +55,7 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public PagingJob filtering(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
+    public PagingJob search(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
         List<JobVO> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
                 .map(JobVO::from)
                 .toList();

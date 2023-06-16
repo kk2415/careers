@@ -42,7 +42,7 @@ public class JobController {
             @RequestParam(required = false) Long size,
             @RequestParam(required = false) Long page
     ) {
-        PagingJob pagingJob = jobService.filtering(JobFilterCondition.of(company, openStatus), orderBy, size, page);
+        PagingJob pagingJob = jobService.search(JobFilterCondition.of(company, openStatus), orderBy, size, page);
 
         return ResponseEntity.ok().body(JobDto.PagingResponse.from(pagingJob));
     }

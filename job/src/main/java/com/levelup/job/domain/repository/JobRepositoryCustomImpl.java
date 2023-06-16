@@ -32,12 +32,14 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom {
                     .where(filterCompany(filterCondition.getCompany()))
                     .offset(pageRequest.getOffset())
                     .limit(pageRequest.getPageSize())
+                    .orderBy(job.createdAt.desc())
                     .fetch();
         } else {
             return queryFactory
                     .select(job)
                     .from(job)
                     .where(filterCompany(filterCondition.getCompany()))
+                    .orderBy(job.createdAt.desc())
                     .fetch();
         }
     }
