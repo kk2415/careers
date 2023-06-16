@@ -152,6 +152,15 @@ public class TopicService {
         return FcmTopicSubscription.UNSUBSCRIPTION;
     }
 
+    public FcmTopicSubscription getFcmTopicSubscription(String deviceToken) {
+        FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
+
+        if (findDeviceToken.getTopic() == null) {
+            return FcmTopicSubscription.UNSUBSCRIPTION;
+        }
+        return FcmTopicSubscription.SUBSCRIPTION;
+    }
+
     public List<FcmTopicVO> getAll() {
         return fcmTopicRepository.findAll().stream()
                 .map(FcmTopicVO::from)

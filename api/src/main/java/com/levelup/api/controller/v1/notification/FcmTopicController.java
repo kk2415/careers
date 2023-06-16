@@ -52,6 +52,14 @@ public class FcmTopicController {
                 .toList());
     }
 
+    @Operation(summary = "FCM 토픽 구독 상태 확인")
+    @GetMapping("/subscription-status")
+    public ResponseEntity<FcmTopicDto.FcmTopicSubscriptionResponse> getFcmTopicSubscription(@RequestParam String deviceToken) {
+        FcmTopicSubscription fcmTopicSubscription = fcmTopicService.getFcmTopicSubscription(deviceToken);
+
+        return ResponseEntity.ok().body(FcmTopicDto.FcmTopicSubscriptionResponse.from(fcmTopicSubscription));
+    }
+
     @Operation(summary = "토픽 구독")
     @PatchMapping("/subscription")
     public ResponseEntity<FcmTopicDto.FcmTopicSubscriptionResponse> subscription(
