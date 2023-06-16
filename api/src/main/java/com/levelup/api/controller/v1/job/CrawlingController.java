@@ -45,7 +45,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -62,7 +62,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -79,7 +79,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -96,7 +96,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -113,7 +113,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -130,7 +130,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -147,7 +147,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -164,7 +164,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()
@@ -181,7 +181,7 @@ public class CrawlingController {
         jobService.deleteAll(notExistsJobs);
 
         jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-                .map(JobVO::getTitle)
+                .map(JobVO::getSubject)
                 .toList());
 
         return ResponseEntity.ok().body(newJobs.stream()

@@ -89,6 +89,10 @@ public class JobVO {
         );
     }
 
+    public String getSubject() {
+        return "[" + company.getName() + "] " + title;
+    }
+
     public Job toEntity() {
         return Job.of(title, company, url, noticeEndDate, jobGroup);
     }
