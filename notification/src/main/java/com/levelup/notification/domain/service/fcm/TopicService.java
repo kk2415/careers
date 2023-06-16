@@ -153,9 +153,9 @@ public class TopicService {
     }
 
     public FcmTopicSubscription getFcmTopicSubscription(String deviceToken) {
-        FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
+        FcmDeviceToken fcmDeviceToken = fcmDeviceTokenRepository.findByToken(deviceToken).orElse(null);
 
-        if (findDeviceToken.getTopic() == null) {
+        if (fcmDeviceToken == null || fcmDeviceToken.getTopic() == null) {
             return FcmTopicSubscription.UNSUBSCRIPTION;
         }
         return FcmTopicSubscription.SUBSCRIPTION;
