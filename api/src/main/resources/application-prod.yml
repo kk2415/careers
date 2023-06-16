@@ -23,6 +23,9 @@ webdriver:
   chrome:
     driver: /home/ec2-user/level-up/tools/chromedriver/chromedriver
 
+logging:
+  config: classpath:log/logback-prod.xml
+
 project:
   properties:
     secret-key: /home/ec2-user/level-up/tools/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json

@@ -24,6 +24,9 @@ webdriver:
     driver: C:\tools\chromedriver_win32\chromedriver.exe
 #    driver: C:\Task\tools\chromedriver_win32\chromedriver.exe
 
+logging:
+  config: classpath:log/logback.xml
+
 project:
   properties:
 #    secret-key: C:/Task/project/level-up/tools/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
