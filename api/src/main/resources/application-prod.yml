@@ -1,5 +1,10 @@
 server:
   port: 8080
+  ssl:
+    enabled: true #default
+    key-store: "/home/ec2-user/level-up/ssl/keystore.p12"
+    key-store-password: "Aa123456!"
+    key-store-type: "PKCS12"
 
 spring:
   datasource:
