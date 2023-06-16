@@ -22,7 +22,7 @@ public class JobScheduler {
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;
 
-    @Scheduled(cron = "0 0 */1 * * *")
+    @Scheduled(cron = "0 0 3 * * *")
     public void crawlingJobs() {
         List<JobVO> jobs = new ArrayList<>();
 
