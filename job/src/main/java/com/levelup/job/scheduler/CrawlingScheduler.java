@@ -19,7 +19,7 @@ public class CrawlingScheduler {
     private final List<Crawler> crawlers;
     private final JobService jobService;
 
-    @Scheduled(cron = "0 */3 * * * *")
+    @Scheduled(cron = "0 0 */1 * * *")
     public void crawlingJobs() {
         List<JobVO> jobs = new ArrayList<>();
 

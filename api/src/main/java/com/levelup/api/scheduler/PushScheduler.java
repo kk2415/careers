@@ -19,7 +19,7 @@ public class PushScheduler {
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;
 
-    @Scheduled(cron = "0 */3 * * * *")
+    @Scheduled(cron = "0 0 */1 * * *")
     public void crawlingJobs() {
         List<JobVO> notPushedJobs = jobService.getNotPushedJobs();
         List<JobVO> jobs = jobService.push(notPushedJobs);
