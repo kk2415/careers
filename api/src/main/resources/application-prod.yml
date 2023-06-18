@@ -7,6 +7,9 @@ server:
     key-store-type: "PKCS12"
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://level-up-database.cdbjs5p1unct.ap-northeast-2.rds.amazonaws.com:3306/levelup?serverTimezone=Asia/Seoul

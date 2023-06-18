@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("com.levelup")
 @EnableJpaRepositories("com.levelup")
 @EnableJpaAuditing
-@Configuration
+@Configuration(value = "ApiJpaConfig")
 public class JpaConfig {
 }

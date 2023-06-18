@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EntityScan("com.levelup")
-@EnableJpaRepositories("com.levelup")
+@EntityScan("com.levelup.job")
+@EnableJpaRepositories("com.levelup.job")
 @EnableJpaAuditing
-@Configuration
+@Configuration(value = "JobJpaConfig")
 public class JpaConfig {
 }
