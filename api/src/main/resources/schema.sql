@@ -17,7 +17,8 @@ create table `job` (
     company varchar(50) not null,
     notice_end_date varchar(50) not null,
     job_group varchar(50) not null,
-    active boolean not null,
+    `active` boolean not null,
+    is_push_sent boolean not null,
     created_at datetime not null default '2022-01-01 00:00:00',
     updated_at datetime not null default '2022-01-01 00:00:00'
 ) engine=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

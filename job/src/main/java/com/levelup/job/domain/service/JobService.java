@@ -95,6 +95,25 @@ public class JobService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<JobVO> getNotPushedJobs() {
+        return jobRepository.findByIsPushSent(false).stream()
+                .map(JobVO::from)
+                .toList();
+    }
+
+    @Transactional
+    public List<JobVO> push(List<JobVO> notPushedJobs) {
+        List<Long> jobIds = notPushedJobs.stream().map(JobVO::getId).toList();
+
+        List<Job> jobs = jobRepository.findAllById(jobIds);
+        jobs.forEach(Job::push);
+
+        return jobs.stream()
+                .map(JobVO::from)
+                .toList();
+    }
+
     @Transactional
     public void update(Long findJobId, JobVO updateJob) {
         Job findJob = jobRepository.findById(findJobId)
@@ -106,7 +125,8 @@ public class JobService {
                 updateJob.getCompany(),
                 updateJob.getNoticeEndDate(),
                 updateJob.getJobGroup(),
-                updateJob.getActive()
+                updateJob.getActive(),
+                updateJob.getIsPushSent()
         );
     }
 

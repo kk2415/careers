@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOG_DIR" value="C:/Task/project/level-up/logs/api" />
+    <property name="LOG_DIR" value="C:/Task/project/level-up/logs/job" />
     <property name="LAYOUT_PATTERN" value="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} : %80logger{80} - %msg%n" />
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

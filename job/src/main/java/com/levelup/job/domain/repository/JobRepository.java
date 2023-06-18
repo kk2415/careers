@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface JobRepository extends JpaRepository<Job, Long>, JobRepositoryCustom {
 
     List<Job> findByCompany(Company company);
+    List<Job> findByIsPushSent(Boolean isPushSent);
 
     @Query("SELECT j FROM Job j WHERE j.company = :company AND j.createdAt >= :startOfDay AND j.createdAt <= :endOfDay")
     List<Job> findByCompanyAndCreatedAt(

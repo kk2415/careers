@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8888
 
 spring:
   datasource:
@@ -35,4 +35,4 @@ jwt:
   access-token:
     expiration: 10080 #분 단위
 
-baseurl: http://localhost:8080
+baseurl: http://localhost:8888

@@ -30,23 +30,31 @@ public class Job extends BaseTimeEntity {
     private String noticeEndDate;
     private String jobGroup;
     private Boolean active;
+    private Boolean isPushSent;
 
     public static Job of(
             String title,
             Company company,
             String url,
             String noticeEndDate,
-            String jobGroup
+            String jobGroup,
+            Boolean active,
+            Boolean isPushSent
     ) {
-        return new Job(null, title, url, company, noticeEndDate, jobGroup, true);
+        return new Job(null, title, url, company, noticeEndDate, jobGroup, active, isPushSent);
     }
 
-    public void update(String title, String url, Company company, String noticeEndDate, String jobGroup, Boolean active) {
+    public void update(String title, String url, Company company, String noticeEndDate, String jobGroup, Boolean active, Boolean isPushSent) {
         this.title = title;
         this.url = url;
         this.company = company;
         this.noticeEndDate = noticeEndDate;
         this.jobGroup = jobGroup;
         this.active = active;
+        this.isPushSent = isPushSent;
+    }
+
+    public void push() {
+        this.isPushSent = true;
     }
 }

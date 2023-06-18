@@ -21,13 +21,13 @@ dependencies {
     implementation project(':common')
 }
 
-bootJar {
-    enabled = false
-}
-
-jar {
-    enabled = true
-}
+//bootJar {
+//    enabled = false
+//}
+//
+//jar {
+//    enabled = true
+//}
 
 tasks.named('test') {
     useJUnitPlatform()

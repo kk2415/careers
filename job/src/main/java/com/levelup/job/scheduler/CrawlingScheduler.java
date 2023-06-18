@@ -1,10 +1,8 @@
-package com.levelup.api.scheduler;
+package com.levelup.job.scheduler;
 
 import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.domain.vo.JobVO;
-import com.levelup.notification.domain.service.JobNotificationService;
-import com.levelup.notification.enumeration.FcmTopicName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -16,13 +14,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Configuration
 @EnableScheduling
-public class JobScheduler {
+public class CrawlingScheduler {
 
     private final List<Crawler> crawlers;
     private final JobService jobService;
-    private final JobNotificationService jobNotificationService;
 
-    @Scheduled(cron = "0 0 3 * * *")
+    @Scheduled(cron = "0 */3 * * * *")
     public void crawlingJobs() {
         List<JobVO> jobs = new ArrayList<>();
 
@@ -35,9 +32,5 @@ public class JobScheduler {
 
             jobs.addAll(newJobs);
         });
-
-        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, jobs.stream()
-                .map(JobVO::getTitle)
-                .toList());
     }
 }

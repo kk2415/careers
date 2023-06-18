@@ -22,6 +22,7 @@ public class JobVO {
     protected String noticeEndDate;
     protected String jobGroup;
     private Boolean active;
+    private Boolean isPushSent;
     protected LocalDateTime createdAt;
 
     public static JobVO of(
@@ -38,6 +39,7 @@ public class JobVO {
                 noticeEndDate,
                 "",
                 true,
+                false,
                 LocalDateTime.now()
         );
     }
@@ -57,6 +59,7 @@ public class JobVO {
                 noticeEndDate,
                 jobGroup,
                 true,
+                false,
                 LocalDateTime.now()
         );
     }
@@ -70,6 +73,7 @@ public class JobVO {
                 job.getNoticeEndDate(),
                 job.getJobGroup(),
                 job.getActive(),
+                job.getIsPushSent(),
                 job.getCreatedAt()
         );
     }
@@ -79,7 +83,7 @@ public class JobVO {
     }
 
     public Job toEntity() {
-        return Job.of(title, company, url, noticeEndDate, jobGroup);
+        return Job.of(title, company, url, noticeEndDate, jobGroup, true, false);
     }
 
     @Override
