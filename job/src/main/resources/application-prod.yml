@@ -26,12 +26,6 @@ webdriver:
 logging:
   config: classpath:log/logback-prod.xml
 
-project:
-  properties:
-    secret-key: /home/ec2-user/level-up/tools/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
-    firebase-create-scoped: "https://www.googleapis.com/auth/firebase.messaging"
-    firebase-topic: "diet_record_notification"
-
 jwt:
   access-token:
     expiration: 10080 #분 단위
