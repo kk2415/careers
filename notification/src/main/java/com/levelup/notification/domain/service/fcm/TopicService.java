@@ -6,8 +6,8 @@ import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
 import com.levelup.notification.infrastructure.enumeration.FcmTopicName;
 import com.levelup.notification.domain.vo.FcmTopicVO;
-import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceToken;
-import com.levelup.notification.infrastructure.jpaentity.fcm.FcmTopic;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceTokenEntity;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmTopicEntity;
 import com.levelup.notification.infrastructure.repository.FcmDeviceTokenRepository;
 import com.levelup.notification.infrastructure.repository.FcmTopicRepository;
 import com.levelup.notification.infrastructure.enumeration.FcmTopicSubscription;
@@ -32,16 +32,16 @@ public class TopicService {
 
     @Transactional
     public FcmTopicVO saveFcmTopic(FcmTopicName topicName) {
-        FcmTopic saveFcmTopic = fcmTopicRepository.save(FcmTopic.of(topicName.name()));
+        FcmTopicEntity saveFcmTopic = fcmTopicRepository.save(FcmTopicEntity.of(topicName.name()));
 
         return FcmTopicVO.from(saveFcmTopic);
     }
 
     @Transactional
     public FcmTopicSubscription handleTopicSubscription(Long topicId, String deviceToken) {
-        FcmTopic findTopic = fcmTopicRepository.findById(topicId)
+        FcmTopicEntity findTopic = fcmTopicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.FCM_TOPIC_NOT_FOUND));
-        FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
+        FcmDeviceTokenEntity findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
 
         if (isSubscribeToTopic(topicId, deviceToken)) {
             FcmTopicSubscription result = unsubscribeToTopic(findTopic.getTopicName(), deviceToken);
@@ -64,13 +64,13 @@ public class TopicService {
     }
 
     @Transactional
-    public FcmDeviceToken findFcmDeviceTokenOrCreate(String deviceToken) {
+    public FcmDeviceTokenEntity findFcmDeviceTokenOrCreate(String deviceToken) {
         return fcmDeviceTokenRepository.findByToken(deviceToken)
-                .orElseGet(() -> fcmDeviceTokenRepository.save(FcmDeviceToken.of(deviceToken)));
+                .orElseGet(() -> fcmDeviceTokenRepository.save(FcmDeviceTokenEntity.of(deviceToken)));
     }
 
     private boolean isSubscribeToTopic(Long topicId, String deviceToken) {
-        Optional<FcmDeviceToken> findDeviceToken
+        Optional<FcmDeviceTokenEntity> findDeviceToken
                 = fcmDeviceTokenRepository.findByTopicIdAndToken(topicId, deviceToken);
 
         return findDeviceToken.isPresent();
@@ -78,9 +78,9 @@ public class TopicService {
 
     @Transactional
     public FcmTopicSubscription subscribeToTopic(Long topicId, String deviceToken) {
-        FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
+        FcmTopicEntity findFcmTopic = fcmTopicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.FCM_TOPIC_NOT_FOUND));
-        FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
+        FcmDeviceTokenEntity findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
 
         FcmTopicSubscription result = subscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
         if (FcmTopicSubscription.SUBSCRIPTION.equals(result)) {
@@ -116,9 +116,9 @@ public class TopicService {
 
     @Transactional
     public FcmTopicSubscription unsubscribeToTopic(Long topicId, String deviceToken) {
-        FcmTopic findFcmTopic = fcmTopicRepository.findById(topicId)
+        FcmTopicEntity findFcmTopic = fcmTopicRepository.findById(topicId)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.FCM_TOPIC_NOT_FOUND));
-        FcmDeviceToken findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
+        FcmDeviceTokenEntity findDeviceToken = findFcmDeviceTokenOrCreate(deviceToken);
 
         FcmTopicSubscription result = unsubscribeToTopic(findFcmTopic.getTopicName(), deviceToken);
         if (FcmTopicSubscription.UNSUBSCRIPTION.equals(result)) {
@@ -153,7 +153,7 @@ public class TopicService {
     }
 
     public FcmTopicSubscription getFcmTopicSubscription(String deviceToken) {
-        FcmDeviceToken fcmDeviceToken = fcmDeviceTokenRepository.findByToken(deviceToken).orElse(null);
+        FcmDeviceTokenEntity fcmDeviceToken = fcmDeviceTokenRepository.findByToken(deviceToken).orElse(null);
 
         if (fcmDeviceToken == null || fcmDeviceToken.getTopic() == null) {
             return FcmTopicSubscription.UNSUBSCRIPTION;

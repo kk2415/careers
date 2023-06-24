@@ -1,6 +1,6 @@
 package com.levelup.notification.domain.vo;
 
-import com.levelup.notification.infrastructure.jpaentity.fcm.FcmTopic;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmTopicEntity;
 
 public record FcmTopicVO(
         Long id,
@@ -10,7 +10,7 @@ public record FcmTopicVO(
         return new FcmTopicVO(id, topicName);
     }
 
-    public static FcmTopicVO from(FcmTopic fcmTopic) {
+    public static FcmTopicVO from(FcmTopicEntity fcmTopic) {
         return new FcmTopicVO(fcmTopic.getId(), fcmTopic.getTopicName());
     }
 }

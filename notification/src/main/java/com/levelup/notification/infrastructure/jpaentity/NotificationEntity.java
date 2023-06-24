@@ -1,6 +1,6 @@
 package com.levelup.notification.infrastructure.jpaentity;
 
-import com.levelup.notification.infrastructure.jpaentity.base.BaseTimeEntity;
+import com.levelup.common.jpaentity.base.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "notification")
 @Entity
-public class Notification extends BaseTimeEntity {
+public class NotificationEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
@@ -27,7 +27,7 @@ public class Notification extends BaseTimeEntity {
     private LocalDate readAt;
     private Boolean isRead;
 
-    public static Notification of(
+    public static NotificationEntity of(
             Long id,
             String title,
             String body,
@@ -36,7 +36,7 @@ public class Notification extends BaseTimeEntity {
             LocalDate readAt,
             Boolean isRead
     ) {
-        return new Notification(
+        return new NotificationEntity(
                 id,
                 title,
                 body,

@@ -1,6 +1,6 @@
 package com.levelup.notification.infrastructure.jpaentity.fcm;
 
-import com.levelup.notification.infrastructure.jpaentity.base.BaseTimeEntity;
+import com.levelup.common.jpaentity.base.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "fcm_device_token")
 @Entity
-public class FcmDeviceToken extends BaseTimeEntity {
+public class FcmDeviceTokenEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fcm_device_token_id")
@@ -22,13 +22,13 @@ public class FcmDeviceToken extends BaseTimeEntity {
 
     @JoinColumn(name = "fcm_topic_id")
     @OneToOne(fetch = FetchType.LAZY)
-    private FcmTopic topic;
+    private FcmTopicEntity topic;
 
-    public static FcmDeviceToken of(String token) {
-        return new FcmDeviceToken(null, token, null);
+    public static FcmDeviceTokenEntity of(String token) {
+        return new FcmDeviceTokenEntity(null, token, null);
     }
 
-    public void subscribeToTopic(FcmTopic topic) {
+    public void subscribeToTopic(FcmTopicEntity topic) {
         this.topic = topic;
     }
 }

@@ -1,6 +1,6 @@
 package com.levelup.notification.domain.vo;
 
-import com.levelup.notification.infrastructure.jpaentity.Notification;
+import com.levelup.notification.infrastructure.jpaentity.NotificationEntity;
 
 import java.time.LocalDate;
 
@@ -29,7 +29,7 @@ public record NotificationVO(
                 false);
     }
 
-    public static NotificationVO from(Notification entity) {
+    public static NotificationVO from(NotificationEntity entity) {
         return new NotificationVO(
                 entity.getId(),
                 entity.getTitle(),

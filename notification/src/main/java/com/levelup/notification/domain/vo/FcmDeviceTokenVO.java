@@ -1,6 +1,6 @@
 package com.levelup.notification.domain.vo;
 
-import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceToken;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceTokenEntity;
 
 public record FcmDeviceTokenVO(
         Long id,
@@ -11,7 +11,7 @@ public record FcmDeviceTokenVO(
         return new FcmDeviceTokenVO(id, token, topicName);
     }
 
-    public static FcmDeviceTokenVO from(FcmDeviceToken fcmDeviceToken) {
+    public static FcmDeviceTokenVO from(FcmDeviceTokenEntity fcmDeviceToken) {
         return new FcmDeviceTokenVO(
                 fcmDeviceToken.getId(),
                 fcmDeviceToken.getToken(),
