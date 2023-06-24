@@ -1,5 +1,6 @@
 rootProject.name = 'levelup'
 include 'api'
+include 'crawler'
 include 'job'
 include 'notification'
 include 'common'
