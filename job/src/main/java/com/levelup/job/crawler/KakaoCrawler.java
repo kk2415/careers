@@ -2,7 +2,7 @@ package com.levelup.job.crawler;
 
 import com.levelup.job.crawler.scraper.KakaoScraper;
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class KakaoCrawler implements Crawler {
     }
 
     @Override
-    public List<JobVO> crawling() {
+    public List<Job> crawling() {
         return scraper.scrape();
     }
 }

@@ -2,7 +2,7 @@ package com.levelup.job.scheduler;
 
 import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.service.JobService;
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -21,13 +21,13 @@ public class CrawlingScheduler {
 
     @Scheduled(cron = "0 0 */1 * * *")
     public void crawlingJobs() {
-        List<JobVO> jobs = new ArrayList<>();
+        List<Job> jobs = new ArrayList<>();
 
         crawlers.forEach(crawler -> {
-            List<JobVO> crawledJobs = crawler.crawling();
-            List<JobVO> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
+            List<Job> crawledJobs = crawler.crawling();
+            List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
 
-            List<JobVO> notExistsJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
+            List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
             jobService.deleteAll(notExistsJobs);
 
             jobs.addAll(newJobs);

@@ -1,6 +1,6 @@
 package com.levelup.job.crawler;
 
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.model.Job;
 import com.levelup.job.infrastructure.enumeration.Company;
 
 import java.util.List;
@@ -12,5 +12,5 @@ import java.util.List;
 public interface Crawler {
 
     Company getCompany();
-    List<JobVO> crawling();
+    List<Job> crawling();
 }

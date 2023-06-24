@@ -2,13 +2,13 @@ package com.levelup.job.domain.service;
 
 import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
-import com.levelup.job.infrastructure.jpaentity.Job;
+import com.levelup.job.infrastructure.jpaentity.JobEntity;
 import com.levelup.job.infrastructure.enumeration.Company;
 import com.levelup.job.infrastructure.enumeration.OrderBy;
 import com.levelup.job.infrastructure.repository.JobRepository;
-import com.levelup.job.domain.vo.JobFilterCondition;
-import com.levelup.job.domain.vo.JobVO;
-import com.levelup.job.domain.vo.PagingJob;
+import com.levelup.job.domain.model.JobFilterCondition;
+import com.levelup.job.domain.model.Job;
+import com.levelup.job.domain.model.PagingJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -31,34 +31,34 @@ public class JobService {
     private final WebClient webClient;
 
     @Transactional
-    public JobVO save(JobVO jobVO) {
-        Job saveJob = jobRepository.save(jobVO.toEntity());
+    public Job save(Job jobVO) {
+        JobEntity saveJob = jobRepository.save(jobVO.toEntity());
 
-        return JobVO.from(saveJob);
+        return Job.from(saveJob);
     }
 
     @Transactional
-    public List<JobVO> saveIfAbsent(List<JobVO> jobs, Company company) {
-        List<JobVO> findJobs = jobRepository.findByCompany(company).stream()
-                .map(JobVO::from).toList();
+    public List<Job> saveIfAbsent(List<Job> jobs, Company company) {
+        List<Job> findJobs = jobRepository.findByCompany(company).stream()
+                .map(Job::from).toList();
 
-        List<Job> saveJobs = jobs.stream()
+        List<JobEntity> saveJobs = jobs.stream()
                 .filter(job -> !findJobs.contains(job))
-                .map(JobVO::toEntity)
+                .map(Job::toEntity)
                 .toList();
 
         jobRepository.saveAll(saveJobs);
 
         return saveJobs.stream()
-                .map(JobVO::from)
+                .map(Job::from)
                 .toList();
     }
 
     @Transactional(readOnly = true)
     public PagingJob search(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
-        List<JobVO> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
-                .filter(Job::getActive)
-                .map(JobVO::from)
+        List<Job> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
+                .filter(JobEntity::getActive)
+                .map(Job::from)
                 .toList();
         Long totalCount = jobRepository.countByFilterCondition(filterCondition);
 
@@ -66,28 +66,28 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobVO> getCreatedTodayByCompany(Company company, int page, int size) {
+    public List<Job> getCreatedTodayByCompany(Company company, int page, int size) {
         LocalDateTime startOfDay = LocalDateTime.now().with(LocalTime.MIN);
         LocalDateTime endOfDay = LocalDateTime.now().with(LocalTime.MAX);
         Pageable pageable = PageRequest.of(page, size);
 
         if (company == null) {
             return jobRepository.findByCreatedAt(startOfDay, endOfDay, pageable).stream()
-                    .map(JobVO::from)
-                    .filter(JobVO::getActive)
+                    .map(Job::from)
+                    .filter(Job::getActive)
                     .toList();
         }
 
         return jobRepository.findByCompanyAndCreatedAt(company, startOfDay, endOfDay, pageable).stream()
-                .map(JobVO::from)
-                .filter(JobVO::getActive)
+                .map(Job::from)
+                .filter(Job::getActive)
                 .toList();
     }
 
     @Transactional(readOnly = true)
-    public List<JobVO> getNotMatched(List<JobVO> jobs, Company company) {
-        List<JobVO> findJobs = jobRepository.findByCompany(company).stream()
-                .map(JobVO::from)
+    public List<Job> getNotMatched(List<Job> jobs, Company company) {
+        List<Job> findJobs = jobRepository.findByCompany(company).stream()
+                .map(Job::from)
                 .toList();
 
         return findJobs.stream()
@@ -96,27 +96,27 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<JobVO> getNotPushedJobs() {
+    public List<Job> getNotPushedJobs() {
         return jobRepository.findByIsPushSent(false).stream()
-                .map(JobVO::from)
+                .map(Job::from)
                 .toList();
     }
 
     @Transactional
-    public List<JobVO> push(List<JobVO> notPushedJobs) {
-        List<Long> jobIds = notPushedJobs.stream().map(JobVO::getId).toList();
+    public List<Job> push(List<Job> notPushedJobs) {
+        List<Long> jobIds = notPushedJobs.stream().map(Job::getId).toList();
 
-        List<Job> jobs = jobRepository.findAllById(jobIds);
-        jobs.forEach(Job::push);
+        List<JobEntity> jobs = jobRepository.findAllById(jobIds);
+        jobs.forEach(JobEntity::push);
 
         return jobs.stream()
-                .map(JobVO::from)
+                .map(Job::from)
                 .toList();
     }
 
     @Transactional
-    public void update(Long findJobId, JobVO updateJob) {
-        Job findJob = jobRepository.findById(findJobId)
+    public void update(Long findJobId, Job updateJob) {
+        JobEntity findJob = jobRepository.findById(findJobId)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.JOB_NOT_FOUND));
 
         findJob.update(
@@ -131,9 +131,9 @@ public class JobService {
     }
 
     @Transactional
-    public void deleteAll(List<JobVO> jobs) {
+    public void deleteAll(List<Job> jobs) {
         jobRepository.deleteAllById(jobs.stream()
-                .map(JobVO::getId)
+                .map(Job::getId)
                 .toList());
     }
 

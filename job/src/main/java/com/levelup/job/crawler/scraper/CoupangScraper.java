@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -21,13 +21,13 @@ public class CoupangScraper {
     private final static Company company = Company.COUPANG;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
-    public List<JobVO> scrape() {
+    public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 
         int page = 1;
         int lastPage = 5;
 
-        List<JobVO> jobs = new ArrayList<>();
+        List<Job> jobs = new ArrayList<>();
         for (; page <= lastPage; ++page) {
             String params = "search=Software+engineer+backend+frontend&location=Seoul%2C+South+Korea&location=South+Korea&pagesize=20#results&page=" + page;
             driver.get(company.getUrl(params));
@@ -39,7 +39,7 @@ public class CoupangScraper {
                     final String url = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getAttribute("href");
                     final String noticeEndDate = "채용 마감시";
 
-                    jobs.add(JobVO.of(title, company, url, noticeEndDate));
+                    jobs.add(Job.of(title, company, url, noticeEndDate));
                 } catch (Exception e) {
                     log.error("{} - {}", e.getClass(), e.getMessage());
                 }

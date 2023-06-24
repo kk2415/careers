@@ -5,9 +5,9 @@ import com.levelup.job.infrastructure.enumeration.Company;
 import com.levelup.job.infrastructure.enumeration.OpenStatus;
 import com.levelup.job.infrastructure.enumeration.OrderBy;
 import com.levelup.job.domain.service.JobService;
-import com.levelup.job.domain.vo.JobFilterCondition;
-import com.levelup.job.domain.vo.JobVO;
-import com.levelup.job.domain.vo.PagingJob;
+import com.levelup.job.domain.model.JobFilterCondition;
+import com.levelup.job.domain.model.Job;
+import com.levelup.job.domain.model.PagingJob;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class JobController {
     @Operation(summary = "채용 공고 생성")
     @PostMapping("")
     public ResponseEntity<JobDto.Response> create(@RequestBody @Valid JobDto.Request request) {
-        JobVO saveJob = jobService.save(request.toDomain());
+        Job saveJob = jobService.save(request.toDomain());
 
         return ResponseEntity.ok().body(JobDto.Response.from(saveJob));
     }
@@ -53,7 +53,7 @@ public class JobController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size
     ) {
-        List<JobVO> jobs = jobService.getCreatedTodayByCompany(company, page, size);
+        List<Job> jobs = jobService.getCreatedTodayByCompany(company, page, size);
 
         return ResponseEntity.ok().body(jobs.stream()
                 .map(JobDto.Response::from).toList());

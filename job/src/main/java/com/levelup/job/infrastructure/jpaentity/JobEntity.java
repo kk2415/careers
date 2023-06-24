@@ -1,7 +1,7 @@
 package com.levelup.job.infrastructure.jpaentity;
 
-import com.levelup.job.infrastructure.jpaentity.base.BaseTimeEntity;
 import com.levelup.job.infrastructure.enumeration.Company;
+import com.levelup.job.infrastructure.jpaentity.base.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "job")
 @Entity
-public class Job extends BaseTimeEntity {
+public class JobEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "job_id")
@@ -32,7 +32,7 @@ public class Job extends BaseTimeEntity {
     private Boolean active;
     private Boolean isPushSent;
 
-    public static Job of(
+    public static JobEntity of(
             String title,
             Company company,
             String url,
@@ -41,7 +41,7 @@ public class Job extends BaseTimeEntity {
             Boolean active,
             Boolean isPushSent
     ) {
-        return new Job(null, title, url, company, noticeEndDate, jobGroup, active, isPushSent);
+        return new JobEntity(null, title, url, company, noticeEndDate, jobGroup, active, isPushSent);
     }
 
     public void update(String title, String url, Company company, String noticeEndDate, String jobGroup, Boolean active, Boolean isPushSent) {

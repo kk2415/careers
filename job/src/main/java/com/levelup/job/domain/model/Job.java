@@ -1,6 +1,6 @@
-package com.levelup.job.domain.vo;
+package com.levelup.job.domain.model;
 
-import com.levelup.job.infrastructure.jpaentity.Job;
+import com.levelup.job.infrastructure.jpaentity.JobEntity;
 import com.levelup.job.infrastructure.enumeration.Company;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-public class JobVO {
+public class Job {
 
     protected Long id;
     protected String title;
@@ -25,13 +25,13 @@ public class JobVO {
     private Boolean isPushSent;
     protected LocalDateTime createdAt;
 
-    public static JobVO of(
+    public static Job of(
             String title,
             Company company,
             String url,
             String noticeEndDate
     ) {
-        return new JobVO(
+        return new Job(
                 null,
                 title,
                 company,
@@ -44,14 +44,14 @@ public class JobVO {
         );
     }
 
-    public static JobVO of(
+    public static Job of(
             String title,
             Company company,
             String url,
             String noticeEndDate,
             String jobGroup
     ) {
-        return new JobVO(
+        return new Job(
                 null,
                 title,
                 company,
@@ -64,8 +64,8 @@ public class JobVO {
         );
     }
 
-    public static JobVO from(Job job) {
-        return new JobVO(
+    public static Job from(JobEntity job) {
+        return new Job(
                 job.getId(),
                 job.getTitle(),
                 job.getCompany(),
@@ -82,14 +82,14 @@ public class JobVO {
         return "[" + company.getName() + "] " + title;
     }
 
-    public Job toEntity() {
-        return Job.of(title, company, url, noticeEndDate, jobGroup, true, false);
+    public JobEntity toEntity() {
+        return JobEntity.of(title, company, url, noticeEndDate, jobGroup, true, false);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof JobVO jobVO)) return false;
+        if (!(o instanceof Job jobVO)) return false;
 
         return (company != null && company.equals(jobVO.company)) && (url != null && url.equals(jobVO.url));
     }

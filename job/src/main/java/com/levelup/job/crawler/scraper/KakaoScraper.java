@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -21,13 +21,13 @@ public class KakaoScraper {
     private final static Company company = Company.KAKAO;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
-    public List<JobVO> scrape() {
+    public List<Job> scrape() {
         int page = 1;
         int lastPage = 5;
         String params;
 
         WebDriver driver = prototypeBeanProvider.getObject();
-        List<JobVO> jobs = new ArrayList<>();
+        List<Job> jobs = new ArrayList<>();
         for (; page <= lastPage; ++page) {
             params = "skilset=Android,iOS,Windows,Web_front,DB,Cloud,Server,Hadoop_eco_system,Algorithm_Ranking,System&company=ALL&page=" + page;
             driver.get(company.getUrl(params));
@@ -45,7 +45,7 @@ public class KakaoScraper {
                     final String url = element.getAttribute("href");
                     final String noticeEndDate = element.findElement(By.cssSelector("dl.list_info > dd")).getText();
 
-                    jobs.add(JobVO.of(title, company, url, noticeEndDate));
+                    jobs.add(Job.of(title, company, url, noticeEndDate));
                 } catch (Exception e) {
                     log.error("{} - {}", e.getClass(), e.getMessage());
                 }

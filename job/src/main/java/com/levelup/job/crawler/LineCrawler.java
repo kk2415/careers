@@ -1,7 +1,7 @@
 package com.levelup.job.crawler;
 
 import com.levelup.job.crawler.scraper.LineScraper;
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.model.Job;
 import com.levelup.job.infrastructure.enumeration.Company;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ public class LineCrawler implements Crawler {
     }
 
     @Override
-    public List<JobVO> crawling() {
+    public List<Job> crawling() {
         return scraper.scrape();
     }
 }

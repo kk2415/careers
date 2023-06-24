@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.vo.JobVO;
+import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -21,7 +21,7 @@ public class BucketPlaceScraper {
     private final static Company company = Company.BUCKET_PLACE;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
-    public List<JobVO> scrape() {
+    public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 
         String params = "region=&team=dev";
@@ -29,14 +29,14 @@ public class BucketPlaceScraper {
 
         List<WebElement> elements = driver.findElements(By.cssSelector("div.recruit-page__job-list__list__wrap > a.recruit-page__job-list__list__wrap__item"));
 
-        ArrayList<JobVO> jobs = new ArrayList<>();
+        ArrayList<Job> jobs = new ArrayList<>();
         for (WebElement element : elements) {
             try {
                 String title = element.getAccessibleName();
                 String url = element.getAttribute("href");
                 String noticeEndDate = "채용 마감시";
 
-                jobs.add(JobVO.of(title, company, url, noticeEndDate));
+                jobs.add(Job.of(title, company, url, noticeEndDate));
             } catch (Exception e) {
                 log.error("{} - {}", e.getClass(), e.getMessage());
             }

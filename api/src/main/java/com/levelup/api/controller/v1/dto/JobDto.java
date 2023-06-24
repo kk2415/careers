@@ -1,8 +1,8 @@
 package com.levelup.api.controller.v1.dto;
 
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.vo.JobVO;
-import com.levelup.job.domain.vo.PagingJob;
+import com.levelup.job.domain.model.Job;
+import com.levelup.job.domain.model.PagingJob;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -28,8 +28,8 @@ public class JobDto {
             return new Request(title, company, url, noticeEndDate);
         }
 
-        public JobVO toDomain() {
-            return JobVO.of(title, company, url, noticeEndDate);
+        public Job toDomain() {
+            return Job.of(title, company, url, noticeEndDate);
         }
     }
 
@@ -41,7 +41,7 @@ public class JobDto {
             String noticeEndDate,
             LocalDateTime createdAt
     ) {
-        public static Response from(JobVO jobVO) {
+        public static Response from(Job jobVO) {
             return new Response(
                     jobVO.getId(),
                     jobVO.getTitle(),
