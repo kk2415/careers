@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "admin")
 @Entity
-public class Admin extends BaseTimeEntity {
+public class AdminEntity extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "admin_id")
@@ -22,7 +22,7 @@ public class Admin extends BaseTimeEntity {
     private String username;
     private String password;
 
-    public static Admin of(String username, String password) {
-        return new Admin(null, username, password);
+    public static AdminEntity of(String username, String password) {
+        return new AdminEntity(null, username, password);
     }
 }

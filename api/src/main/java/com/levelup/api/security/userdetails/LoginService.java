@@ -2,7 +2,7 @@ package com.levelup.api.security.userdetails;
 
 import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
-import com.levelup.common.jpaentity.Admin;
+import com.levelup.common.jpaentity.AdminEntity;
 import com.levelup.common.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +20,7 @@ public class LoginService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Admin admin = adminRepository.findByUsername(username)
+        AdminEntity admin = adminRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.ADMIN_NOT_FOUND));
 
         return User.of(
