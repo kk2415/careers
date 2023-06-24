@@ -1,7 +1,7 @@
 package com.levelup.api.controller.v1.dto;
 
 import com.levelup.notification.infrastructure.enumeration.FcmTopicName;
-import com.levelup.notification.domain.vo.FcmTopicVO;
+import com.levelup.notification.domain.model.FcmTopic;
 import com.levelup.notification.infrastructure.enumeration.FcmTopicSubscription;
 
 import javax.validation.constraints.NotNull;
@@ -23,7 +23,7 @@ public class FcmTopicDto {
             return new FcmTopicResponse(id, topicName);
         }
 
-        public static FcmTopicResponse from(FcmTopicVO VO) {
+        public static FcmTopicResponse from(FcmTopic VO) {
             return new FcmTopicResponse(VO.id(), VO.topicName());
         }
     }

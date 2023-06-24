@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.levelup.job.domain.jpaentity.QJob.job;
+import static com.levelup.job.infrastructure.jpaentity.QJob.job;
 
 public class JobRepositoryCustomImpl implements JobRepositoryCustom {
 

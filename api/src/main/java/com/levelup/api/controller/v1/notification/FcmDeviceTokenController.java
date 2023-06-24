@@ -1,6 +1,6 @@
 package com.levelup.api.controller.v1.notification;
 
-import com.levelup.notification.domain.vo.FcmDeviceTokenVO;
+import com.levelup.notification.domain.model.FcmDeviceToken;
 import com.levelup.notification.domain.service.fcm.DeviceTokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,8 +22,8 @@ public class FcmDeviceTokenController {
 
     @Operation(summary = "FCM 디바이스 토큰 DB에 저장")
     @PostMapping
-    public ResponseEntity<FcmDeviceTokenVO> createDeviceToken(@RequestParam String token) {
-        FcmDeviceTokenVO fcmDeviceTokenVO = fcmService.saveFcmDeviceToken(token);
+    public ResponseEntity<FcmDeviceToken> createDeviceToken(@RequestParam String token) {
+        FcmDeviceToken fcmDeviceTokenVO = fcmService.saveFcmDeviceToken(token);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(fcmDeviceTokenVO);
     }

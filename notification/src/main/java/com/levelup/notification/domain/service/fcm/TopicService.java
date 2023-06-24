@@ -5,7 +5,7 @@ import com.google.firebase.messaging.TopicManagementResponse;
 import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
 import com.levelup.notification.infrastructure.enumeration.FcmTopicName;
-import com.levelup.notification.domain.vo.FcmTopicVO;
+import com.levelup.notification.domain.model.FcmTopic;
 import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceTokenEntity;
 import com.levelup.notification.infrastructure.jpaentity.fcm.FcmTopicEntity;
 import com.levelup.notification.infrastructure.repository.FcmDeviceTokenRepository;
@@ -31,10 +31,10 @@ public class TopicService {
     private final FirebaseMessaging firebaseMessaging;
 
     @Transactional
-    public FcmTopicVO saveFcmTopic(FcmTopicName topicName) {
+    public FcmTopic saveFcmTopic(FcmTopicName topicName) {
         FcmTopicEntity saveFcmTopic = fcmTopicRepository.save(FcmTopicEntity.of(topicName.name()));
 
-        return FcmTopicVO.from(saveFcmTopic);
+        return FcmTopic.from(saveFcmTopic);
     }
 
     @Transactional
@@ -161,9 +161,9 @@ public class TopicService {
         return FcmTopicSubscription.SUBSCRIPTION;
     }
 
-    public List<FcmTopicVO> getAll() {
+    public List<FcmTopic> getAll() {
         return fcmTopicRepository.findAll().stream()
-                .map(FcmTopicVO::from)
+                .map(FcmTopic::from)
                 .toList();
     }
 }

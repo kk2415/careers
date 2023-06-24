@@ -3,7 +3,7 @@ package com.levelup.api.controller.v1.notification;
 import com.levelup.api.controller.v1.dto.FcmTopicDto;
 import com.levelup.api.controller.v1.dto.FcmTopicDto.FcmTopicCreateRequest;
 import com.levelup.notification.domain.service.fcm.TopicService;
-import com.levelup.notification.domain.vo.FcmTopicVO;
+import com.levelup.notification.domain.model.FcmTopic;
 import com.levelup.notification.infrastructure.enumeration.FcmTopicSubscription;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,8 +25,8 @@ public class FcmTopicController {
 
     @Operation(summary = "FCM 토픽 생성")
     @PostMapping
-    public ResponseEntity<FcmTopicVO> createTopic(@RequestParam @Valid FcmTopicCreateRequest request) {
-        FcmTopicVO fcmTopicVO = fcmTopicService.saveFcmTopic(request.topicName());
+    public ResponseEntity<FcmTopic> createTopic(@RequestParam @Valid FcmTopicCreateRequest request) {
+        FcmTopic fcmTopicVO = fcmTopicService.saveFcmTopic(request.topicName());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(fcmTopicVO);
     }
@@ -45,7 +45,7 @@ public class FcmTopicController {
     @Operation(summary = "FCM 토픽 전체 조회")
     @GetMapping("/all")
     public ResponseEntity<List<FcmTopicDto.FcmTopicResponse>> getAll() {
-        List<FcmTopicVO> topics = fcmTopicService.getAll();
+        List<FcmTopic> topics = fcmTopicService.getAll();
 
         return ResponseEntity.ok().body(topics.stream()
                 .map(FcmTopicDto.FcmTopicResponse::from)

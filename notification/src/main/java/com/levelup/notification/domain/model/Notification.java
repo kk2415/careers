@@ -1,10 +1,10 @@
-package com.levelup.notification.domain.vo;
+package com.levelup.notification.domain.model;
 
 import com.levelup.notification.infrastructure.jpaentity.NotificationEntity;
 
 import java.time.LocalDate;
 
-public record NotificationVO(
+public record Notification(
         Long id,
         String title,
         String body,
@@ -13,13 +13,13 @@ public record NotificationVO(
         LocalDate readAt,
         Boolean isRead
 ) {
-    public static NotificationVO of(
+    public static Notification of(
             String title,
             String body,
             Long receiverId,
             Long activatorId)
     {
-        return new NotificationVO(
+        return new Notification(
                 null,
                 title,
                 body,
@@ -29,8 +29,8 @@ public record NotificationVO(
                 false);
     }
 
-    public static NotificationVO from(NotificationEntity entity) {
-        return new NotificationVO(
+    public static Notification from(NotificationEntity entity) {
+        return new Notification(
                 entity.getId(),
                 entity.getTitle(),
                 entity.getBody(),
