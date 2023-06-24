@@ -1,6 +1,6 @@
 package com.levelup.notification.domain.vo;
 
-import com.levelup.notification.domain.entity.fcm.FcmTopic;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmTopic;
 
 public record FcmTopicVO(
         Long id,

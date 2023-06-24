@@ -1,6 +1,6 @@
-package com.levelup.notification.domain.entity;
+package com.levelup.notification.infrastructure.jpaentity;
 
-import com.levelup.notification.domain.entity.base.BaseTimeEntity;
+import com.levelup.notification.infrastructure.jpaentity.base.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

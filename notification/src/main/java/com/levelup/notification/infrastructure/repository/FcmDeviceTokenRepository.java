@@ -1,6 +1,6 @@
-package com.levelup.notification.domain.repository;
+package com.levelup.notification.infrastructure.repository;
 
-import com.levelup.notification.domain.entity.fcm.FcmDeviceToken;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

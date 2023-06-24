@@ -1,8 +1,8 @@
 package com.levelup.api.controller.v1.dto;
 
-import com.levelup.notification.enumeration.FcmTopicName;
+import com.levelup.notification.infrastructure.enumeration.FcmTopicName;
 import com.levelup.notification.domain.vo.FcmTopicVO;
-import com.levelup.notification.enumeration.FcmTopicSubscription;
+import com.levelup.notification.infrastructure.enumeration.FcmTopicSubscription;
 
 import javax.validation.constraints.NotNull;
 

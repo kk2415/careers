@@ -1,6 +1,6 @@
 package com.levelup.notification.domain.vo;
 
-import com.levelup.notification.domain.entity.Notification;
+import com.levelup.notification.infrastructure.jpaentity.Notification;
 
 import java.time.LocalDate;
 

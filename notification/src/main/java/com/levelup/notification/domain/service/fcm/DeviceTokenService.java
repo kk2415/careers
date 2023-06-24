@@ -1,8 +1,8 @@
 package com.levelup.notification.domain.service.fcm;
 
 import com.levelup.notification.domain.vo.FcmDeviceTokenVO;
-import com.levelup.notification.domain.entity.fcm.FcmDeviceToken;
-import com.levelup.notification.domain.repository.FcmDeviceTokenRepository;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceToken;
+import com.levelup.notification.infrastructure.repository.FcmDeviceTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

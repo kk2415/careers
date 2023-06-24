@@ -1,6 +1,6 @@
 package com.levelup.notification.domain.service;
 
-import com.levelup.notification.enumeration.FcmTopicName;
+import com.levelup.notification.infrastructure.enumeration.FcmTopicName;
 import com.levelup.notification.domain.service.fcm.SendMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

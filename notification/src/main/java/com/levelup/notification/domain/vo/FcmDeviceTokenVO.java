@@ -1,6 +1,6 @@
 package com.levelup.notification.domain.vo;
 
-import com.levelup.notification.domain.entity.fcm.FcmDeviceToken;
+import com.levelup.notification.infrastructure.jpaentity.fcm.FcmDeviceToken;
 
 public record FcmDeviceTokenVO(
         Long id,

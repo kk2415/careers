@@ -4,7 +4,7 @@ import com.levelup.api.controller.v1.dto.FcmTopicDto;
 import com.levelup.api.controller.v1.dto.FcmTopicDto.FcmTopicCreateRequest;
 import com.levelup.notification.domain.service.fcm.TopicService;
 import com.levelup.notification.domain.vo.FcmTopicVO;
-import com.levelup.notification.enumeration.FcmTopicSubscription;
+import com.levelup.notification.infrastructure.enumeration.FcmTopicSubscription;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

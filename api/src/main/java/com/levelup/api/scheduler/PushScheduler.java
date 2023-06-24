@@ -3,7 +3,7 @@ package com.levelup.api.scheduler;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.notification.domain.service.JobNotificationService;
-import com.levelup.notification.enumeration.FcmTopicName;
+import com.levelup.notification.infrastructure.enumeration.FcmTopicName;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;

@@ -1,4 +1,4 @@
-package com.levelup.notification.domain.entity.base;
+package com.levelup.notification.infrastructure.jpaentity.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
