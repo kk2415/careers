@@ -1,7 +1,7 @@
 package com.levelup.job.domain.vo;
 
-import com.levelup.job.domain.enumeration.Company;
-import com.levelup.job.domain.enumeration.OpenStatus;
+import com.levelup.job.infrastructure.enumeration.Company;
+import com.levelup.job.infrastructure.enumeration.OpenStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

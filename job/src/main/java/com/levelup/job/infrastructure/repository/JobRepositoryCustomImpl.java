@@ -1,7 +1,7 @@
-package com.levelup.job.domain.repository;
+package com.levelup.job.infrastructure.repository;
 
-import com.levelup.job.domain.entity.Job;
-import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.infrastructure.jpaentity.Job;
+import com.levelup.job.infrastructure.enumeration.Company;
 import com.levelup.job.domain.vo.JobFilterCondition;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.levelup.job.domain.entity.QJob.job;
+import static com.levelup.job.domain.jpaentity.QJob.job;
 
 public class JobRepositoryCustomImpl implements JobRepositoryCustom {
 

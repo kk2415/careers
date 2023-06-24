@@ -1,4 +1,4 @@
-package com.levelup.job.domain.entity.base;
+package com.levelup.job.infrastructure.jpaentity.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

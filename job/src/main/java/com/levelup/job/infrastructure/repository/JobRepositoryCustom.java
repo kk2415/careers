@@ -1,7 +1,7 @@
-package com.levelup.job.domain.repository;
+package com.levelup.job.infrastructure.repository;
 
 import com.levelup.job.domain.vo.JobFilterCondition;
-import com.levelup.job.domain.entity.Job;
+import com.levelup.job.infrastructure.jpaentity.Job;
 
 import java.util.List;
 

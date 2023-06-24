@@ -1,4 +1,4 @@
-package com.levelup.job.domain.enumeration;
+package com.levelup.job.infrastructure.enumeration;
 
 public enum Company {
 

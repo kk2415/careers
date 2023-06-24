@@ -1,7 +1,7 @@
 package com.levelup.job.domain.vo;
 
-import com.levelup.job.domain.entity.Job;
-import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.infrastructure.jpaentity.Job;
+import com.levelup.job.infrastructure.enumeration.Company;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

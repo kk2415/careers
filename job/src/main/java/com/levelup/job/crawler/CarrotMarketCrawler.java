@@ -1,7 +1,7 @@
 package com.levelup.job.crawler;
 
 import com.levelup.job.crawler.scraper.CarrotMarketScraper;
-import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.infrastructure.enumeration.Company;
 import com.levelup.job.domain.vo.JobVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
-package com.levelup.job.domain.entity;
+package com.levelup.job.infrastructure.jpaentity;
 
-import com.levelup.job.domain.entity.base.BaseTimeEntity;
-import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.infrastructure.jpaentity.base.BaseTimeEntity;
+import com.levelup.job.infrastructure.enumeration.Company;
 import lombok.*;
 
 import javax.persistence.*;

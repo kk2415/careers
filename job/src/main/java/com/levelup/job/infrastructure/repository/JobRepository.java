@@ -1,7 +1,7 @@
-package com.levelup.job.domain.repository;
+package com.levelup.job.infrastructure.repository;
 
-import com.levelup.job.domain.entity.Job;
-import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.infrastructure.jpaentity.Job;
+import com.levelup.job.infrastructure.enumeration.Company;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

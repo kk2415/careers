@@ -1,7 +1,7 @@
 package com.levelup.job.crawler;
 
 import com.levelup.job.domain.vo.JobVO;
-import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.infrastructure.enumeration.Company;
 
 import java.util.List;
 

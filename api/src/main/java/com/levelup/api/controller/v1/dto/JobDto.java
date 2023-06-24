@@ -1,6 +1,6 @@
 package com.levelup.api.controller.v1.dto;
 
-import com.levelup.job.domain.enumeration.Company;
+import com.levelup.job.infrastructure.enumeration.Company;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.vo.PagingJob;
 

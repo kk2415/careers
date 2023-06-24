@@ -2,10 +2,10 @@ package com.levelup.job.domain.service;
 
 import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
-import com.levelup.job.domain.entity.Job;
-import com.levelup.job.domain.enumeration.Company;
-import com.levelup.job.domain.enumeration.OrderBy;
-import com.levelup.job.domain.repository.JobRepository;
+import com.levelup.job.infrastructure.jpaentity.Job;
+import com.levelup.job.infrastructure.enumeration.Company;
+import com.levelup.job.infrastructure.enumeration.OrderBy;
+import com.levelup.job.infrastructure.repository.JobRepository;
 import com.levelup.job.domain.vo.JobFilterCondition;
 import com.levelup.job.domain.vo.JobVO;
 import com.levelup.job.domain.vo.PagingJob;
