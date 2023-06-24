@@ -48,7 +48,7 @@
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ACCESS_LOG" />
     </root>
-    <logger name="com.onoffmix" level="error" additivity="false">
+    <logger name="com.levelup" level="error" additivity="false">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="ERROR_LOG" />
     </logger>
