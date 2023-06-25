@@ -26,7 +26,7 @@ public class SpringApplicationListener implements ApplicationListener<ContextRef
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("Starting ContextRefreshedEvent of SpringApplicationListener");
-        log.error("hello");
+
         crawlers.forEach(crawler -> {
             List<Job> crawledJobs = crawler.crawling();
             jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
