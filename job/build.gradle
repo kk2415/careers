@@ -13,8 +13,6 @@ dependencies {
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.7.2'
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-devtools-v111', version: '4.8.3'
 
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
