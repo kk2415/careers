@@ -59,6 +59,7 @@ public class JobService {
         List<Job> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
                 .filter(JobEntity::getActive)
                 .map(Job::from)
+                .distinct()
                 .toList();
         Long totalCount = jobRepository.countByFilterCondition(filterCondition);
 
