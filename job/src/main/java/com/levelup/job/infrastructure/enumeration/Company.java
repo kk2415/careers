@@ -11,6 +11,7 @@ public enum Company {
     CARROT_MARKET("당근마켓", "https://team.daangn.com/jobs/"),
     BUCKET_PLACE("오늘의 집", "https://www.bucketplace.com/careers/"),
     YANOLJA("야놀자", "https://careers.yanolja.co"),
+    SKT("SKT", "https://thecareers.sktelecom.com/Recruit"),
     OTHER("그 외", "url"),
     ;
 

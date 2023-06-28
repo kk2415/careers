@@ -31,6 +31,7 @@ public class CrawlingController {
     private final Crawler carrotMarketCrawler;
     private final Crawler bucketPlaceCrawler;
     private final Crawler yanoljaCrawler;
+    private final Crawler sktCrawler;
 
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;
@@ -186,5 +187,24 @@ public class CrawlingController {
 
         return ResponseEntity.ok().body(newJobs.stream()
                 .map(JobDto.Response::from).toList());
+    }
+
+    @Operation(summary = "SKT 채용 크롤링")
+    @PostMapping("/skt")
+    public ResponseEntity<List<JobDto.Response>> crawlSkt() {
+        List<Job> crawledJobs = sktCrawler.crawling();
+//        List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, yanoljaCrawler.getCompany());
+//
+//        List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, yanoljaCrawler.getCompany());
+//        jobService.deleteAll(notExistsJobs);
+//
+//        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+//                .map(Job::getSubject)
+//                .toList());
+
+//        return ResponseEntity.ok().body(newJobs.stream()
+//                .map(JobDto.Response::from).toList());
+
+        return ResponseEntity.ok().build();
     }
 }
