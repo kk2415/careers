@@ -18,7 +18,7 @@ public class CrawlingScheduler {
     private final List<Crawler> crawlers;
     private final JobService jobService;
 
-    @Scheduled(cron = "0 0 */1 * * *")
+    @Scheduled(cron = "0 0 */2 * * *")
     public void crawlingJobs() {
         crawlers.forEach(crawler -> {
             List<Job> crawledJobs = crawler.crawling();
