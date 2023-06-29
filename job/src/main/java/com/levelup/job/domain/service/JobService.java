@@ -38,11 +38,11 @@ public class JobService {
     }
 
     @Transactional
-    public List<Job> saveIfAbsent(List<Job> jobs, Company company) {
+    public List<Job> saveIfAbsent(List<Job> creationJobs, Company company) {
         List<Job> findJobs = jobRepository.findByCompany(company).stream()
                 .map(Job::from).toList();
 
-        List<JobEntity> saveJobs = jobs.stream()
+        List<JobEntity> saveJobs = creationJobs.stream()
                 .filter(job -> !findJobs.contains(job))
                 .map(Job::toEntity)
                 .toList();

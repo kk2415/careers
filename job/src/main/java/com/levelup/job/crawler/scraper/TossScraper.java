@@ -21,7 +21,7 @@ public class TossScraper {
     public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 
-        String params = "category=engineering-product&category=engineering-platform&category=core-system&category=engineering-product-platform&category=infra&category=qa&category=engineering&category=design";
+        String params = "category=engineering-product&category=engineering-platform&category=core-system&category=engineering-product-platform&category=qa&category=engineering&category=design&category=data&category=infra&category=security&category=infra-security";
         driver.get(company.getUrl(params));
 
         List<WebElement> aTagElements = driver.findElements(By.cssSelector("div.css-64lvsl > a[href^='/career/job-detail']"));

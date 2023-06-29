@@ -53,9 +53,9 @@ public class Job {
     ) {
         return new Job(
                 null,
-                title,
+                title.trim(),
                 company,
-                url,
+                url.trim(),
                 noticeEndDate,
                 jobGroup,
                 true,
@@ -91,11 +91,11 @@ public class Job {
         if (this == o) return true;
         if (!(o instanceof Job jobVO)) return false;
 
-        return (company != null && company.equals(jobVO.company)) && (url != null && url.equals(jobVO.url));
+        return (title != null && title.equals(jobVO.title)) && (url != null && url.equals(jobVO.url));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(company, url);
+        return Objects.hash(title, url);
     }
 }

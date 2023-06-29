@@ -31,7 +31,8 @@ public class CrawlingController {
     private final Crawler carrotMarketCrawler;
     private final Crawler bucketPlaceCrawler;
     private final Crawler yanoljaCrawler;
-    private final Crawler sktCrawler;
+    private final Crawler skCrawler;
+    private final Crawler socarCrawler;
 
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;
@@ -189,22 +190,37 @@ public class CrawlingController {
                 .map(JobDto.Response::from).toList());
     }
 
-    @Operation(summary = "SKT 채용 크롤링")
-    @PostMapping("/skt")
+    @Operation(summary = "SK 채용 크롤링")
+    @PostMapping("/sk")
     public ResponseEntity<List<JobDto.Response>> crawlSkt() {
-        List<Job> crawledJobs = sktCrawler.crawling();
-//        List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, yanoljaCrawler.getCompany());
-//
-//        List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, yanoljaCrawler.getCompany());
-//        jobService.deleteAll(notExistsJobs);
-//
-//        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
-//                .map(Job::getSubject)
-//                .toList());
+        List<Job> crawledJobs = skCrawler.crawling();
+        List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, skCrawler.getCompany());
 
-//        return ResponseEntity.ok().body(newJobs.stream()
-//                .map(JobDto.Response::from).toList());
+        List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, skCrawler.getCompany());
+        jobService.deleteAll(notExistsJobs);
 
-        return ResponseEntity.ok().build();
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(Job::getSubject)
+                .toList());
+
+        return ResponseEntity.ok().body(newJobs.stream()
+                .map(JobDto.Response::from).toList());
+    }
+
+    @Operation(summary = "쏘카 채용 크롤링")
+    @PostMapping("/socar")
+    public ResponseEntity<List<JobDto.Response>> crawlSocar() {
+        List<Job> crawledJobs = socarCrawler.crawling();
+        List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, socarCrawler.getCompany());
+
+        List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, socarCrawler.getCompany());
+        jobService.deleteAll(notExistsJobs);
+
+        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, newJobs.stream()
+                .map(Job::getSubject)
+                .toList());
+
+        return ResponseEntity.ok().body(newJobs.stream()
+                .map(JobDto.Response::from).toList());
     }
 }

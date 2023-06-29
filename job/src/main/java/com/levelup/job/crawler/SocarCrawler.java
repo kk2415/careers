@@ -1,6 +1,6 @@
 package com.levelup.job.crawler;
 
-import com.levelup.job.crawler.scraper.SKTScraper;
+import com.levelup.job.crawler.scraper.SocarScraper;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.infrastructure.enumeration.Company;
 import lombok.RequiredArgsConstructor;
@@ -11,14 +11,14 @@ import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component("sktCrawler")
-public class SKTCrawler implements Crawler {
+@Component("socarCrawler")
+public class SocarCrawler implements Crawler {
 
-    private final SKTScraper scraper;
+    private final SocarScraper scraper;
 
     @Override
     public Company getCompany() {
-        return Company.SKT;
+        return scraper.company;
     }
 
     @Override

@@ -16,7 +16,7 @@ create table `job` (
     url text not null,
     company varchar(50) not null,
     notice_end_date varchar(50) not null,
-    job_group varchar(50) not null,
+    job_group varchar(255) not null,
     `active` boolean not null,
     is_push_sent boolean not null,
     created_at datetime not null default '2022-01-01 00:00:00',
