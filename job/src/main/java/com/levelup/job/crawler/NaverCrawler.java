@@ -18,7 +18,7 @@ public class NaverCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.NAVER;
+        return scraper.company;
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class KakaoScraper {
 
-    private final static Company company = Company.KAKAO;
+    public final Company company = Company.KAKAO;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {
@@ -56,6 +56,7 @@ public class KakaoScraper {
 
         return jobs.stream()
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
                 .toList();
     }
 }

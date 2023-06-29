@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class CoupangScraper {
 
-    private final static Company company = Company.COUPANG;
+    public final Company company = Company.COUPANG;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {
@@ -50,6 +50,7 @@ public class CoupangScraper {
 
         return jobs.stream()
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
                 .toList();
     }
 }

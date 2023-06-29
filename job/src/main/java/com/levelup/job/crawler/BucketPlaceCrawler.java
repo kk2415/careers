@@ -18,7 +18,7 @@ public class BucketPlaceCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.BUCKET_PLACE;
+        return scraper.company;
     }
 
     @Override

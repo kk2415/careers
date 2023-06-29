@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 public class TossScraper {
 
-    private final static Company company = Company.TOSS;
+    public final Company company = Company.TOSS;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {
@@ -25,7 +25,7 @@ public class TossScraper {
         driver.get(company.getUrl(params));
 
         List<WebElement> aTagElements = driver.findElements(By.cssSelector("div.css-64lvsl > a[href^='/career/job-detail']"));
-        List<Job> tossJobList = aTagElements.stream()
+        List<Job> jobs = aTagElements.stream()
                 .map(aTagElement -> {
                     String title = aTagElement.findElement(By.cssSelector("a.css-g65o95 > div.css-1xr69i7 > div.css-1g4e5jn.e1esrqlj0 > span.typography.typography--h5.typography--bold.color--grey700 > div > span")).getText();
                     String url = aTagElement.getAttribute("href");
@@ -33,11 +33,13 @@ public class TossScraper {
 
                     return Job.of(title, company, url, noticedEndedDate);
                 })
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .toList();
 
         driver.close();
 
-        return tossJobList;
+        return jobs.stream()
+                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
+                .toList();
     }
 }

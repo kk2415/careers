@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class SKScraper {
 
-    private final static Company company = Company.SK;
+    public final Company company = Company.SK;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {
@@ -29,16 +29,16 @@ public class SKScraper {
         ArrayList<Job> jobs = new ArrayList<>();
         for (WebElement element : elements) {
             try {
-                String company = element.findElement(By.cssSelector("div.info-area > a > div.company")).getText();
+                String companyName = element.findElement(By.cssSelector("div.info-area > a > div.company")).getText();
                 WebElement aTag = element.findElement(By.cssSelector("div.subject-area > a"));
                 String subjectArea = aTag.getText();
-                String title = getTitle(company, subjectArea);
+                String title = getTitle(companyName, subjectArea);
                 String jobGroup = getJobGroup(subjectArea);
                 String url = aTag.getAttribute("href");
                 String noticeEndDate = "영업 종료시";
 
                 if (jobGroup.contains("개발") && !jobGroup.contains("사업개발")) {
-                    jobs.add(Job.of(title, SKScraper.company, url, noticeEndDate, jobGroup));
+                    jobs.add(Job.of(title, company, url, noticeEndDate, jobGroup));
                 }
             } catch (Exception e) {
                 log.error("{} - {}", e.getClass(), e.getMessage());
@@ -47,7 +47,10 @@ public class SKScraper {
 
         driver.quit();
 
-        return jobs;
+        return jobs.stream()
+                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
+                .toList();
     }
 
     private List<WebElement> scrollToEnd(WebDriver driver) {

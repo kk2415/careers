@@ -18,7 +18,7 @@ public class LineCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.LINE;
+        return scraper.company;
     }
 
     @Override

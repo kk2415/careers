@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 public class NaverScraper {
 
-    private final static Company company = Company.NAVER;
+    public final Company company = Company.NAVER;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {
@@ -56,6 +56,7 @@ public class NaverScraper {
 
         return jobs.stream()
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
                 .toList();
     }
 

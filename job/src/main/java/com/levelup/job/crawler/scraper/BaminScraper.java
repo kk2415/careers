@@ -40,7 +40,10 @@ public class BaminScraper {
 
         driver.quit();
 
-        return jobs;
+        return jobs.stream()
+                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
+                .toList();
     }
 
     private List<WebElement> scrollToEnd(WebDriver driver) {

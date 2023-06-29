@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class BucketPlaceScraper {
 
-    private final static Company company = Company.BUCKET_PLACE;
+    public final Company company = Company.BUCKET_PLACE;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {

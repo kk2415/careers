@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class YanoljaScraper {
 
-    private final static Company company = Company.YANOLJA;
+    public final Company company = Company.YANOLJA;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {

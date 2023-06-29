@@ -18,7 +18,7 @@ public class TossCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.TOSS;
+        return scraper.company;
     }
 
     @Override

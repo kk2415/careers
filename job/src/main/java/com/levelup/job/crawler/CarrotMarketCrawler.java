@@ -18,7 +18,7 @@ public class CarrotMarketCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.CARROT_MARKET;
+        return scraper.company;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class KakaoCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.KAKAO;
+        return scraper.company;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class SKCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.SK;
+        return scraper.company;
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class LineScraper {
 
-    private final static Company company = Company.LINE;
+    public final Company company = Company.LINE;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {
@@ -48,6 +48,7 @@ public class LineScraper {
 
         return jobs.stream()
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
                 .toList();
     }
 }

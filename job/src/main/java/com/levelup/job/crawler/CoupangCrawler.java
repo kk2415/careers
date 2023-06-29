@@ -14,16 +14,16 @@ import java.util.List;
 @Component("coupangCrawler")
 public class CoupangCrawler implements Crawler {
 
-    private final CoupangScraper coupangScraper;
+    private final CoupangScraper scraper;
 
     @Override
     public Company getCompany() {
-        return Company.COUPANG;
+        return scraper.company;
     }
 
     @Override
     public List<Job> crawling() {
-        return coupangScraper.scrape();
+        return scraper.scrape();
     }
 }
 

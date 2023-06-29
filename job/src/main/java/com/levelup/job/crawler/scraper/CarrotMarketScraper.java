@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class CarrotMarketScraper {
 
-    private final static Company company = Company.CARROT_MARKET;
+    public final Company company = Company.CARROT_MARKET;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
     public List<Job> scrape() {
@@ -44,6 +44,7 @@ public class CarrotMarketScraper {
 
         return jobs.stream()
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .distinct()
                 .toList();
     }
 }
