@@ -17,11 +17,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class NaverScraper {
+public class NaverScraper implements Scraper<Job> {
 
-    public final Company company = Company.NAVER;
+    private final Company company = Company.NAVER;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
+    @Override
+    public Company getCompany() {
+        return company;
+    }
+
+    @Override
     public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 

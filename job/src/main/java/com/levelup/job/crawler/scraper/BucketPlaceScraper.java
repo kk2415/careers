@@ -16,11 +16,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class BucketPlaceScraper {
+public class BucketPlaceScraper implements Scraper {
 
-    public final Company company = Company.BUCKET_PLACE;
+    private final Company company = Company.BUCKET_PLACE;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
+    @Override
+    public Company getCompany() {
+        return company;
+    }
+
+    @Override
     public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 

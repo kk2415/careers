@@ -16,11 +16,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class CarrotMarketScraper {
+public class CarrotMarketScraper implements Scraper<Job> {
 
-    public final Company company = Company.CARROT_MARKET;
+    private final Company company = Company.CARROT_MARKET;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
+    @Override
+    public Company getCompany() {
+        return company;
+    }
+
+    @Override
     public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());

@@ -17,11 +17,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class SocarScraper {
+public class SocarScraper implements Scraper<Job> {
 
-    public final Company company = Company.SOCAR;
+    private final Company company = Company.SOCAR;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
+    @Override
+    public Company getCompany() {
+        return company;
+    }
+
+    @Override
     public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());

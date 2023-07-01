@@ -13,11 +13,17 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Component
-public class TossScraper {
+public class TossScraper implements Scraper<Job> {
 
-    public final Company company = Company.TOSS;
+    private final Company company = Company.TOSS;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
+    @Override
+    public Company getCompany() {
+        return company;
+    }
+
+    @Override
     public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 

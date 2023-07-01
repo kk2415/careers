@@ -16,11 +16,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class KakaoScraper {
+public class KakaoScraper implements Scraper<Job> {
 
-    public final Company company = Company.KAKAO;
+    private final Company company = Company.KAKAO;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
+    @Override
+    public Company getCompany() {
+        return company;
+    }
+
+    @Override
     public List<Job> scrape() {
         int page = 1;
         int lastPage = 5;

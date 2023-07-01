@@ -18,7 +18,7 @@ public class BaminCrawler implements Crawler {
 
     @Override
     public Company getCompany() {
-        return Company.BAMIN;
+        return scraper.getCompany();
     }
 
     @Override
@@ -26,4 +26,3 @@ public class BaminCrawler implements Crawler {
         return scraper.scrape();
     }
 }
-

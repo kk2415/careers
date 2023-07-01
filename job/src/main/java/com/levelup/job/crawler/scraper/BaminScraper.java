@@ -14,11 +14,17 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class BaminScraper {
+public class BaminScraper implements Scraper<Job> {
 
-    private final static Company company = Company.BAMIN;
+    private final Company company = Company.BAMIN;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
 
+    @Override
+    public Company getCompany() {
+        return company;
+    }
+
+    @Override
     public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
