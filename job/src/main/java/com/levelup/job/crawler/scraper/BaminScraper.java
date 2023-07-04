@@ -8,7 +8,6 @@ import org.openqa.selenium.*;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -30,26 +29,21 @@ public class BaminScraper implements Scraper<Job> {
         driver.get(company.getUrl());
 
         List<WebElement> jobElements = scrollToEnd(driver);
+        List<Job> jobs = jobElements.stream()
+                .map(jobElement -> {
+                    String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
+                    String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
+                    String noticeEndDate = "영업 종료시";
 
-        ArrayList<Job> jobs = new ArrayList<>();
-        for (WebElement jobElement : jobElements) {
-            try {
-                String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
-                String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
-                String noticeEndDate = "영업 종료시";
-
-                jobs.add(Job.of(title, company, url, noticeEndDate));
-            } catch (Exception e) {
-                log.error("{} - {}", e.getClass(), e.getMessage());
-            }
-        }
-
-        driver.quit();
-
-        return jobs.stream()
+                    return Job.of(title, company, url, noticeEndDate);
+                })
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .distinct()
                 .toList();
+
+        driver.quit();
+
+        return jobs;
     }
 
     private List<WebElement> scrollToEnd(WebDriver driver) {

@@ -10,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -34,27 +33,22 @@ public class LineScraper implements Scraper<Job> {
         driver.get(company.getUrl(params));
 
         List<WebElement> elements = driver.findElements(By.cssSelector("ul.job_list > li"));
+        List<Job> jobs = elements.stream()
+                .map(element -> {
+                    String title = element.findElement(By.cssSelector("a h3.title")).getText();
+                    String jobNoticeUri = element.findElement(By.cssSelector("a")).getAttribute("href");
+                    String jobNoticePath = jobNoticeUri.substring(jobNoticeUri.lastIndexOf("/"));
+                    String noticeEndDate = element.findElement(By.cssSelector("a span.date")).getText();
+                    String url = Company.LINE.getUrl() + jobNoticePath;
 
-        ArrayList<Job> jobs = new ArrayList<>();
-        for (WebElement element : elements) {
-            try {
-                String title = element.findElement(By.cssSelector("a h3.title")).getText();
-                String jobNoticeUri = element.findElement(By.cssSelector("a")).getAttribute("href");
-                String jobNoticePath = jobNoticeUri.substring(jobNoticeUri.lastIndexOf("/"));
-                String noticeEndDate = element.findElement(By.cssSelector("a span.date")).getText();
-                String url = Company.LINE.getUrl() + jobNoticePath;
-
-                jobs.add(Job.of(title, company, url, noticeEndDate));
-            } catch (Exception e) {
-                log.error("{} - {}", e.getClass(), e.getMessage());
-            }
-        }
-
-        driver.quit();
-
-        return jobs.stream()
+                    return Job.of(title, company, url, noticeEndDate);
+                })
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .distinct()
                 .toList();
+
+        driver.quit();
+
+        return jobs;
     }
 }

@@ -39,13 +39,12 @@ public class TossScraper implements Scraper<Job> {
 
                     return Job.of(title, company, url, noticedEndedDate);
                 })
-                .toList();
-
-        driver.close();
-
-        return jobs.stream()
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .distinct()
                 .toList();
+
+        driver.quit();
+
+        return jobs;
     }
 }

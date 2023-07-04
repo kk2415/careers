@@ -10,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,25 +34,21 @@ public class YanoljaScraper implements Scraper<Job> {
         List<String> validJobGroups = List.of("Software Engineer", "Backend Engineer", "Frontend Engineer", "DevOps Engineer", "DBA", "Infra");
         List<WebElement> elements = driver.findElements(By.cssSelector("ul.iKWWXF > a"));
 
-        ArrayList<Job> jobs = new ArrayList<>();
-        for (WebElement element : elements) {
-            try {
-                String title = element.findElement(By.cssSelector("li > div.eBKBVi > div.ctrzdb")).getText();
-                String url = element.getAttribute("href");
-                String noticeEndDate = "채용 마감시";
-                String jobGroup = element.findElement(By.cssSelector("li > div.eBKBVi > div.edcwkf > span.guTnnu")).getText();
+        List<Job> jobs = elements.stream()
+                .map(element -> {
+                    String title = element.findElement(By.cssSelector("li > div.eBKBVi > div.ctrzdb")).getText();
+                    String url = element.getAttribute("href");
+                    String noticeEndDate = "채용 마감시";
+                    String jobGroup = element.findElement(By.cssSelector("li > div.eBKBVi > div.edcwkf > span.guTnnu")).getText();
 
-                jobs.add(Job.of(title, company, url, noticeEndDate, jobGroup));
-            } catch (Exception e) {
-                log.error("{} - {}", e.getClass(), e.getMessage());
-            }
-        }
-
-        driver.quit();
-
-        return jobs.stream()
+                    return Job.of(title, company, url, noticeEndDate, jobGroup);
+                })
                 .filter(job -> validJobGroups.contains(job.getJobGroup()))
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .collect(Collectors.toList());
+
+        driver.quit();
+
+        return jobs;
     }
 }

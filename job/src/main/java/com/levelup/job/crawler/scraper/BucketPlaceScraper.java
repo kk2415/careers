@@ -10,13 +10,12 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class BucketPlaceScraper implements Scraper {
+public class BucketPlaceScraper implements Scraper<Job> {
 
     private final Company company = Company.BUCKET_PLACE;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -34,24 +33,18 @@ public class BucketPlaceScraper implements Scraper {
         driver.get(company.getUrl(params));
 
         List<WebElement> elements = driver.findElements(By.cssSelector("div.recruit-page__job-list__list__wrap > a.recruit-page__job-list__list__wrap__item"));
-
-        ArrayList<Job> jobs = new ArrayList<>();
-        for (WebElement element : elements) {
-            try {
-                String title = element.getAccessibleName();
-                String url = element.getAttribute("href");
-                String noticeEndDate = "채용 마감시";
-
-                jobs.add(Job.of(title, company, url, noticeEndDate));
-            } catch (Exception e) {
-                log.error("{} - {}", e.getClass(), e.getMessage());
-            }
-        }
+        List<Job> jobs = elements.stream()
+                .map(element -> {
+                    String title = element.getAccessibleName();
+                    String url = element.getAttribute("href");
+                    String noticeEndDate = "채용 마감시";
+                    return Job.of(title, company, url, noticeEndDate);
+                })
+                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .toList();
 
         driver.quit();
 
-        return jobs.stream()
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
-                .toList();
+        return jobs;
     }
 }

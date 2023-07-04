@@ -4,6 +4,9 @@ import com.levelup.common.exception.BusinessException;
 import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriverException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,5 +60,19 @@ public class GlobalExceptionHandler {
         log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
 
         return ResponseEntity.status(e.getHttpStatus()).body(ExceptionResponse.of(e.getCode(), e.getMessage(), e.getHttpStatus()));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<ExceptionResponse> handleNoSuchElementException(NoSuchElementException e, HttpServletRequest request) {
+        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionResponse.of(ExceptionCode.SELENIUM_EXCEPTION.name(), e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+    }
+
+    @ExceptionHandler(WebDriverException.class)
+    public ResponseEntity<ExceptionResponse> handleWebDriverException(WebDriverException e, HttpServletRequest request) {
+        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionResponse.of(ExceptionCode.SELENIUM_EXCEPTION.name(), e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 }

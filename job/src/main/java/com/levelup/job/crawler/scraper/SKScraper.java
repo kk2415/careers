@@ -11,8 +11,8 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,31 +32,30 @@ public class SKScraper implements Scraper<Job> {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
         List<WebElement> elements = scrollToEnd(driver);
-        ArrayList<Job> jobs = new ArrayList<>();
-        for (WebElement element : elements) {
-            try {
-                String companyName = element.findElement(By.cssSelector("div.info-area > a > div.company")).getText();
-                WebElement aTag = element.findElement(By.cssSelector("div.subject-area > a"));
-                String subjectArea = aTag.getText();
-                String title = getTitle(companyName, subjectArea);
-                String jobGroup = getJobGroup(subjectArea);
-                String url = aTag.getAttribute("href");
-                String noticeEndDate = "영업 종료시";
+        List<Job> jobs = elements.stream()
+                .map(element -> {
+                    String companyName = element.findElement(By.cssSelector("div.info-area > a > div.company")).getText();
+                    WebElement aTag = element.findElement(By.cssSelector("div.subject-area > a"));
+                    String subjectArea = aTag.getText();
+                    String title = getTitle(companyName, subjectArea);
+                    String jobGroup = getJobGroup(subjectArea);
+                    String url = aTag.getAttribute("href");
+                    String noticeEndDate = "영업 종료시";
 
-                if (jobGroup.contains("개발") && !jobGroup.contains("사업개발")) {
-                    jobs.add(Job.of(title, company, url, noticeEndDate, jobGroup));
-                }
-            } catch (Exception e) {
-                log.error("{} - {}", e.getClass(), e.getMessage());
-            }
-        }
+                    if (jobGroup.contains("개발") && !jobGroup.contains("사업개발")) {
+                        return Job.of(title, company, url, noticeEndDate, jobGroup);
+                    }
 
-        driver.quit();
-
-        return jobs.stream()
+                    return null;
+                })
+                .filter(Objects::nonNull)
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .distinct()
                 .toList();
+
+        driver.quit();
+
+        return jobs;
     }
 
     private List<WebElement> scrollToEnd(WebDriver driver) {

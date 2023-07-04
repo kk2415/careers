@@ -10,8 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,41 +29,34 @@ public class KakaoScraper implements Scraper<Job> {
 
     @Override
     public List<Job> scrape() {
-        int page = 1;
-        int lastPage = 5;
-        String params;
-
         WebDriver driver = prototypeBeanProvider.getObject();
-        List<Job> jobs = new ArrayList<>();
-        for (; page <= lastPage; ++page) {
-            params = "skilset=Android,iOS,Windows,Web_front,DB,Cloud,Server,Hadoop_eco_system,Algorithm_Ranking,System&company=ALL&page=" + page;
-            driver.get(company.getUrl(params));
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            final int firstPage = 1;
+            final int lastPage = 6;
 
-            List<WebElement> elements = driver.findElements(By.cssSelector("ul.list_jobs a"));
-            for (WebElement element : elements) {
-                try {
-                    String title = element.findElement(By.cssSelector("h4.tit_jobs")).getText();
-                    final String url = element.getAttribute("href");
-                    final String noticeEndDate = element.findElement(By.cssSelector("dl.list_info > dd")).getText();
+            return IntStream.rangeClosed(firstPage, lastPage)
+                    .mapToObj(page -> {
+                        String params = "skilset=Android,iOS,Windows,Web_front,DB,Cloud,Server,Hadoop_eco_system,Algorithm_Ranking,System&company=ALL&page=" + page;
+                        driver.get(company.getUrl(params));
 
-                    jobs.add(Job.of(title, company, url, noticeEndDate));
-                } catch (Exception e) {
-                    log.error("{} - {}", e.getClass(), e.getMessage());
-                }
-            }
+                        List<WebElement> elements = driver.findElements(By.cssSelector("ul.list_jobs a"));
+                        return elements.stream()
+                                .map(element -> {
+                                    String title = element.findElement(By.cssSelector("h4.tit_jobs")).getText();
+                                    final String url = element.getAttribute("href");
+                                    final String noticeEndDate = element.findElement(By.cssSelector("dl.list_info > dd")).getText();
+
+                                    return Job.of(title, company, url, noticeEndDate);
+                                })
+                                .toList();
+                    })
+                    .flatMap(Collection::stream)
+                    .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                    .distinct()
+                    .toList();
+        } finally {
+            driver.quit();
         }
-
-        driver.quit();
-
-        return jobs.stream()
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
-                .distinct()
-                .toList();
     }
 }

@@ -10,8 +10,6 @@ plugins {
 
 dependencies {
     implementation group: 'org.jsoup', name: 'jsoup', version: '1.15.2'
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.7.2'
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-devtools-v111', version: '4.8.3'
 
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"

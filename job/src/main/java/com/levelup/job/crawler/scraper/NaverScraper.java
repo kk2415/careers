@@ -11,7 +11,6 @@ import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -35,35 +34,30 @@ public class NaverScraper implements Scraper<Job> {
         driver.get(company.getUrl(params));
 
         List<WebElement> elements = scrollToEnd(driver);
+        List<Job> jobs = elements.stream()
+                .map(element -> {
+                    String title = element.findElement(By.cssSelector("a.card_link > h4.card_title")).getText();
 
-        ArrayList<Job> jobs = new ArrayList<>();
-        for (WebElement element : elements) {
-            try {
-                String title = element.findElement(By.cssSelector("a.card_link > h4.card_title")).getText();
+                    String htmlOnClickAttrValue = element.findElement(By.cssSelector("a.card_link")).getAttribute("onclick");
+                    String jobNoticeKey;
+                    if (htmlOnClickAttrValue.contains("'")) {
+                        jobNoticeKey = htmlOnClickAttrValue.substring(htmlOnClickAttrValue.indexOf("'") + 1, htmlOnClickAttrValue.lastIndexOf("'"));
+                    } else {
+                        jobNoticeKey = htmlOnClickAttrValue.substring(htmlOnClickAttrValue.indexOf("(") + 1, htmlOnClickAttrValue.lastIndexOf(")"));
+                    }
 
-                String htmlOnClickAttrValue = element.findElement(By.cssSelector("a.card_link")).getAttribute("onclick");
-                String jobNoticeKey;
-                if (htmlOnClickAttrValue.contains("'")) {
-                    jobNoticeKey = htmlOnClickAttrValue.substring(htmlOnClickAttrValue.indexOf("'") + 1, htmlOnClickAttrValue.lastIndexOf("'"));
-                } else {
-                    jobNoticeKey = htmlOnClickAttrValue.substring(htmlOnClickAttrValue.indexOf("(") + 1, htmlOnClickAttrValue.lastIndexOf(")"));
-                }
+                    String url = "https://recruit.navercorp.com/rcrt/view.do?annoId=" + jobNoticeKey;
+                    String noticeEndDate = element.findElement(By.cssSelector("dl.card_info dd.info_text:last-child")).getText();
 
-                String url = "https://recruit.navercorp.com/rcrt/view.do?annoId=" + jobNoticeKey;
-                String noticeEndDate = element.findElement(By.cssSelector("dl.card_info dd.info_text:last-child")).getText();
-
-                jobs.add(Job.of(title, company, url, noticeEndDate));
-            } catch (Exception e) {
-                log.error("{} - {}", e.getClass(), e.getMessage());
-            }
-        }
-
-        driver.quit();
-
-        return jobs.stream()
+                    return Job.of(title, company, url, noticeEndDate);
+                })
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .distinct()
                 .toList();
+
+        driver.quit();
+
+        return jobs;
     }
 
     private List<WebElement> scrollToEnd(WebDriver driver) {
