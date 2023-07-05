@@ -1,18 +1,21 @@
 package com.levelup.job.crawler;
 
-import com.levelup.job.crawler.scraper.BaminScraper;
+import com.levelup.job.crawler.scraper.Scraper;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.infrastructure.enumeration.Company;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @Component("baminCrawler")
 public class BaminCrawler implements Crawler {
 
-    private final BaminScraper scraper;
+    private final Scraper<Job> scraper;
+
+    public BaminCrawler(@Qualifier("baminScraper") Scraper<Job> scraper) {
+        this.scraper = scraper;
+    }
 
     @Override
     public Company getCompany() {

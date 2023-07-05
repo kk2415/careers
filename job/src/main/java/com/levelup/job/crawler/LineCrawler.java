@@ -1,20 +1,21 @@
 package com.levelup.job.crawler;
 
-import com.levelup.job.crawler.scraper.LineScraper;
+import com.levelup.job.crawler.scraper.Scraper;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.infrastructure.enumeration.Company;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Slf4j
-@RequiredArgsConstructor
 @Component("lineCrawler")
 public class LineCrawler implements Crawler {
 
-    private final LineScraper scraper;
+    private final Scraper<Job> scraper;
+
+    public LineCrawler(@Qualifier("lineScraper") Scraper<Job> scraper) {
+        this.scraper = scraper;
+    }
 
     @Override
     public Company getCompany() {
