@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,16 +23,20 @@ public class CrawlingScheduler {
 
     @Scheduled(cron = "0 0 */2 * * *")
     public void crawlingJobs() {
-        crawlers.forEach(crawler -> {
-            List<Job> crawledJobs = crawler.crawling();
-            List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
+        List<String> newJobsSubject = crawlers.stream()
+                .map(crawler -> {
+                    List<Job> crawledJobs = crawler.crawling();
+                    List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
 
-            List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
-            jobService.deleteAll(deleteJobs);
+                    List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
+                    jobService.deleteAll(deleteJobs);
 
-            notificationApiClient.sendPushAlarm(newJobs.stream()
-                    .map(Job::getSubject)
-                    .toList());
-        });
+                    return newJobs;
+                })
+                .flatMap(Collection::stream)
+                .map(Job::getSubject)
+                .toList();
+
+        notificationApiClient.sendPushAlarm(newJobsSubject);
     }
 }

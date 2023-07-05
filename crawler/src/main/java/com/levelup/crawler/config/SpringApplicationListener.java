@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,18 +30,20 @@ public class SpringApplicationListener implements ApplicationListener<ContextRef
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("Starting ContextRefreshedEvent of SpringApplicationListener");
 
-        notificationApiClient.sendPushAlarm(List.of("test"));
+        List<String> newJobsSubject = crawlers.stream()
+                .map(crawler -> {
+                    List<Job> crawledJobs = crawler.crawling();
+                    List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
 
-        crawlers.forEach(crawler -> {
-            List<Job> crawledJobs = crawler.crawling();
-            List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
+                    List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
+                    jobService.deleteAll(deleteJobs);
 
-            List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
-            jobService.deleteAll(deleteJobs);
+                    return newJobs;
+                })
+                .flatMap(Collection::stream)
+                .map(Job::getSubject)
+                .toList();
 
-            notificationApiClient.sendPushAlarm(newJobs.stream()
-                    .map(Job::getSubject)
-                    .toList());
-        });
+        notificationApiClient.sendPushAlarm(newJobsSubject);
     }
 }
