@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component("lineCrawler")
-public class LineCrawler implements Crawler {
+public class LineCrawler implements Crawler<Job> {
 
     private final Scraper<Job> scraper;
 

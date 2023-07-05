@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component("yanoljaCrawler")
-public class YanoljaCrawler implements Crawler {
+public class YanoljaCrawler implements Crawler<Job> {
 
     private final Scraper<Job> scraper;
 

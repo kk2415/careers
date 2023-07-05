@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component("carrotMarketCrawler")
-public class CarrotMarketCrawler implements Crawler {
+public class CarrotMarketCrawler implements Crawler<Job> {
 
     private final CarrotMarketScraper scraper;
 
