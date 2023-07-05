@@ -30,4 +30,4 @@ jwt:
   access-token:
     expiration: 10080 #분 단위
 
-baseurl: http://localhost:8888
+api_base_url: https://levelupback.link:8080
