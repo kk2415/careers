@@ -22,17 +22,17 @@ import java.util.List;
 @RestController
 public class CrawlingController {
 
-    private final Crawler kakaoCrawler;
-    private final Crawler lineCrawler;
-    private final Crawler naverCrawler;
-    private final Crawler coupangCrawler;
-    private final Crawler tossCrawler;
-    private final Crawler baminCrawler;
-    private final Crawler carrotMarketCrawler;
-    private final Crawler bucketPlaceCrawler;
-    private final Crawler yanoljaCrawler;
-    private final Crawler skCrawler;
-    private final Crawler socarCrawler;
+    private final Crawler<Job> kakaoCrawler;
+    private final Crawler<Job> lineCrawler;
+    private final Crawler<Job> naverCrawler;
+    private final Crawler<Job> coupangCrawler;
+    private final Crawler<Job> tossCrawler;
+    private final Crawler<Job> baminCrawler;
+    private final Crawler<Job> carrotMarketCrawler;
+    private final Crawler<Job> bucketPlaceCrawler;
+    private final Crawler<Job> yanoljaCrawler;
+    private final Crawler<Job> skCrawler;
+    private final Crawler<Job> socarCrawler;
 
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;

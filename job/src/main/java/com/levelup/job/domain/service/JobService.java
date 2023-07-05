@@ -15,8 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,7 +26,6 @@ import java.util.List;
 public class JobService {
 
     private final JobRepository jobRepository;
-    private final WebClient webClient;
 
     @Transactional
     public Job save(Job jobVO) {
@@ -136,14 +133,5 @@ public class JobService {
         jobRepository.deleteAllById(jobs.stream()
                 .map(Job::getId)
                 .toList());
-    }
-
-    public void test() {
-        Mono<String> mono = webClient.get()
-                .uri("/api/v1/notifications/test")
-                .retrieve()
-                .bodyToMono(String.class);
-
-        String response = mono.block();
     }
 }

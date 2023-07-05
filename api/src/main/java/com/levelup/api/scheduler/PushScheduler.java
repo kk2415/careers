@@ -21,11 +21,11 @@ public class PushScheduler {
 
     @Scheduled(cron = "0 0 */1 * * *")
     public void crawlingJobs() {
-        List<Job> notPushedJobs = jobService.getNotPushedJobs();
-        List<Job> jobs = jobService.push(notPushedJobs);
-
-        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, jobs.stream()
-                .map(Job::getSubject)
-                .toList());
+//        List<Job> notPushedJobs = jobService.getNotPushedJobs();
+//        List<Job> jobs = jobService.push(notPushedJobs);
+//
+//        jobNotificationService.pushNewJobsNotification(FcmTopicName.JOB, jobs.stream()
+//                .map(Job::getSubject)
+//                .toList());
     }
 }

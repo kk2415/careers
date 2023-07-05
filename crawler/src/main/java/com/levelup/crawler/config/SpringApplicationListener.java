@@ -3,6 +3,7 @@ package com.levelup.crawler.config;
 import com.levelup.job.crawler.Crawler;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.domain.service.JobService;
+import com.levelup.job.web.api.NotificationApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
@@ -20,19 +21,26 @@ import java.util.List;
 @Component
 public class SpringApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final List<Crawler> crawlers;
+    private final List<Crawler<Job>> crawlers;
     private final JobService jobService;
+    private final NotificationApiClient notificationApiClient;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.info("Starting ContextRefreshedEvent of SpringApplicationListener");
 
+        notificationApiClient.sendPushAlarm(List.of("test"));
+
         crawlers.forEach(crawler -> {
             List<Job> crawledJobs = crawler.crawling();
-            jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
+            List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
 
             List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
             jobService.deleteAll(deleteJobs);
+
+            notificationApiClient.sendPushAlarm(newJobs.stream()
+                    .map(Job::getSubject)
+                    .toList());
         });
     }
 }
