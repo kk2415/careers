@@ -28,22 +28,24 @@ public class SpringApplicationListener implements ApplicationListener<ContextRef
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        log.info("Starting ContextRefreshedEvent of SpringApplicationListener");
+        try {
+            List<String> newJobsSubject = crawlers.stream()
+                    .map(crawler -> {
+                        List<Job> crawledJobs = crawler.crawling();
+                        List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
 
-        List<String> newJobsSubject = crawlers.stream()
-                .map(crawler -> {
-                    List<Job> crawledJobs = crawler.crawling();
-                    List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
+                        List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
+                        jobService.deleteAll(deleteJobs);
 
-                    List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());
-                    jobService.deleteAll(deleteJobs);
+                        return newJobs;
+                    })
+                    .flatMap(Collection::stream)
+                    .map(Job::getSubject)
+                    .toList();
 
-                    return newJobs;
-                })
-                .flatMap(Collection::stream)
-                .map(Job::getSubject)
-                .toList();
-
-        notificationApiClient.sendPushAlarm(newJobsSubject);
+            notificationApiClient.sendPushAlarm(newJobsSubject);
+        } catch (Exception e) {
+            log.error("SpringApplicationListener exception 발생, message: {}", e.getMessage());
+        }
     }
 }
