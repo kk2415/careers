@@ -19,26 +19,30 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<Void> handleThrowable(Throwable e, HttpServletRequest request) {
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
+
+        return ResponseEntity.status(500).build();
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception e, HttpServletRequest request) {
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
-        e.printStackTrace();
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
 
         return ResponseEntity.status(500).body(ExceptionResponse.of(ExceptionCode.EXCEPTION.name(), e.getMessage(), ExceptionCode.EXCEPTION.getHttpStatus()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException e, HttpServletRequest request) {
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
-        e.printStackTrace();
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
 
         return ResponseEntity.status(ExceptionCode.INVALID_REQUEST_BODY.getHttpStatus()).body(FieldExceptionResponse.of(ExceptionCode.INVALID_REQUEST_BODY, e.getBindingResult()));
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public ResponseEntity<ExceptionResponse> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e, HttpServletRequest request) {
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
-        e.printStackTrace();
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
 
         return ResponseEntity.status(ExceptionCode.FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus()).body(ExceptionResponse.of(
                 ExceptionCode.FILE_SIZE_LIMIT_EXCEEDED.name(),
@@ -49,29 +53,28 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ExceptionResponse> handleBusinessException(BusinessException e, HttpServletRequest request) {
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
-        e.printStackTrace();
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
 
         return ResponseEntity.status(e.getHttpStatus()).body(ExceptionResponse.of(e.getCode(), e.getMessage(), e.getHttpStatus()));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(EntityNotFoundException e, HttpServletRequest request) {
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
 
         return ResponseEntity.status(e.getHttpStatus()).body(ExceptionResponse.of(e.getCode(), e.getMessage(), e.getHttpStatus()));
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ExceptionResponse> handleNoSuchElementException(NoSuchElementException e, HttpServletRequest request) {
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionResponse.of(ExceptionCode.SELENIUM_EXCEPTION.name(), e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 
     @ExceptionHandler(WebDriverException.class)
     public ResponseEntity<ExceptionResponse> handleWebDriverException(WebDriverException e, HttpServletRequest request) {
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), e.getMessage());
+        log.error("{} - request uri: {}", request.getMethod(), request.getRequestURI(), e);
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionResponse.of(ExceptionCode.SELENIUM_EXCEPTION.name(), e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }

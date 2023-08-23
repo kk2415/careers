@@ -43,7 +43,7 @@ public class SpringApplicationListener implements ApplicationListener<ContextRef
                     .map(Job::getSubject)
                     .toList();
 
-            notificationApiClient.sendPushAlarm(newJobsSubject);
+//            notificationApiClient.sendPushAlarm(newJobsSubject);
         } catch (Exception e) {
             log.error("SpringApplicationListener exception 발생, message: {}", e.getMessage());
         }
