@@ -2,9 +2,9 @@ package com.levelup.api.security.authorization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.levelup.api.controller.exception.ExceptionResponse;
+import com.levelup.common.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -27,11 +27,13 @@ public class AuthorizationAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        ExceptionResponse responseBody = ExceptionResponse.of("ROLE_NOT_FOUND", "권한이 없습니다.", 400);
+        ExceptionResponse responseBody = ExceptionResponse.of(
+                ExceptionCode.INVALID_PERMISSION.name(),
+                ExceptionCode.INVALID_PERMISSION.getMessage(),
+                ExceptionCode.INVALID_PERMISSION.getHttpStatus()
+        );
 
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), "ROLE_NOT_FOUND" + " " + "권한이 없습니다.");
-
-        response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setStatus(responseBody.getHttpStatus());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.getWriter().write(objectMapper.writeValueAsString(responseBody));

@@ -70,4 +70,8 @@ public class User implements UserDetails {
                 null,
                 null);
     }
+
+    public String getRole() {
+        return roles.get(0).toString();
+    }
 }

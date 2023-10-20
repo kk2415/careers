@@ -2,10 +2,9 @@ package com.levelup.api.security.authorization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.levelup.api.controller.exception.ExceptionResponse;
-import com.levelup.api.util.jwt.AuthenticationErrorCode;
+import com.levelup.common.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -28,16 +27,15 @@ public class AuthorizationNoAuthenticationHandler implements AuthenticationEntry
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        AuthenticationErrorCode authenticationErrorCode = (AuthenticationErrorCode) request.getAttribute("AuthenticationErrorCode");
-
-        log.error("{} - request uri: {}, message: {}", request.getMethod(), request.getRequestURI(), authenticationErrorCode.name() + " " + authenticationErrorCode.getMessage());
+        ExceptionCode exceptionCode = (ExceptionCode) request.getAttribute(JwtAuthorizationFilter.JWT_EXCEPTION_KEY);
 
         ExceptionResponse responseBody = ExceptionResponse.of(
-                authenticationErrorCode.name(),
-                authenticationErrorCode.getMessage(),
-                HttpStatus.UNAUTHORIZED.value());
+                exceptionCode.name(),
+                exceptionCode.getMessage(),
+                exceptionCode.getHttpStatus()
+        );
 
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setStatus(responseBody.getHttpStatus());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.getWriter().write(objectMapper.writeValueAsString(responseBody));

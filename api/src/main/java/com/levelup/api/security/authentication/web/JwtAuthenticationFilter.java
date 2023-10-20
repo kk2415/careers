@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.levelup.api.controller.exception.ExceptionResponse;
 import com.levelup.api.controller.v1.dto.LoginDto;
 import com.levelup.api.security.authentication.CustomAuthenticationToken;
-import com.levelup.api.security.userdetails.Role;
 import com.levelup.api.security.userdetails.User;
 import com.levelup.api.util.jwt.AccessToken;
 import com.levelup.api.util.jwt.TokenProvider;
+import com.levelup.common.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -38,19 +37,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        LoginDto.LoginRequest loginRequest = createLoginRequest(request);
+
+        //ProviderManager
+        AuthenticationManager authenticationManager = getAuthenticationManager();
+
+        return authenticationManager.authenticate(
+                new CustomAuthenticationToken(
+                        loginRequest.username(),
+                        loginRequest.password(),
+                        new ArrayList<>(10)
+                )
+        );
+    }
+
+    private LoginDto.LoginRequest createLoginRequest(HttpServletRequest request) {
         try {
-            LoginDto.LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginDto.LoginRequest.class);
-
-            //ProviderManager
-            AuthenticationManager authenticationManager = getAuthenticationManager();
-
-            return authenticationManager.authenticate(
-                    new CustomAuthenticationToken(
-                            loginRequest.username(),
-                            loginRequest.password(),
-                            new ArrayList<>(10)
-                    )
-            );
+            return new ObjectMapper().readValue(request.getInputStream(), LoginDto.LoginRequest.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,46 +62,43 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         User user = (User) authResult.getPrincipal();
-        String token = tokenProvider.createAccessToken(user.getRoles().get(0).toString());
-        AccessToken accessToken = AccessToken.of(
-                token,
-                tokenProvider.getExpiration(token),
-                tokenProvider.getIssuedAt(token)
-        );
 
         response.setStatus(HttpStatus.OK.value());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.getWriter().write(getResponseBody(user, accessToken));
+        response.getWriter().write(createResponseBody(user));
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authResult);
         SecurityContextHolder.setContext(context);
     }
 
-    private String getResponseBody(User user, AccessToken accessToken) throws JsonProcessingException {
-        String role = user.getRoles().stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst()
-                .orElse(Role.ANONYMOUS.toString());
+    private String createResponseBody(User user) throws JsonProcessingException {
+        String token = tokenProvider.createAccessToken(user.getRole());
+        AccessToken accessToken = AccessToken.of(
+                token,
+                tokenProvider.getExpiration(token),
+                tokenProvider.getIssuedAt(token)
+        );
 
-        return objectMapper.writeValueAsString(LoginDto.LoginResponse.of(accessToken, role));
+        return objectMapper.writeValueAsString(LoginDto.LoginResponse.of(accessToken, user.getRole()));
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-        String exceptionMsg = "비밀번호가 일치하지 않습니다.";
+        ExceptionCode exceptionCode = ExceptionCode.INVALID_PASSWORD;
         if (exception instanceof InternalAuthenticationServiceException) {
-            exceptionMsg = "아이디가 일치하지 않습니다.";
+            exceptionCode = ExceptionCode.USERNAME_NOT_FOUND;
         }
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON.toString());
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.getWriter().write(objectMapper.writeValueAsString(ExceptionResponse.of(
-                "LOGIN_EXCEPTION",
-                exceptionMsg,
-                HttpStatus.UNAUTHORIZED.value())));
+                exceptionCode.name(),
+                exceptionCode.getMessage(),
+                exceptionCode.getHttpStatus()
+        )));
 
         SecurityContextHolder.clearContext();
     }
