@@ -32,8 +32,8 @@ api_base_url: http://localhost:8080
 
 db:
   driver-class-name: com.mysql.cj.jdbc.Driver
-  username: onoffmix
-  password: Onoffmix#234
+  username: username
+  password: password
   host: 121.78.207.227
   port: 3306
   database-name: onoffmix_mice_ksa_test
