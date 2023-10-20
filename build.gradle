@@ -41,6 +41,7 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
         implementation 'com.github.maricn:logback-slack-appender:1.4.0'
+        implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 
         implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.7.2'
         implementation group: 'org.seleniumhq.selenium', name: 'selenium-devtools-v111', version: '4.8.3'
@@ -49,7 +50,6 @@ subprojects {
         implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
         implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
-        // https://mvnrepository.com/artifact/mysql/mysql-connector-java
         implementation 'mysql:mysql-connector-java:8.0.28'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
