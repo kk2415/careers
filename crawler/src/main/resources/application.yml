@@ -3,24 +3,10 @@ server:
 
 spring:
   datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://level-up-database.cdbjs5p1unct.ap-northeast-2.rds.amazonaws.com:3306/levelup?serverTimezone=Asia/Seoul
-#    username: root
-#    password: leveluprds!
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/levelup?serverTimezone=Asia/Seoul
     username: root
     password: onoffmix
-
-  ssh:
-    tunnel:
-      enabled: true
-      host: 43.201.67.10
-      port: 22
-      username: ec2-user
-      private_key: C:\Users\onoffmix\.ssh\level-up-prod.pem
-      remoteHost: level-up-database.cdbjs5p1unct.ap-northeast-2.rds.amazonaws.com
-      database_port: 3306
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -43,3 +29,17 @@ jwt:
     expiration: 10080 #분 단위
 
 api_base_url: http://localhost:8080
+
+db:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  username: username
+  password: password
+  host: 121.78.207.227
+  port: 3306
+  database-name: onoffmix_mice_ksa_test
+
+ssh:
+  host: 121.78.1.177
+  port: 22
+  username: username
+  password: password

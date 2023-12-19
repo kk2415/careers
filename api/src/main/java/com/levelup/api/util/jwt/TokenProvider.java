@@ -1,7 +1,6 @@
 package com.levelup.api.util.jwt;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
@@ -21,15 +20,14 @@ public class TokenProvider {
 
     private Date expireDate;
 
-    public String createAccessToken(String role) {
+    public String createAccessToken(String subject) {
         Pair<String, Key> key = JwtKey.getRandomKey();
-        Claims subject = Jwts.claims().setSubject(String.valueOf(role)); //subject
         this.expireDate = Date.from(Instant.now().plus(accessTokenExpiration, ChronoUnit.MINUTES)); //ExpiredJwtException
 
         return Jwts.builder()
                 .setHeaderParam(JwsHeader.KEY_ID, key.getFirst()) //header
 
-                .setClaims(subject) //subject
+                .setClaims(Jwts.claims().setSubject(String.valueOf(subject))) //subject
                 .setIssuer("level up") //iis
                 .setIssuedAt(new Date()) //iat
                 .setExpiration(expireDate) //exp
@@ -38,23 +36,13 @@ public class TokenProvider {
                 .compact();
     }
 
-    public AuthenticationErrorCode validateToken(String token) throws RuntimeException {
-        try {
-            Jwts.parserBuilder()
-                    .setSigningKeyResolver(SigningKeyResolver.instance) //JWT 만들었을 때 사용했던 비밀키를 넣어줘야됨
-                    .build()
-                    .parseClaimsJws(token);
-            return AuthenticationErrorCode.SUCCESS;
+    public AuthenticationErrorCode validate(String token) throws RuntimeException {
+        Jwts.parserBuilder()
+                .setSigningKeyResolver(SigningKeyResolver.instance) //JWT 만들었을 때 사용했던 비밀키를 넣어줘야됨
+                .build()
+                .parseClaimsJws(token);
 
-        } catch (ExpiredJwtException e) {
-            return AuthenticationErrorCode.EXPIRED_TOKEN;
-        } catch (SignatureException e) {
-            return AuthenticationErrorCode.INVALID_SIGNATURE;
-        } catch (IllegalArgumentException e) {
-            return AuthenticationErrorCode.NULL_TOKEN;
-        } catch (MalformedJwtException e) {
-            return AuthenticationErrorCode.INVALID_TOKEN;
-        }
+        return AuthenticationErrorCode.SUCCESS;
     }
 
     public String getSubject(String token) {

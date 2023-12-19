@@ -3,7 +3,7 @@ server:
   ssl:
     enabled: true #default
     key-store: "/home/ec2-user/level-up/ssl/keystore.p12"
-    key-store-password: "Aa123456!"
+    key-store-password: ENC(JkQXF3hHuqtUSVMKGYe0P6A2ZvCZjNIx)
     key-store-type: "PKCS12"
 
 spring:
@@ -14,7 +14,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://level-up-database.cdbjs5p1unct.ap-northeast-2.rds.amazonaws.com:3306/levelup?serverTimezone=Asia/Seoul
     username: root
-    password: leveluprds!
+    password: ENC(LWPVD4KK5iHWh0h33G5jKpPvYO1qoYNQ)
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect

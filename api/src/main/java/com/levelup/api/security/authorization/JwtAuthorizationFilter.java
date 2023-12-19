@@ -1,8 +1,10 @@
 package com.levelup.api.security.authorization;
 
 import com.levelup.api.security.userdetails.User;
-import com.levelup.api.util.jwt.AuthenticationErrorCode;
 import com.levelup.api.util.jwt.TokenProvider;
+import com.levelup.common.exception.ExceptionCode;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,29 +26,33 @@ import java.util.Optional;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
+    public static final String JWT_EXCEPTION_KEY = "INVALID_JWT_KEY";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         parseBearerHeader(request)
-                .ifPresentOrElse((token) -> {
-                            AuthenticationErrorCode validationResult = tokenProvider.validateToken(token);
-                            SecurityContext securityContext = SecurityContextHolder.getContext();
+                .ifPresentOrElse(token -> {
+                    try {
+                        tokenProvider.validate(token);
 
-                            if (validationResult.isValid()) {
-                                String role = tokenProvider.getSubject(token);
+                        String role = tokenProvider.getSubject(token);
+                        AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                                User.createMock(),
+                                null,
+                                Collections.singleton(new SimpleGrantedAuthority(role)));
 
-                                AbstractAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                                        User.createMock(),
-                                        null,
-                                        Collections.singleton(new SimpleGrantedAuthority(role)));
-                                securityContext.setAuthentication(authenticationToken);
-                            } else {
-                                request.setAttribute("AuthenticationErrorCode", validationResult);
-                            }
-                        },
-                        () -> {
-                            request.setAttribute("AuthenticationErrorCode", AuthenticationErrorCode.NULL_BEARER_HEADER);
-                        });
+                        SecurityContext securityContext = SecurityContextHolder.getContext();
+                        securityContext.setAuthentication(authenticationToken);
+                    } catch (ExpiredJwtException e) {
+                        request.setAttribute(JWT_EXCEPTION_KEY, ExceptionCode.EXPIRED_TOKEN);
+                    } catch (IllegalArgumentException e) {
+                        request.setAttribute(JWT_EXCEPTION_KEY, ExceptionCode.NULL_TOKEN);
+                    } catch (MalformedJwtException e) {
+                        request.setAttribute(JWT_EXCEPTION_KEY, ExceptionCode.INVALID_TOKEN);
+                    }
+                    },
+                        () -> request.setAttribute(JWT_EXCEPTION_KEY, ExceptionCode.NULL_BEARER_HEADER)
+                );
 
         filterChain.doFilter(request, response);
     }
