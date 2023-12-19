@@ -36,10 +36,10 @@ public class YanoljaScraper implements Scraper<Job> {
 
         List<Job> jobs = elements.stream()
                 .map(element -> {
-                    String title = element.findElement(By.cssSelector("li > div.eBKBVi > div.ctrzdb")).getText();
+                    String title = element.findElement(By.cssSelector("li > div.eBKBVi > div.hsclxU")).getText();
                     String url = element.getAttribute("href");
                     String noticeEndDate = "채용 마감시";
-                    String jobGroup = element.findElement(By.cssSelector("li > div.eBKBVi > div.edcwkf > span.guTnnu")).getText();
+                    String jobGroup = element.findElement(By.cssSelector("li > div.eBKBVi > div.kLNKNf > span.gDzMae")).getText();
 
                     return Job.of(title, company, url, noticeEndDate, jobGroup);
                 })
