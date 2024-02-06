@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -16,7 +16,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class NaverScraper implements Scraper<Job> {
+public class NaverScraper implements Scraper<CreateJob> {
 
     private final Company company = Company.NAVER;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -27,14 +27,14 @@ public class NaverScraper implements Scraper<Job> {
     }
 
     @Override
-    public List<Job> scrape() {
+    public List<CreateJob> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 
         String params = "subJobCdArr=1010001%2C1010002%2C1010003%2C1010004%2C1010005%2C1010006%2C1010007%2C1010008%2C1010020%2C1020001%2C1030001%2C1030002%2C1040001%2C1060001&sysCompanyCdArr=KR%2CNB%2CWM%2CSN%2CNL%2CWTKR%2CNFN%2CNI&empTypeCdArr=&entTypeCdArr=&workAreaCdArr=&sw=&subJobCdData=1010001&subJobCdData=1010002&subJobCdData=1010003&subJobCdData=1010004&subJobCdData=1010005&subJobCdData=1010006&subJobCdData=1010007&subJobCdData=1010008&subJobCdData=1010020&subJobCdData=1020001&subJobCdData=1030001&subJobCdData=1030002&subJobCdData=1040001&subJobCdData=1060001&sysCompanyCdData=KR&sysCompanyCdData=NB&sysCompanyCdData=WM&sysCompanyCdData=SN&sysCompanyCdData=NL&sysCompanyCdData=WTKR&sysCompanyCdData=NFN&sysCompanyCdData=NI";
         driver.get(company.getUrl(params));
 
         List<WebElement> elements = scrollToEnd(driver);
-        List<Job> jobs = elements.stream()
+        List<CreateJob> jobs = elements.stream()
                 .map(element -> {
                     String title = element.findElement(By.cssSelector("a.card_link > h4.card_title")).getText();
 
@@ -49,7 +49,13 @@ public class NaverScraper implements Scraper<Job> {
                     String url = "https://recruit.navercorp.com/rcrt/view.do?annoId=" + jobNoticeKey;
                     String noticeEndDate = element.findElement(By.cssSelector("dl.card_info dd.info_text:last-child")).getText();
 
-                    return Job.of(title, company, url, noticeEndDate);
+                    return CreateJob.of(
+                            title,
+                            company,
+                            url,
+                            noticeEndDate,
+                            ""
+                    );
                 })
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .distinct()

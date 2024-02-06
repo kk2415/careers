@@ -1,6 +1,6 @@
 package com.levelup.job.crawler.scraper;
 
-import com.levelup.job.domain.model.Job;
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class SocarScraper implements Scraper<Job> {
+public class SocarScraper implements Scraper<CreateJob> {
 
     private final Company company = Company.SOCAR;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -29,12 +29,12 @@ public class SocarScraper implements Scraper<Job> {
     }
 
     @Override
-    public List<Job> scrape() {
+    public List<CreateJob> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
 
         List<WebElement> pagingButtons = driver.findElements(By.cssSelector("div.Pagination_Pagination__FU2nU > button.Pagination_item__GJ3ds"));
-        List<Job> jobs = pagingButtons.stream()
+        List<CreateJob> jobs = pagingButtons.stream()
                 .map(pagingButton -> {
                     pagingButton.click();
 
@@ -57,7 +57,13 @@ public class SocarScraper implements Scraper<Job> {
                                     return null;
                                 }
 
-                                return Job.of(title, company, url, noticeEndDate, jobGroup);
+                                return CreateJob.of(
+                                        title,
+                                        company,
+                                        url,
+                                        noticeEndDate,
+                                        jobGroup
+                                );
                             })
                             .filter(Objects::nonNull)
                             .toList();

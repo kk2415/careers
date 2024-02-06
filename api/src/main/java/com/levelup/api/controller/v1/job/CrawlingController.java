@@ -2,6 +2,7 @@ package com.levelup.api.controller.v1.job;
 
 import com.levelup.api.controller.v1.dto.JobDto;
 import com.levelup.job.crawler.Crawler;
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.domain.model.Job;
 import com.levelup.notification.domain.service.JobNotificationService;
@@ -22,17 +23,17 @@ import java.util.List;
 @RestController
 public class CrawlingController {
 
-    private final Crawler<Job> kakaoCrawler;
-    private final Crawler<Job> lineCrawler;
-    private final Crawler<Job> naverCrawler;
-    private final Crawler<Job> coupangCrawler;
-    private final Crawler<Job> tossCrawler;
-    private final Crawler<Job> baminCrawler;
-    private final Crawler<Job> carrotMarketCrawler;
-    private final Crawler<Job> bucketPlaceCrawler;
-    private final Crawler<Job> yanoljaCrawler;
-    private final Crawler<Job> skCrawler;
-    private final Crawler<Job> socarCrawler;
+    private final Crawler<CreateJob> kakaoCrawler;
+    private final Crawler<CreateJob> lineCrawler;
+    private final Crawler<CreateJob> naverCrawler;
+    private final Crawler<CreateJob> coupangCrawler;
+    private final Crawler<CreateJob> tossCrawler;
+    private final Crawler<CreateJob> baminCrawler;
+    private final Crawler<CreateJob> carrotMarketCrawler;
+    private final Crawler<CreateJob> bucketPlaceCrawler;
+    private final Crawler<CreateJob> yanoljaCrawler;
+    private final Crawler<CreateJob> skCrawler;
+    private final Crawler<CreateJob> socarCrawler;
 
     private final JobService jobService;
     private final JobNotificationService jobNotificationService;
@@ -40,7 +41,7 @@ public class CrawlingController {
     @Operation(summary = "카카오 채용 크롤링")
     @PostMapping("/kakao")
     public ResponseEntity<List<JobDto.Response>> crawlKakao() {
-        List<Job> crawledJobs = kakaoCrawler.crawling();
+        List<CreateJob> crawledJobs = kakaoCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, kakaoCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, kakaoCrawler.getCompany());
@@ -57,7 +58,7 @@ public class CrawlingController {
     @Operation(summary = "라인 채용 크롤링")
     @PostMapping("/line")
     public ResponseEntity<List<JobDto.Response>> crawlLine() {
-        List<Job> crawledJobs = lineCrawler.crawling();
+        List<CreateJob> crawledJobs = lineCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, lineCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, lineCrawler.getCompany());
@@ -74,7 +75,7 @@ public class CrawlingController {
     @Operation(summary = "네이버 채용 크롤링")
     @PostMapping("/naver")
     public ResponseEntity<List<JobDto.Response>> crawlNaver() {
-        List<Job> crawledJobs = naverCrawler.crawling();
+        List<CreateJob> crawledJobs = naverCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, naverCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, naverCrawler.getCompany());
@@ -91,7 +92,7 @@ public class CrawlingController {
     @Operation(summary = "쿠팡 채용 크롤링")
     @PostMapping("/coupang")
     public ResponseEntity<List<JobDto.Response>> crawlCoupang() {
-        List<Job> crawledJobs = coupangCrawler.crawling();
+        List<CreateJob> crawledJobs = coupangCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, coupangCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, coupangCrawler.getCompany());
@@ -108,7 +109,7 @@ public class CrawlingController {
     @Operation(summary = "토스 채용 크롤링")
     @PostMapping("/toss")
     public ResponseEntity<List<JobDto.Response>> crawlToss() {
-        List<Job> crawledJobs = tossCrawler.crawling();
+        List<CreateJob> crawledJobs = tossCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, tossCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, tossCrawler.getCompany());
@@ -125,7 +126,7 @@ public class CrawlingController {
     @Operation(summary = "배민 채용 크롤링")
     @PostMapping("/bamin")
     public ResponseEntity<List<JobDto.Response>> crawlBamin() {
-        List<Job> crawledJobs = baminCrawler.crawling();
+        List<CreateJob> crawledJobs = baminCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, baminCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, baminCrawler.getCompany());
@@ -142,7 +143,7 @@ public class CrawlingController {
     @Operation(summary = "당근마켓 채용 크롤링")
     @PostMapping("/carrot-market")
     public ResponseEntity<List<JobDto.Response>> crawlCarrotMarket() {
-        List<Job> crawledJobs = carrotMarketCrawler.crawling();
+        List<CreateJob> crawledJobs = carrotMarketCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, carrotMarketCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, carrotMarketCrawler.getCompany());
@@ -159,7 +160,7 @@ public class CrawlingController {
     @Operation(summary = "오늘의 집 채용 크롤링")
     @PostMapping("/bucket-place")
     public ResponseEntity<List<JobDto.Response>> crawlBucketPlace() {
-        List<Job> crawledJobs = bucketPlaceCrawler.crawling();
+        List<CreateJob> crawledJobs = bucketPlaceCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, bucketPlaceCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, bucketPlaceCrawler.getCompany());
@@ -176,7 +177,7 @@ public class CrawlingController {
     @Operation(summary = "야놀자 채용 크롤링")
     @PostMapping("/yanolja")
     public ResponseEntity<List<JobDto.Response>> crawlYanolja() {
-        List<Job> crawledJobs = yanoljaCrawler.crawling();
+        List<CreateJob> crawledJobs = yanoljaCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, yanoljaCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, yanoljaCrawler.getCompany());
@@ -193,7 +194,7 @@ public class CrawlingController {
     @Operation(summary = "SK 채용 크롤링")
     @PostMapping("/sk")
     public ResponseEntity<List<JobDto.Response>> crawlSkt() {
-        List<Job> crawledJobs = skCrawler.crawling();
+        List<CreateJob> crawledJobs = skCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, skCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, skCrawler.getCompany());
@@ -210,7 +211,7 @@ public class CrawlingController {
     @Operation(summary = "쏘카 채용 크롤링")
     @PostMapping("/socar")
     public ResponseEntity<List<JobDto.Response>> crawlSocar() {
-        List<Job> crawledJobs = socarCrawler.crawling();
+        List<CreateJob> crawledJobs = socarCrawler.crawling();
         List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, socarCrawler.getCompany());
 
         List<Job> notExistsJobs = jobService.getNotMatched(crawledJobs, socarCrawler.getCompany());

@@ -1,7 +1,7 @@
 package com.levelup.job.crawler;
 
 import com.levelup.job.crawler.scraper.Scraper;
-import com.levelup.job.domain.model.Job;
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component("socarCrawler")
-public class SocarCrawler implements Crawler<Job> {
+public class SocarCrawler implements Crawler<CreateJob> {
 
-    private final Scraper<Job> scraper;
+    private final Scraper<CreateJob> scraper;
 
-    public SocarCrawler(@Qualifier("socarScraper") Scraper<Job> scraper) {
+    public SocarCrawler(
+            @Qualifier("socarScraper") Scraper<CreateJob> scraper
+    ) {
         this.scraper = scraper;
     }
 
@@ -23,7 +25,7 @@ public class SocarCrawler implements Crawler<Job> {
     }
 
     @Override
-    public List<Job> crawling() {
+    public List<CreateJob> crawling() {
         return scraper.scrape();
     }
 }

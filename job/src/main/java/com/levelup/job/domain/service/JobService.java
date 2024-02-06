@@ -2,6 +2,7 @@ package com.levelup.job.domain.service;
 
 import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.jpaentity.JobEntity;
 import com.levelup.job.infrastructure.enumeration.Company;
 import com.levelup.job.infrastructure.enumeration.OrderBy;
@@ -35,13 +36,17 @@ public class JobService {
     }
 
     @Transactional
-    public List<Job> saveIfAbsent(List<Job> creationJobs, Company company) {
-        List<Job> findJobs = jobRepository.findByCompany(company).stream()
-                .map(Job::from).toList();
+    public List<Job> saveIfAbsent(List<CreateJob> creationJobs, Company company) {
+        List<Job> savedJobs = jobRepository.findByCompany(company).stream()
+                .map(Job::from)
+                .toList();
 
         List<JobEntity> saveJobs = creationJobs.stream()
-                .filter(job -> !findJobs.contains(job))
-                .map(Job::toEntity)
+                .filter(createJob -> savedJobs.stream().noneMatch(savedJob ->
+                                savedJob.getTitle().equals(createJob.getTitle()) &&
+                                savedJob.getUrl().equals(createJob.getUrl()))
+                )
+                .map(CreateJob::toEntity)
                 .toList();
 
         jobRepository.saveAll(saveJobs);
@@ -83,13 +88,16 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<Job> getNotMatched(List<Job> jobs, Company company) {
-        List<Job> findJobs = jobRepository.findByCompany(company).stream()
+    public List<Job> getNotMatched(List<CreateJob> createJobs, Company company) {
+        List<Job> savedJobs = jobRepository.findByCompany(company).stream()
                 .map(Job::from)
                 .toList();
 
-        return findJobs.stream()
-                .filter(findJob -> !jobs.contains(findJob))
+        return savedJobs.stream()
+                .filter(savedJob -> createJobs.stream().noneMatch(createJob ->
+                        createJob.getTitle().equals(savedJob.getTitle()) &&
+                        createJob.getUrl().equals(savedJob.getUrl()))
+                )
                 .toList();
     }
 

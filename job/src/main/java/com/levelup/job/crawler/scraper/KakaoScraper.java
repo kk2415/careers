@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class KakaoScraper implements Scraper<Job> {
+public class KakaoScraper implements Scraper<CreateJob> {
 
     private final Company company = Company.KAKAO;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -28,7 +28,7 @@ public class KakaoScraper implements Scraper<Job> {
     }
 
     @Override
-    public List<Job> scrape() {
+    public List<CreateJob> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 
         try {
@@ -47,7 +47,13 @@ public class KakaoScraper implements Scraper<Job> {
                                     final String url = element.getAttribute("href");
                                     final String noticeEndDate = element.findElement(By.cssSelector("dl.list_info > dd")).getText();
 
-                                    return Job.of(title, company, url, noticeEndDate);
+                                    return CreateJob.of(
+                                            title,
+                                            company,
+                                            url,
+                                            noticeEndDate,
+                                            ""
+                                    );
                                 })
                                 .toList();
                     })

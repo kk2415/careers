@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class BucketPlaceScraper implements Scraper<Job> {
+public class BucketPlaceScraper implements Scraper<CreateJob> {
 
     private final Company company = Company.BUCKET_PLACE;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -26,19 +26,25 @@ public class BucketPlaceScraper implements Scraper<Job> {
     }
 
     @Override
-    public List<Job> scrape() {
+    public List<CreateJob> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 
         String params = "region=&team=dev";
         driver.get(company.getUrl(params));
 
         List<WebElement> elements = driver.findElements(By.cssSelector("div.recruit-page__job-list__list__wrap > a.recruit-page__job-list__list__wrap__item"));
-        List<Job> jobs = elements.stream()
+        List<CreateJob> jobs = elements.stream()
                 .map(element -> {
                     String title = element.getAccessibleName();
                     String url = element.getAttribute("href");
                     String noticeEndDate = "채용 마감시";
-                    return Job.of(title, company, url, noticeEndDate);
+                    return CreateJob.of(
+                            title,
+                            company,
+                            url,
+                            noticeEndDate,
+                            ""
+                    );
                 })
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .toList();

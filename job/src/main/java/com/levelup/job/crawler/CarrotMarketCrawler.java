@@ -1,20 +1,25 @@
 package com.levelup.job.crawler;
 
-import com.levelup.job.crawler.scraper.CarrotMarketScraper;
+import com.levelup.job.crawler.scraper.Scraper;
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.model.Job;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 @Component("carrotMarketCrawler")
-public class CarrotMarketCrawler implements Crawler<Job> {
+public class CarrotMarketCrawler implements Crawler<CreateJob> {
 
-    private final CarrotMarketScraper scraper;
+    private final Scraper<CreateJob> scraper;
+
+    public CarrotMarketCrawler(
+            @Qualifier("carrotMarketScraper") Scraper<CreateJob> scraper
+    ) {
+        this.scraper = scraper;
+    }
 
     @Override
     public Company getCompany() {
@@ -22,7 +27,7 @@ public class CarrotMarketCrawler implements Crawler<Job> {
     }
 
     @Override
-    public List<Job> crawling() {
+    public List<CreateJob> crawling() {
         return scraper.scrape();
     }
 }

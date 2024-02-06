@@ -33,6 +33,7 @@ public class JobEntity extends BaseTimeEntity {
     private Boolean isPushSent;
 
     public static JobEntity of(
+            Long id,
             String title,
             Company company,
             String url,
@@ -41,10 +42,27 @@ public class JobEntity extends BaseTimeEntity {
             Boolean active,
             Boolean isPushSent
     ) {
-        return new JobEntity(null, title, url, company, noticeEndDate, jobGroup, active, isPushSent);
+        return new JobEntity(
+                id,
+                title,
+                url,
+                company,
+                noticeEndDate,
+                jobGroup,
+                active,
+                isPushSent
+        );
     }
 
-    public void update(String title, String url, Company company, String noticeEndDate, String jobGroup, Boolean active, Boolean isPushSent) {
+    public void update(
+            String title,
+            String url,
+            Company company,
+            String noticeEndDate,
+            String jobGroup,
+            Boolean active,
+            Boolean isPushSent
+    ) {
         this.title = title;
         this.url = url;
         this.company = company;
@@ -55,6 +73,6 @@ public class JobEntity extends BaseTimeEntity {
     }
 
     public void push() {
-        this.isPushSent = true;
+        isPushSent = Boolean.TRUE;
     }
 }

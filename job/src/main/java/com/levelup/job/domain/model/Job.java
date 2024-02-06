@@ -83,15 +83,15 @@ public class Job {
     }
 
     public JobEntity toEntity() {
-        return JobEntity.of(title, company, url, noticeEndDate, jobGroup, true, false);
+        return JobEntity.of(null, title, company, url, noticeEndDate, jobGroup, true, false);
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Job jobVO)) return false;
+        if (!(o instanceof Job job)) return false;
 
-        return (title != null && title.equals(jobVO.title)) && (url != null && url.equals(jobVO.url));
+        return (title != null && title.equals(job.title)) && (url != null && url.equals(job.url));
     }
 
     @Override

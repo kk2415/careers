@@ -1,6 +1,6 @@
 package com.levelup.job.crawler.scraper;
 
-import com.levelup.job.domain.model.Job;
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class SKScraper implements Scraper<Job> {
+public class SKScraper implements Scraper<CreateJob> {
 
     private final Company company = Company.SK;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -28,11 +28,11 @@ public class SKScraper implements Scraper<Job> {
     }
 
     @Override
-    public List<Job> scrape() {
+    public List<CreateJob> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
         List<WebElement> elements = scrollToEnd(driver);
-        List<Job> jobs = elements.stream()
+        List<CreateJob> jobs = elements.stream()
                 .map(element -> {
                     String companyName = element.findElement(By.cssSelector("div.info-area > a > div.company")).getText();
                     WebElement aTag = element.findElement(By.cssSelector("div.subject-area > a"));
@@ -43,7 +43,13 @@ public class SKScraper implements Scraper<Job> {
                     String noticeEndDate = "영업 종료시";
 
                     if (jobGroup.contains("개발") && !jobGroup.contains("사업개발")) {
-                        return Job.of(title, company, url, noticeEndDate, jobGroup);
+                        return CreateJob.of(
+                                title,
+                                company,
+                                url,
+                                noticeEndDate,
+                                jobGroup
+                        );
                     }
 
                     return null;

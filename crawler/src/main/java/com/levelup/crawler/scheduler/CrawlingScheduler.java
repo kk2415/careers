@@ -1,6 +1,7 @@
 package com.levelup.crawler.scheduler;
 
 import com.levelup.job.crawler.Crawler;
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.web.api.NotificationApiClient;
@@ -17,7 +18,7 @@ import java.util.List;
 @EnableScheduling
 public class CrawlingScheduler {
 
-    private final List<Crawler<Job>> crawlers;
+    private final List<Crawler<CreateJob>> crawlers;
     private final JobService jobService;
     private final NotificationApiClient notificationApiClient;
 
@@ -25,7 +26,7 @@ public class CrawlingScheduler {
     public void crawlingJobs() {
         List<String> newJobsSubject = crawlers.stream()
                 .map(crawler -> {
-                    List<Job> crawledJobs = crawler.crawling();
+                    List<CreateJob> crawledJobs = crawler.crawling();
                     List<Job> newJobs = jobService.saveIfAbsent(crawledJobs, crawler.getCompany());
 
                     List<Job> deleteJobs = jobService.getNotMatched(crawledJobs, crawler.getCompany());

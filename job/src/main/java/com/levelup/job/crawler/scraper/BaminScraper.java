@@ -1,7 +1,7 @@
 package com.levelup.job.crawler.scraper;
 
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class BaminScraper implements Scraper<Job> {
+public class BaminScraper implements Scraper<CreateJob> {
 
     private final Company company = Company.BAMIN;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -24,18 +24,24 @@ public class BaminScraper implements Scraper<Job> {
     }
 
     @Override
-    public List<Job> scrape() {
+    public List<CreateJob> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
 
         List<WebElement> jobElements = scrollToEnd(driver);
-        List<Job> jobs = jobElements.stream()
+        List<CreateJob> jobs = jobElements.stream()
                 .map(jobElement -> {
                     String title = jobElement.findElement(By.cssSelector("div.flag-btn > div.share-group")).getAccessibleName();
                     String url = jobElement.findElement(By.cssSelector("a.title")).getAttribute("href");
                     String noticeEndDate = "영업 종료시";
 
-                    return Job.of(title, company, url, noticeEndDate);
+                    return CreateJob.of(
+                            title,
+                            company,
+                            url,
+                            noticeEndDate,
+                            ""
+                    );
                 })
                 .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
                 .distinct()
