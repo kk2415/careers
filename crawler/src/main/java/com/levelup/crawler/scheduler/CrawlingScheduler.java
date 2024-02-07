@@ -1,6 +1,6 @@
 package com.levelup.crawler.scheduler;
 
-import com.levelup.job.crawler.Crawler;
+import com.levelup.crawler.crawler.Crawler;
 import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.domain.model.Job;

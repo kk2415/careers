@@ -1,6 +1,6 @@
 package com.levelup.crawler.config;
 
-import com.levelup.job.crawler.Crawler;
+import com.levelup.crawler.crawler.Crawler;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.web.api.NotificationApiClient;
@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

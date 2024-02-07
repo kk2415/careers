@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Component
+//@Component
 public class DataSourceConfig {
 
     @Value("${db.driver-class-name}")
