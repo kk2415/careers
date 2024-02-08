@@ -29,9 +29,8 @@ public class CoupangScraper implements Scraper<CreateJob> {
         final WebDriver driver = prototypeBeanProvider.getObject();
         final String params = "search=Software+backend+frontend&location=Seoul%2C+South+Korea&location=South+Korea&pagesize=100#results";
         driver.get(company.getUrl(params));
-        String currentUrl = driver.getCurrentUrl();
-        System.out.println("currentUrl: " + currentUrl);
-        ((JavascriptExecutor) driver).executeScript("location.reload()");
+
+//        ((JavascriptExecutor) driver).executeScript("location.reload()");
 //        driver.get("https://www.coupang.jobs/kr/jobs?search=Software+backend+frontend&location=Seoul%2C+South+Korea&location=South+Korea&pagesize=100#results");
 //        driver.navigate().refresh();
 
@@ -43,7 +42,7 @@ public class CoupangScraper implements Scraper<CreateJob> {
                     final String title = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getText();
                     final String url = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getAttribute("href");
                     final String noticeEndDate = "채용 마감시";
-                    System.out.println("title: " + title);
+
                     return CreateJob.of(
                             title,
                             company,

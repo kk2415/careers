@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,5 +18,8 @@ public class CrawlingScheduler {
 
     @Scheduled(cron = "0 0 */2 * * *")
     public void crawlingJobs() {
+        crawlers.stream()
+                .map(Crawler::crawling)
+                .forEach(System.out::println);
     }
 }

@@ -1,14 +1,11 @@
 package com.levelup.crawler.config;
 
-import com.levelup.crawler.crawler.Crawler;
-import com.levelup.crawler.domain.model.Job;
+import com.levelup.crawler.scheduler.CrawlingScheduler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * 스프링 컨테이너 초기화 직후 실행됨
@@ -19,12 +16,12 @@ import java.util.List;
 @Component
 public class SpringApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final List<Crawler<Job>> crawlers;
+    private final CrawlingScheduler crawlingScheduler;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         try {
-
+            crawlingScheduler.crawlingJobs();
         } catch (Exception e) {
             log.error("SpringApplicationListener exception 발생, message: {}", e.getMessage());
         }
