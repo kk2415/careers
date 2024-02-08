@@ -1,6 +1,6 @@
 package com.levelup.notification.infrastructure.jpaentity.fcm;
 
-import com.levelup.common.jpaentity.base.BaseTimeEntity;
+import com.levelup.notification.infrastructure.jpaentity.base.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,8 @@ import javax.persistence.*;
 @Entity
 public class FcmDeviceTokenEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "fcm_device_token_id")
     private Long id;
     private String token;
