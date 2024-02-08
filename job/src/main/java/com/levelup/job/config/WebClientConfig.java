@@ -1,4 +1,4 @@
-package com.levelup.common.config;
+package com.levelup.job.config;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -19,7 +19,7 @@ public class WebClientConfig {
 
     @Bean
     public WebClient webClient() {
-        HttpClient httpClient = HttpClient.create()
+        final HttpClient httpClient = HttpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
                 .responseTimeout(Duration.ofMillis(5000))
                 .doOnConnected(conn ->
