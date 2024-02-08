@@ -2,7 +2,7 @@ package com.levelup.job.security.authorization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.levelup.common.exception.ExceptionCode;
-import com.levelup.job.controller.exception.ExceptionResponse;
+import com.levelup.job.presentation.exception.ExceptionResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;

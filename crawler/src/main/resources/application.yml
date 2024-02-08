@@ -1,24 +1,6 @@
 server:
   port: 8888
 
-spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/levelup?serverTimezone=Asia/Seoul
-    username: root
-    password: root
-
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        default_batch_fetch_size: 100
-    open-in-view: false
-
 webdriver:
   chrome:
     driver: C:\tools\chromedriver_win32\chromedriver.exe
@@ -29,17 +11,3 @@ jwt:
     expiration: 10080 #분 단위
 
 api_base_url: http://localhost:8080
-
-db:
-  driver-class-name: com.mysql.cj.jdbc.Driver
-  username: username
-  password: password
-  host: 121.78.207.227
-  port: 3306
-  database-name: onoffmix_mice_ksa_test
-
-ssh:
-  host: 121.78.1.177
-  port: 22
-  username: username
-  password: password

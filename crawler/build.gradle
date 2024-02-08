@@ -1,7 +1,5 @@
 dependencies {
-    implementation 'com.jcraft:jsch:0.1.55'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
 
-    implementation project(':job')
     implementation project(':common')
 }

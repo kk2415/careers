@@ -1,7 +1,6 @@
 package com.levelup.crawler.domain.model;
 
-import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.infrastructure.jpaentity.JobEntity;
+import com.levelup.crawler.domain.enumeration.Company;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -62,28 +61,6 @@ public class Job {
                 false,
                 LocalDateTime.now()
         );
-    }
-
-    public static Job from(JobEntity job) {
-        return new Job(
-                job.getId(),
-                job.getTitle(),
-                job.getCompany(),
-                job.getUrl(),
-                job.getNoticeEndDate(),
-                job.getJobGroup(),
-                job.getActive(),
-                job.getIsPushSent(),
-                job.getCreatedAt()
-        );
-    }
-
-    public String getSubject() {
-        return "[" + company.getName() + "] " + title;
-    }
-
-    public JobEntity toEntity() {
-        return JobEntity.of(null, title, company, url, noticeEndDate, jobGroup, true, false);
     }
 
     @Override

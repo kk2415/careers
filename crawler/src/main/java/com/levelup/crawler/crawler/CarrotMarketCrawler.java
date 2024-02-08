@@ -1,15 +1,13 @@
 package com.levelup.crawler.crawler;
 
 import com.levelup.crawler.crawler.scraper.Scraper;
-import com.levelup.job.domain.model.CreateJob;
-import com.levelup.job.infrastructure.enumeration.Company;
-import lombok.extern.slf4j.Slf4j;
+import com.levelup.crawler.domain.enumeration.Company;
+import com.levelup.crawler.domain.model.CreateJob;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Slf4j
 @Component("carrotMarketCrawler")
 public class CarrotMarketCrawler implements Crawler<CreateJob> {
 

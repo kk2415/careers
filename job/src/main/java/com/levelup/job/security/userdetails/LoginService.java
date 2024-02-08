@@ -2,8 +2,8 @@ package com.levelup.job.security.userdetails;
 
 import com.levelup.common.exception.EntityNotFoundException;
 import com.levelup.common.exception.ExceptionCode;
-import com.levelup.common.jpaentity.AdminEntity;
-import com.levelup.common.repository.AdminRepository;
+import com.levelup.job.infrastructure.jpaentity.AdminEntity;
+import com.levelup.job.infrastructure.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

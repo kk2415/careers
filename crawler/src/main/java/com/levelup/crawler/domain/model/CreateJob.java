@@ -1,7 +1,6 @@
 package com.levelup.crawler.domain.model;
 
-import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.infrastructure.jpaentity.JobEntity;
+import com.levelup.crawler.domain.enumeration.Company;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,19 +39,6 @@ public class CreateJob {
                 Boolean.TRUE,
                 Boolean.FALSE,
                 LocalDateTime.now()
-        );
-    }
-
-    public JobEntity toEntity() {
-        return JobEntity.of(
-                null,
-                title,
-                company,
-                url,
-                noticeEndDate,
-                jobGroup,
-                active,
-                isPushSent
         );
     }
 

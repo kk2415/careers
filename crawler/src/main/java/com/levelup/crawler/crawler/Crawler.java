@@ -1,6 +1,6 @@
 package com.levelup.crawler.crawler;
 
-import com.levelup.job.infrastructure.enumeration.Company;
+import com.levelup.crawler.domain.enumeration.Company;
 
 import java.util.List;
 

@@ -1,5 +1,5 @@
 rootProject.name = 'levelup'
-include 'crawler'
 include 'job'
+include 'crawler'
 include 'notification'
 include 'common'

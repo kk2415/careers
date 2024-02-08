@@ -1,12 +1,10 @@
 package com.levelup.crawler.crawler.scraper;
 
-import com.levelup.job.domain.model.CreateJob;
-import com.levelup.job.infrastructure.enumeration.Company;
+import com.levelup.crawler.domain.enumeration.Company;
+import com.levelup.crawler.domain.model.CreateJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
