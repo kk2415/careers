@@ -54,23 +54,30 @@ public class JobDto {
             String noticeEndDate,
             LocalDateTime createdAt
     ) {
-        public static Response from(Job jobVO) {
+        public static Response from(Job job) {
             return new Response(
-                    jobVO.getId(),
-                    jobVO.getTitle(),
-                    jobVO.getCompany(),
-                    jobVO.getUrl(),
-                    jobVO.getNoticeEndDate(),
-                    jobVO.getCreatedAt());
+                    job.getId(),
+                    job.getTitle(),
+                    job.getCompany(),
+                    job.getUrl(),
+                    job.getNoticeEndDate(),
+                    job.getCreatedAt()
+            );
         }
     }
 
     public record PagingResponse(
             List<Response> jobs,
-            Long totalCount
+            Long totalElements,
+            Integer totalPages
     ) {
         public static PagingResponse from(PagingJob pagingJob) {
-            return new PagingResponse(pagingJob.jobs().stream().map(Response::from).toList(), pagingJob.totalCount());
+            return new PagingResponse(pagingJob.jobs().stream()
+                    .map(Response::from)
+                    .toList(),
+                    pagingJob.totalElements(),
+                    pagingJob.totalPages()
+            );
         }
     }
 }

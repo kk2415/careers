@@ -7,11 +7,12 @@ import com.levelup.job.infrastructure.jpaentity.JobEntity;
 import com.levelup.job.infrastructure.enumeration.Company;
 import com.levelup.job.infrastructure.enumeration.OrderBy;
 import com.levelup.job.infrastructure.repository.JobRepository;
-import com.levelup.job.domain.model.JobFilterCondition;
+import com.levelup.job.domain.model.JobSearchCondition;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.domain.model.PagingJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -83,15 +84,25 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public PagingJob search(JobFilterCondition filterCondition, OrderBy orderBy, Long size, Long page) {
-        List<Job> jobs = jobRepository.findByFilterCondition(filterCondition, size, page).stream()
-                .filter(JobEntity::getActive)
-                .map(Job::from)
-                .distinct()
-                .toList();
-        Long totalCount = jobRepository.countByFilterCondition(filterCondition);
+    public PagingJob search(
+            JobSearchCondition filterCondition,
+            OrderBy orderBy,
+            Integer page,
+            Integer size
+    ) {
+        final PageImpl<JobEntity> pageJobs = jobRepository.search(
+                filterCondition,
+                page,
+                size
+        );
 
-        return PagingJob.of(jobs, totalCount);
+        return PagingJob.of(
+                pageJobs.stream()
+                        .map(Job::from)
+                        .toList(),
+                pageJobs.getTotalElements(),
+                pageJobs.getTotalPages()
+        );
     }
 
     @Transactional(readOnly = true)

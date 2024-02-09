@@ -82,10 +82,6 @@ public class Job {
         return "[" + company.getName() + "] " + title;
     }
 
-    public JobEntity toEntity() {
-        return JobEntity.of(null, title, company, url, noticeEndDate, jobGroup, true, false);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

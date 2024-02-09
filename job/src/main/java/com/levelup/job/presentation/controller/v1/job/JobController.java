@@ -2,7 +2,7 @@ package com.levelup.job.presentation.controller.v1.job;
 
 import com.levelup.job.presentation.controller.v1.dto.JobDto;
 import com.levelup.job.domain.model.Job;
-import com.levelup.job.domain.model.JobFilterCondition;
+import com.levelup.job.domain.model.JobSearchCondition;
 import com.levelup.job.domain.model.PagingJob;
 import com.levelup.job.domain.service.JobService;
 import com.levelup.job.infrastructure.enumeration.Company;
@@ -48,13 +48,18 @@ public class JobController {
     @Operation(summary = "채용 공고 페이징 조회")
     @GetMapping("")
     public ResponseEntity<JobDto.PagingResponse> gets(
-            @RequestParam(required = false) Company company,
-            @RequestParam(required = false) OpenStatus openStatus,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size,
             @RequestParam(defaultValue = "CREATED_AT") OrderBy orderBy,
-            @RequestParam(required = false) Long size,
-            @RequestParam(required = false) Long page
+            @RequestParam(required = false) Company company,
+            @RequestParam(required = false) OpenStatus openStatus
     ) {
-        PagingJob pagingJob = jobService.search(JobFilterCondition.of(company, openStatus), orderBy, size, page);
+        PagingJob pagingJob = jobService.search(
+                JobSearchCondition.of(company, openStatus),
+                orderBy,
+                page,
+                size
+        );
 
         return ResponseEntity.ok().body(JobDto.PagingResponse.from(pagingJob));
     }

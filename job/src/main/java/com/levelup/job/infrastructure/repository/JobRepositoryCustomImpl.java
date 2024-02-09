@@ -1,16 +1,20 @@
 package com.levelup.job.infrastructure.repository;
 
+import com.levelup.job.domain.model.Paging;
 import com.levelup.job.infrastructure.jpaentity.JobEntity;
 import com.levelup.job.infrastructure.enumeration.Company;
-import com.levelup.job.domain.model.JobFilterCondition;
+import com.levelup.job.domain.model.JobSearchCondition;
 import com.levelup.job.infrastructure.jpaentity.QJobEntity;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Objects;
 
 public class JobRepositoryCustomImpl implements JobRepositoryCustom {
 
@@ -21,38 +25,42 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom {
     }
 
     @Override
-    public List<JobEntity> findByFilterCondition(JobFilterCondition filterCondition, Long size, Long page) {
-        if (page != null && size != null) {
-            PageRequest pageRequest = PageRequest.of(Math.toIntExact(page), Math.toIntExact(size));
+    public PageImpl<JobEntity> search(
+            JobSearchCondition filterCondition,
+            Integer page,
+            Integer size
+    ) {
+        if (Paging.pageable(size)) {
+            final Pageable pageable = Paging.createPageable(page, size);
 
-            return queryFactory
+            final Long total = queryFactory
+                    .select(Wildcard.count)
+                    .from(QJobEntity.jobEntity)
+                    .where(filterCompany(filterCondition.company()))
+                    .fetchOne();
+            final List<JobEntity> contents = queryFactory
                     .select(QJobEntity.jobEntity)
                     .from(QJobEntity.jobEntity)
-                    .where(filterCompany(filterCondition.getCompany()))
-                    .offset(pageRequest.getOffset())
-                    .limit(pageRequest.getPageSize())
-                    .orderBy(QJobEntity.jobEntity.createdAt.desc())
+                    .where(filterCompany(filterCondition.company()))
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize())
+                    .orderBy(QJobEntity.jobEntity.createdAt.desc(), QJobEntity.jobEntity.id.desc())
                     .fetch();
+
+            return new PageImpl<JobEntity>(contents, pageable, total);
         } else {
-            return queryFactory
+            final List<JobEntity> contents = queryFactory
                     .select(QJobEntity.jobEntity)
                     .from(QJobEntity.jobEntity)
-                    .where(filterCompany(filterCondition.getCompany()))
-                    .orderBy(QJobEntity.jobEntity.createdAt.desc())
+                    .where(filterCompany(filterCondition.company()))
+                    .orderBy(QJobEntity.jobEntity.createdAt.desc(), QJobEntity.jobEntity.id.desc())
                     .fetch();
+
+            return new PageImpl<JobEntity>(contents);
         }
     }
 
-    @Override
-    public Long countByFilterCondition(JobFilterCondition filterCondition) {
-        return queryFactory
-                .select(QJobEntity.jobEntity)
-                .from(QJobEntity.jobEntity)
-                .where(filterCompany(filterCondition.getCompany()))
-                .fetchCount();
-    }
-
     private BooleanExpression filterCompany(Company company) {
-        return company == null ? null : QJobEntity.jobEntity.company.eq(company);
+        return Objects.isNull(company) ? null : QJobEntity.jobEntity.company.eq(company);
     }
 }

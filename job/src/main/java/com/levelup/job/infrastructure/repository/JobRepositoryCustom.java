@@ -1,12 +1,10 @@
 package com.levelup.job.infrastructure.repository;
 
-import com.levelup.job.domain.model.JobFilterCondition;
+import com.levelup.job.domain.model.JobSearchCondition;
 import com.levelup.job.infrastructure.jpaentity.JobEntity;
-
-import java.util.List;
+import org.springframework.data.domain.PageImpl;
 
 public interface JobRepositoryCustom {
 
-    List<JobEntity> findByFilterCondition(JobFilterCondition filterCondition, Long size, Long page);
-    Long countByFilterCondition(JobFilterCondition filterCondition);
+    PageImpl<JobEntity> search(JobSearchCondition filterCondition, Integer page, Integer size);
 }
