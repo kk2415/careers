@@ -2,19 +2,19 @@ package com.levelup.crawler.crawler;
 
 import com.levelup.crawler.crawler.scraper.Scraper;
 import com.levelup.crawler.domain.enumeration.Company;
-import com.levelup.crawler.domain.model.CreateJob;
+import com.levelup.crawler.domain.model.Job;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component("tossCrawler")
-public class TossCrawler implements Crawler<CreateJob> {
+public class TossCrawler implements Crawler<Job> {
 
-    private final Scraper<CreateJob> scraper;
+    private final Scraper<Job> scraper;
 
     public TossCrawler(
-            @Qualifier("tossScraper") Scraper<CreateJob> scraper
+            @Qualifier("tossScraper") Scraper<Job> scraper
     ) {
         this.scraper = scraper;
     }
@@ -25,7 +25,7 @@ public class TossCrawler implements Crawler<CreateJob> {
     }
 
     @Override
-    public List<CreateJob> crawling() {
+    public List<Job> crawling() {
         return scraper.scrape();
     }
 }

@@ -25,12 +25,24 @@ public class JobController {
 
     private final JobService jobService;
 
-    @Operation(summary = "채용 공고 생성")
+    @Operation(summary = "신규 채용 공고 생성")
     @PostMapping("")
-    public ResponseEntity<JobDto.Response> create(@RequestBody @Valid JobDto.Request request) {
-        Job saveJob = jobService.save(request.toDomain());
+    public ResponseEntity<List<JobDto.Response>> create(@RequestBody @Valid JobDto.Requests request) {
+        final List<Job> savedJob = jobService.saveIfAbsent(request.toDomain());
 
-        return ResponseEntity.ok().body(JobDto.Response.from(saveJob));
+        return ResponseEntity.ok().body(savedJob.stream()
+                .map(JobDto.Response::from)
+                .toList());
+    }
+
+    @Operation(summary = "신규 채용 공고 생성 및 내려간 공고 삭제")
+    @PostMapping("/create-drop")
+    public ResponseEntity<List<JobDto.Response>> createAndDrop(@RequestBody @Valid JobDto.Requests request) {
+        final List<Job> savedJob = jobService.saveIfAbsentAndDrop(request.toDomain());
+
+        return ResponseEntity.ok().body(savedJob.stream()
+                .map(JobDto.Response::from)
+                .toList());
     }
 
     @Operation(summary = "채용 공고 페이징 조회")
@@ -65,7 +77,12 @@ public class JobController {
             @RequestParam Long jobId,
             @RequestBody @Valid JobDto.Request request
     ) {
-        jobService.update(jobId, request.toDomain());
+        jobService.update(jobId, Job.of(
+                request.title(),
+                request.company(),
+                request.url(),
+                request.noticeEndDate()
+        ));
 
         return ResponseEntity.ok().build();
     }

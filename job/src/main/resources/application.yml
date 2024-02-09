@@ -9,7 +9,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/levelup?serverTimezone=Asia/Seoul
     username: root
-    password: onoffmix
+    password: root
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
@@ -22,15 +22,10 @@ spring:
         default_batch_fetch_size: 100
     open-in-view: false
 
-webdriver:
-  chrome:
-    driver: C:\tools\chromedriver_win32\chromedriver.exe
-#    driver: C:\Task\tools\chromedriver_win32\chromedriver.exe
-
 project:
   properties:
-    secret-key: C:/kyunkim/project/level-up/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
-#    secret-key: C:/Task/project/level-up/tools/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
+#    secret-key: C:/kyunkim/project/level-up/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
+    secret-key: C:/Task/project/level-up/tools/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
     firebase-create-scoped: "https://www.googleapis.com/auth/firebase.messaging"
     firebase-topic: "diet_record_notification"
 

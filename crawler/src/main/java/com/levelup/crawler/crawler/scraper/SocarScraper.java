@@ -1,7 +1,7 @@
 package com.levelup.crawler.crawler.scraper;
 
 import com.levelup.crawler.domain.enumeration.Company;
-import com.levelup.crawler.domain.model.CreateJob;
+import com.levelup.crawler.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class SocarScraper implements Scraper<CreateJob> {
+public class SocarScraper implements Scraper<Job> {
 
     private final Company company = Company.SOCAR;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -27,12 +27,12 @@ public class SocarScraper implements Scraper<CreateJob> {
     }
 
     @Override
-    public List<CreateJob> scrape() {
+    public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
 
         List<WebElement> pagingButtons = driver.findElements(By.cssSelector("div.Pagination_Pagination__FU2nU > button.Pagination_item__GJ3ds"));
-        List<CreateJob> jobs = pagingButtons.stream()
+        List<Job> jobs = pagingButtons.stream()
                 .map(pagingButton -> {
                     pagingButton.click();
 
@@ -55,7 +55,7 @@ public class SocarScraper implements Scraper<CreateJob> {
                                     return null;
                                 }
 
-                                return CreateJob.of(
+                                return Job.of(
                                         title,
                                         company,
                                         url,
@@ -67,7 +67,7 @@ public class SocarScraper implements Scraper<CreateJob> {
                             .toList();
                 })
                 .flatMap(Collection::stream)
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .filter(job -> !job.title().isEmpty() && !job.title().isBlank())
                 .distinct()
                 .toList();
 

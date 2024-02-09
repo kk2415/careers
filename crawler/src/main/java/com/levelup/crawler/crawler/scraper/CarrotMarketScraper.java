@@ -1,7 +1,7 @@
 package com.levelup.crawler.crawler.scraper;
 
 import com.levelup.crawler.domain.enumeration.Company;
-import com.levelup.crawler.domain.model.CreateJob;
+import com.levelup.crawler.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -13,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class CarrotMarketScraper implements Scraper<CreateJob> {
+public class CarrotMarketScraper implements Scraper<Job> {
 
     private final Company company = Company.CARROT_MARKET;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -24,18 +24,18 @@ public class CarrotMarketScraper implements Scraper<CreateJob> {
     }
 
     @Override
-    public List<CreateJob> scrape() {
+    public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
 
         List<WebElement> elements = driver.findElements(By.cssSelector("ul.c-jpGEAj > div"));
-        List<CreateJob> jobs = elements.stream()
+        List<Job> jobs = elements.stream()
                 .map(element -> {
                     String title = element.findElement(By.cssSelector("li.c-deAcZv > a.c-hCDnza > div.c-MPFyP > h3.c-boyXyq")).getAccessibleName();
                     String url = element.findElement(By.cssSelector("li.c-deAcZv > a.c-hCDnza")).getAttribute("href");
                     String noticeEndDate = "채용 마감시";
 
-                    return CreateJob.of(
+                    return Job.of(
                             title,
                             company,
                             url,
@@ -43,7 +43,7 @@ public class CarrotMarketScraper implements Scraper<CreateJob> {
                             ""
                     );
                 })
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .filter(job -> !job.title().isEmpty() && !job.title().isBlank())
                 .distinct()
                 .toList();
 

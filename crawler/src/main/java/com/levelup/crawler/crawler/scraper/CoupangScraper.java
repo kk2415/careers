@@ -1,7 +1,7 @@
 package com.levelup.crawler.crawler.scraper;
 
 import com.levelup.crawler.domain.enumeration.Company;
-import com.levelup.crawler.domain.model.CreateJob;
+import com.levelup.crawler.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class CoupangScraper implements Scraper<CreateJob> {
+public class CoupangScraper implements Scraper<Job> {
 
     private final Company company = Company.COUPANG;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -25,7 +25,7 @@ public class CoupangScraper implements Scraper<CreateJob> {
     }
 
     @Override
-    public List<CreateJob> scrape() {
+    public List<Job> scrape() {
         final WebDriver driver = prototypeBeanProvider.getObject();
         final String params = "search=Software+backend+frontend&location=Seoul%2C+South+Korea&location=South+Korea&pagesize=100#results";
         driver.get(company.getUrl(params));
@@ -37,13 +37,13 @@ public class CoupangScraper implements Scraper<CreateJob> {
 //        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 //        List<WebElement> elements = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("#content > main > div.row.justify-content-between > section > div.grid.job-listing > div.card.card-job")));
         List<WebElement> elements = driver.findElements(By.cssSelector("#content > main > div.row.justify-content-between > section > div.grid.job-listing > div.card.card-job"));
-        List<CreateJob> href = elements.stream()
+        List<Job> href = elements.stream()
                 .map(element -> {
                     final String title = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getText();
                     final String url = element.findElement(By.cssSelector("div.card-body > h2.card-title > a.stretched-link")).getAttribute("href");
                     final String noticeEndDate = "채용 마감시";
 
-                    return CreateJob.of(
+                    return Job.of(
                             title,
                             company,
                             url,
@@ -51,7 +51,7 @@ public class CoupangScraper implements Scraper<CreateJob> {
                             ""
                     );
                 })
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .filter(job -> !job.title().isEmpty() && !job.title().isBlank())
                 .distinct()
                 .toList();
         driver.quit();

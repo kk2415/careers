@@ -1,7 +1,7 @@
 package com.levelup.crawler.scheduler;
 
 import com.levelup.crawler.crawler.Crawler;
-import com.levelup.crawler.domain.model.CreateJob;
+import com.levelup.crawler.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -14,7 +14,7 @@ import java.util.List;
 @EnableScheduling
 public class CrawlingScheduler {
 
-    private final List<Crawler<CreateJob>> crawlers;
+    private final List<Crawler<Job>> crawlers;
 
     @Scheduled(cron = "0 0 */2 * * *")
     public void crawlingJobs() {

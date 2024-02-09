@@ -19,7 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,10 +32,33 @@ public class JobService {
     private final JobRepository jobRepository;
 
     @Transactional
-    public Job save(Job jobVO) {
-        JobEntity saveJob = jobRepository.save(jobVO.toEntity());
+    public List<Job> saveIfAbsentAndDrop(List<CreateJob> createJobs) {
+        final Map<Company, List<CreateJob>> createJobsByCompany = createJobs.stream()
+                .collect(Collectors.groupingBy(CreateJob::getCompany));
 
-        return Job.from(saveJob);
+        final List<Job> result = new ArrayList<>();
+        createJobsByCompany.forEach((Company company, List<CreateJob> jobs) -> {
+                    result.addAll(saveIfAbsent(jobs, company));
+
+                    final List<Job> notMatchedJobs = findNotMatchedWith(jobs, company);
+                    deleteAll(notMatchedJobs);
+                }
+        );
+
+        return result;
+    }
+
+    @Transactional
+    public List<Job> saveIfAbsent(List<CreateJob> createJobs) {
+        final Map<Company, List<CreateJob>> createJobsByCompany = createJobs.stream()
+                .collect(Collectors.groupingBy(CreateJob::getCompany));
+
+        final List<Job> result = new ArrayList<>();
+        createJobsByCompany.forEach((Company company, List<CreateJob> jobs) ->
+                result.addAll(saveIfAbsent(jobs, company))
+        );
+
+        return result;
     }
 
     @Transactional
@@ -88,7 +114,7 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<Job> getNotMatched(List<CreateJob> createJobs, Company company) {
+    public List<Job> findNotMatchedWith(List<CreateJob> createJobs, Company company) {
         List<Job> savedJobs = jobRepository.findByCompany(company).stream()
                 .map(Job::from)
                 .toList();
@@ -102,7 +128,7 @@ public class JobService {
     }
 
     @Transactional(readOnly = true)
-    public List<Job> getNotPushedJobs() {
+    public List<Job> findNotPushedJobs() {
         return jobRepository.findByIsPushSent(false).stream()
                 .map(Job::from)
                 .toList();

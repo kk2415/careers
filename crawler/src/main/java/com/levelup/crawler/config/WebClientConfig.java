@@ -28,6 +28,7 @@ public class WebClientConfig {
 
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader("Authorization", "Bearer " + "eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJST0xFX0FETUlOIiwiaXNzIjoibGV2ZWwgdXAiLCJpYXQiOjE3MDc0NTk0ODEsImV4cCI6MTcwODA2NDI4MX0.IttTo8ovAlg_469sBsJyARGyFLQWM_VkBHRDPnvGv2M")
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

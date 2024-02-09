@@ -1,7 +1,7 @@
 package com.levelup.crawler.crawler.scraper;
 
 import com.levelup.crawler.domain.enumeration.Company;
-import com.levelup.crawler.domain.model.CreateJob;
+import com.levelup.crawler.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -14,7 +14,7 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class SKScraper implements Scraper<CreateJob> {
+public class SKScraper implements Scraper<Job> {
 
     private final Company company = Company.SK;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -25,11 +25,11 @@ public class SKScraper implements Scraper<CreateJob> {
     }
 
     @Override
-    public List<CreateJob> scrape() {
+    public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
         driver.get(company.getUrl());
         List<WebElement> elements = scrollToEnd(driver);
-        List<CreateJob> jobs = elements.stream()
+        List<Job> jobs = elements.stream()
                 .map(element -> {
                     String companyName = element.findElement(By.cssSelector("div.info-area > a > div.company")).getText();
                     WebElement aTag = element.findElement(By.cssSelector("div.subject-area > a"));
@@ -40,7 +40,7 @@ public class SKScraper implements Scraper<CreateJob> {
                     String noticeEndDate = "영업 종료시";
 
                     if (jobGroup.contains("개발") && !jobGroup.contains("사업개발")) {
-                        return CreateJob.of(
+                        return Job.of(
                                 title,
                                 company,
                                 url,
@@ -52,7 +52,7 @@ public class SKScraper implements Scraper<CreateJob> {
                     return null;
                 })
                 .filter(Objects::nonNull)
-                .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                .filter(job -> !job.title().isEmpty() && !job.title().isBlank())
                 .distinct()
                 .toList();
 

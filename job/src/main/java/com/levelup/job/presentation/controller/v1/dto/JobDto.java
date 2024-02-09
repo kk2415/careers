@@ -1,5 +1,6 @@
 package com.levelup.job.presentation.controller.v1.dto;
 
+import com.levelup.job.domain.model.CreateJob;
 import com.levelup.job.domain.model.Job;
 import com.levelup.job.domain.model.PagingJob;
 import com.levelup.job.infrastructure.enumeration.Company;
@@ -10,6 +11,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class JobDto {
+
+    public record Requests(
+            List<Request> jobs
+    ) {
+        public List<CreateJob> toDomain() {
+            return jobs.stream()
+                    .map(jobRequest -> CreateJob.of(
+                            jobRequest.title(),
+                            jobRequest.company(),
+                            jobRequest.url(),
+                            jobRequest.noticeEndDate(),
+                            jobRequest.jobGroup()
+                    ))
+                    .toList();
+        }
+    }
 
     public record Request(
             @NotNull @NotBlank
@@ -22,15 +39,11 @@ public class JobDto {
             String url,
 
             @NotNull
-            String noticeEndDate
-    ) {
-        public static Request of(String title, Company company, String url, String noticeEndDate) {
-            return new Request(title, company, url, noticeEndDate);
-        }
+            String noticeEndDate,
 
-        public Job toDomain() {
-            return Job.of(title, company, url, noticeEndDate);
-        }
+            @NotNull
+            String jobGroup
+    ) {
     }
 
     public record Response(

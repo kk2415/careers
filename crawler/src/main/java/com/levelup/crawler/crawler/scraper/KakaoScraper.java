@@ -1,7 +1,7 @@
 package com.levelup.crawler.crawler.scraper;
 
 import com.levelup.crawler.domain.enumeration.Company;
-import com.levelup.crawler.domain.model.CreateJob;
+import com.levelup.crawler.domain.model.Job;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class KakaoScraper implements Scraper<CreateJob> {
+public class KakaoScraper implements Scraper<Job> {
 
     private final Company company = Company.KAKAO;
     private final ObjectProvider<WebDriver> prototypeBeanProvider;
@@ -26,7 +26,7 @@ public class KakaoScraper implements Scraper<CreateJob> {
     }
 
     @Override
-    public List<CreateJob> scrape() {
+    public List<Job> scrape() {
         WebDriver driver = prototypeBeanProvider.getObject();
 
         try {
@@ -45,7 +45,7 @@ public class KakaoScraper implements Scraper<CreateJob> {
                                     final String url = element.getAttribute("href");
                                     final String noticeEndDate = element.findElement(By.cssSelector("dl.list_info > dd")).getText();
 
-                                    return CreateJob.of(
+                                    return Job.of(
                                             title,
                                             company,
                                             url,
@@ -56,7 +56,7 @@ public class KakaoScraper implements Scraper<CreateJob> {
                                 .toList();
                     })
                     .flatMap(Collection::stream)
-                    .filter(job -> !job.getTitle().isEmpty() && !job.getTitle().isBlank())
+                    .filter(job -> !job.title().isEmpty() && !job.title().isBlank())
                     .distinct()
                     .toList();
         } finally {
