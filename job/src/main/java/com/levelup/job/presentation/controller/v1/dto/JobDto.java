@@ -52,16 +52,18 @@ public class JobDto {
             Company company,
             String url,
             String noticeEndDate,
+            String jobGroup,
             LocalDateTime createdAt
     ) {
         public static Response from(Job job) {
             return new Response(
-                    job.getId(),
-                    job.getTitle(),
-                    job.getCompany(),
-                    job.getUrl(),
-                    job.getNoticeEndDate(),
-                    job.getCreatedAt()
+                    job.id(),
+                    job.title(),
+                    job.company(),
+                    job.url(),
+                    job.noticeEndDate(),
+                    job.jobGroup(),
+                    job.createdAt()
             );
         }
     }

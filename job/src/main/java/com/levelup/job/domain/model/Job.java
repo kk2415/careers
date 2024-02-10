@@ -2,28 +2,21 @@ package com.levelup.job.domain.model;
 
 import com.levelup.job.infrastructure.jpaentity.JobEntity;
 import com.levelup.job.infrastructure.enumeration.Company;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@ToString
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
-public class Job {
-
-    protected Long id;
-    protected String title;
-    protected Company company;
-    protected String url;
-    protected String noticeEndDate;
-    protected String jobGroup;
-    private Boolean active;
-    private Boolean isPushSent;
-    protected LocalDateTime createdAt;
+public record Job(
+        Long id,
+        String title,
+        Company company,
+        String url,
+        String noticeEndDate,
+        String jobGroup,
+        Boolean active,
+        Boolean isPushSent,
+        LocalDateTime createdAt
+) {
 
     public static Job of(
             String title,
@@ -76,10 +69,6 @@ public class Job {
                 job.getIsPushSent(),
                 job.getCreatedAt()
         );
-    }
-
-    public String getSubject() {
-        return "[" + company.getName() + "] " + title;
     }
 
     @Override

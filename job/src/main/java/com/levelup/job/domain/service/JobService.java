@@ -70,8 +70,8 @@ public class JobService {
 
         List<JobEntity> saveJobs = creationJobs.stream()
                 .filter(createJob -> savedJobs.stream().noneMatch(savedJob ->
-                                savedJob.getTitle().equals(createJob.getTitle()) &&
-                                savedJob.getUrl().equals(createJob.getUrl()))
+                                savedJob.title().equals(createJob.getTitle()) &&
+                                savedJob.url().equals(createJob.getUrl()))
                 )
                 .map(CreateJob::toEntity)
                 .toList();
@@ -114,13 +114,13 @@ public class JobService {
         if (company == null) {
             return jobRepository.findByCreatedAt(startOfDay, endOfDay, pageable).stream()
                     .map(Job::from)
-                    .filter(Job::getActive)
+                    .filter(Job::active)
                     .toList();
         }
 
         return jobRepository.findByCompanyAndCreatedAt(company, startOfDay, endOfDay, pageable).stream()
                 .map(Job::from)
-                .filter(Job::getActive)
+                .filter(Job::active)
                 .toList();
     }
 
@@ -132,8 +132,8 @@ public class JobService {
 
         return savedJobs.stream()
                 .filter(savedJob -> createJobs.stream().noneMatch(createJob ->
-                        createJob.getTitle().equals(savedJob.getTitle()) &&
-                        createJob.getUrl().equals(savedJob.getUrl()))
+                        createJob.getTitle().equals(savedJob.title()) &&
+                        createJob.getUrl().equals(savedJob.url()))
                 )
                 .toList();
     }
@@ -147,7 +147,7 @@ public class JobService {
 
     @Transactional
     public List<Job> push(List<Job> notPushedJobs) {
-        List<Long> jobIds = notPushedJobs.stream().map(Job::getId).toList();
+        List<Long> jobIds = notPushedJobs.stream().map(Job::id).toList();
 
         List<JobEntity> jobs = jobRepository.findAllById(jobIds);
         jobs.forEach(JobEntity::push);
@@ -163,20 +163,20 @@ public class JobService {
                 .orElseThrow(() -> new EntityNotFoundException(ExceptionCode.JOB_NOT_FOUND));
 
         findJob.update(
-                updateJob.getTitle(),
-                updateJob.getUrl(),
-                updateJob.getCompany(),
-                updateJob.getNoticeEndDate(),
-                updateJob.getJobGroup(),
-                updateJob.getActive(),
-                updateJob.getIsPushSent()
+                updateJob.title(),
+                updateJob.url(),
+                updateJob.company(),
+                updateJob.noticeEndDate(),
+                updateJob.jobGroup(),
+                updateJob.active(),
+                updateJob.isPushSent()
         );
     }
 
     @Transactional
     public void deleteAll(List<Job> jobs) {
         jobRepository.deleteAllById(jobs.stream()
-                .map(Job::getId)
+                .map(Job::id)
                 .toList());
     }
 }
