@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 public class AdminEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_id")
     private Long id;
 

@@ -23,7 +23,6 @@ public class CrawlingController {
     private final Crawler<Job> kakaoCrawler;
     private final Crawler<Job> lineCrawler;
     private final Crawler<Job> naverCrawler;
-    private final Crawler<Job> coupangCrawler;
     private final Crawler<Job> tossCrawler;
     private final Crawler<Job> baminCrawler;
     private final Crawler<Job> carrotMarketCrawler;
@@ -60,17 +59,6 @@ public class CrawlingController {
     @PostMapping("/naver")
     public ResponseEntity<List<JobDto.Response>> crawlNaver() {
         final List<Job> crawledJobs = naverCrawler.crawling();
-        jobSendService.send(crawledJobs);
-
-        return ResponseEntity.ok().body(crawledJobs.stream()
-                .map(JobDto.Response::from)
-                .toList());
-    }
-
-    @Operation(summary = "쿠팡 채용 크롤링")
-    @PostMapping("/coupang")
-    public ResponseEntity<List<JobDto.Response>> crawlCoupang() {
-        final List<Job> crawledJobs = coupangCrawler.crawling();
         jobSendService.send(crawledJobs);
 
         return ResponseEntity.ok().body(crawledJobs.stream()

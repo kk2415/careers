@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 public class JobEntity extends BaseTimeEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "job_id")
     private Long id;
 
