@@ -36,11 +36,13 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom {
             final Long total = queryFactory
                     .select(Wildcard.count)
                     .from(QJobEntity.jobEntity)
+                    .where(filterKeyword(filterCondition.keyword()))
                     .where(filterCompany(filterCondition.company()))
                     .fetchOne();
             final List<JobEntity> contents = queryFactory
                     .select(QJobEntity.jobEntity)
                     .from(QJobEntity.jobEntity)
+                    .where(filterKeyword(filterCondition.keyword()))
                     .where(filterCompany(filterCondition.company()))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -52,12 +54,18 @@ public class JobRepositoryCustomImpl implements JobRepositoryCustom {
             final List<JobEntity> contents = queryFactory
                     .select(QJobEntity.jobEntity)
                     .from(QJobEntity.jobEntity)
+                    .where(filterKeyword(filterCondition.keyword()))
                     .where(filterCompany(filterCondition.company()))
                     .orderBy(QJobEntity.jobEntity.createdAt.desc(), QJobEntity.jobEntity.id.desc())
                     .fetch();
 
             return new PageImpl<JobEntity>(contents);
         }
+    }
+
+    private BooleanExpression filterKeyword(String keyword) {
+        return Objects.isNull(keyword) || keyword.isEmpty() || keyword.isBlank() ?
+                null : QJobEntity.jobEntity.title.containsIgnoreCase(keyword);
     }
 
     private BooleanExpression filterCompany(Company company) {

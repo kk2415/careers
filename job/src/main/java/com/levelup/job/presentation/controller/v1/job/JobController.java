@@ -48,14 +48,15 @@ public class JobController {
     @Operation(summary = "채용 공고 페이징 조회")
     @GetMapping("")
     public ResponseEntity<JobDto.PagingResponse> gets(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Company company,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
             @RequestParam(defaultValue = "CREATED_AT") OrderBy orderBy,
-            @RequestParam(required = false) Company company,
             @RequestParam(required = false) OpenStatus openStatus
     ) {
         PagingJob pagingJob = jobService.search(
-                JobSearchCondition.of(company, openStatus),
+                JobSearchCondition.of(keyword, company, openStatus),
                 orderBy,
                 page,
                 size
