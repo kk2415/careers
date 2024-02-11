@@ -3,6 +3,7 @@ package com.levelup.crawler.config;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,9 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebClientConfig {
 
+    @Value("${access.token}")
+    private String accessToken;
+
     @Bean
     public WebClient webClient() {
         final HttpClient httpClient = HttpClient.create()
@@ -28,7 +32,7 @@ public class WebClientConfig {
 
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .defaultHeader("Authorization", "Bearer " + "eyJraWQiOiJrZXkzIiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiJST0xFX0FETUlOIiwiaXNzIjoibGV2ZWwgdXAiLCJpYXQiOjE3MDc0NTk0ODEsImV4cCI6MTcwODA2NDI4MX0.IttTo8ovAlg_469sBsJyARGyFLQWM_VkBHRDPnvGv2M")
+                .defaultHeader("Authorization", "Bearer " + accessToken)
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }

@@ -4,11 +4,10 @@ import com.levelup.crawler.crawler.scraper.Scraper;
 import com.levelup.crawler.domain.enumeration.Company;
 import com.levelup.crawler.domain.model.Job;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component("coupangCrawler")
+//@Component("coupangCrawler")
 public class CoupangCrawler implements Crawler<Job> {
 
     private final Scraper<Job> scraper;

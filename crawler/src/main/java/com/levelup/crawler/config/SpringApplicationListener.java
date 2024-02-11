@@ -21,7 +21,7 @@ public class SpringApplicationListener implements ApplicationListener<ContextRef
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         try {
-//            crawlingScheduler.crawlingJobs();
+            crawlingScheduler.crawlingJobs();
         } catch (Exception e) {
             log.error("SpringApplicationListener exception 발생, message: {}", e.getMessage());
         }
