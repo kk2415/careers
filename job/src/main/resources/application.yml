@@ -22,13 +22,6 @@ spring:
         default_batch_fetch_size: 100
     open-in-view: false
 
-project:
-  properties:
-#    secret-key: C:/kyunkim/project/level-up/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
-    secret-key: C:/Task/project/level-up/tools/firebase/level-up-516d8-firebase-adminsdk-2ffux-dc6b1f5357.json
-    firebase-create-scoped: "https://www.googleapis.com/auth/firebase.messaging"
-    firebase-topic: "diet_record_notification"
-
 jwt:
   access-token:
     expiration: 10080 #분 단위
