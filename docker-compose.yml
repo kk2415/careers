@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.26
+    networks:
+      - careers_network
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: careers
+    ports:
+      - "3306:3306"
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - /srv/careers/data/mysql/data:/var/lib/mysql
+      - /srv/careers/data/mysql/conf.d:/etc/mysql/conf.d
+  job:
+    container_name: job
+    image: kyunkim/careers:job-0.0
+    networks:
+      - careers_network
+    environment:
+      JAR_FILE: 'job-1.0.0.jar'
+      PROFILE: 'dev'
+      JASYPT_PASSWORD: ''
+    ports:
+      - "${JOB_APP_PORT}:${JOB_APP_PORT}"
+
+networks:
+  careers_network:
+    driver: bridge
+
