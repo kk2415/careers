@@ -3,7 +3,7 @@ version: '3'
 name: careers
 services:
   job:
-    container_name: job1
+    container_name: job_8080
     image: kyunkim/careers:job-0.0
     networks:
       - careers_network

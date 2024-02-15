@@ -38,7 +38,7 @@ services:
       - /srv/careers/data/mysql/conf.d:/etc/mysql/conf.d
 
   job:
-    container_name: job
+    container_name: job_8080
     image: kyunkim/careers:job-0.0
     networks:
       - careers_network

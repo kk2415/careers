@@ -38,14 +38,14 @@ services:
       - D:/data/docker/mysql/careers/conf.d:/etc/mysql/conf.d
 
   job:
-    container_name: job
+    container_name: job_8080
     image: kyunkim/careers:job-0.0
     networks:
       - careers_network
     environment:
       JAR_FILE: 'job-1.0.0.jar'
       PROFILE: 'dev'
-      JASYPT_PASSWORD: 'ZG5jcHJucmRQcm1h'
+      JASYPT_PASSWORD: ''
     ports:
       - "8080:8080"
 
