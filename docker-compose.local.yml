@@ -3,20 +3,20 @@ version: '3'
 name: careers
 services:
   nginx:
-    image: nginx:latest
     container_name: nginx
     hostname: nginx
+    image: nginx:latest
+    networks:
+      - careers_network
     environment:
       - TZ=Asia/Seoul
       - TIMEZONE=Asia/Seoul
     ports:
       - 80:80
       - 443:443
-    networks:
-      - careers_network
     volumes:
-      - ./log/nginx:/var/log/nginx
-      - ./nginx/conf.d/job.conf:/etc/nginx/conf.d/job.conf
+      - ../log/nginx:/var/log/nginx
+      - ../nginx/conf.d:/etc/nginx/conf.d
 
   mysql:
     container_name: mysql
@@ -36,6 +36,7 @@ services:
     volumes:
       - D:/data/docker/mysql/careers/data:/var/lib/mysql
       - D:/data/docker/mysql/careers/conf.d:/etc/mysql/conf.d
+
   job:
     container_name: job
     image: kyunkim/careers:job-0.0
@@ -44,11 +45,9 @@ services:
     environment:
       JAR_FILE: 'job-1.0.0.jar'
       PROFILE: 'dev'
-      JASYPT_PASSWORD: ''
+      JASYPT_PASSWORD: 'ZG5jcHJucmRQcm1h'
     ports:
       - "8080:8080"
-    depends_on:
-      - mysql
 
 networks:
   careers_network:

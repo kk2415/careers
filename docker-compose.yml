@@ -3,19 +3,21 @@ version: '3'
 name: careers
 services:
   nginx:
-    image: nginx:latest
     container_name: nginx
     hostname: nginx
+    image: nginx:latest
+    networks:
+      - careers_network
     environment:
       - TZ=Asia/Seoul
       - TIMEZONE=Asia/Seoul
     ports:
       - 80:80
       - 443:443
-    networks:
-      - careers_network
     volumes:
       - /srv/careers/log/nginx:/var/log/nginx
+      - /srv/careers/nginx/conf.d:/etc/nginx/conf.d
+
   mysql:
     container_name: mysql
     image: mysql:8.0.26
@@ -34,6 +36,7 @@ services:
     volumes:
       - /srv/careers/data/mysql/data:/var/lib/mysql
       - /srv/careers/data/mysql/conf.d:/etc/mysql/conf.d
+
   job:
     container_name: job
     image: kyunkim/careers:job-0.0
@@ -51,4 +54,3 @@ services:
 networks:
   careers_network:
     driver: bridge
-
