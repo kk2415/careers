@@ -1,4 +1,4 @@
-rootProject.name = 'levelup'
+rootProject.name = 'careers'
 include 'job'
 include 'crawler'
 include 'notification'

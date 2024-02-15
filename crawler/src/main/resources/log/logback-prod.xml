@@ -57,7 +57,7 @@
         <colorCoding>true</colorCoding>
     </appender>
 
-    <logger name="com.levelup" level="error">
+    <logger name="com.careers" level="error">
         <appender-ref ref="ERROR_LOG" />
         <appender-ref ref="SLACK" />
     </logger>
