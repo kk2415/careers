@@ -1,6 +1,23 @@
 version: '3'
 
+name: careers
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    hostname: nginx
+    environment:
+      - TZ=Asia/Seoul
+      - TIMEZONE=Asia/Seoul
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - careers_network
+    volumes:
+      - ./log/nginx:/var/log/nginx
+      - ./nginx/conf.d/job.conf:/etc/nginx/conf.d/job.conf
+
   mysql:
     container_name: mysql
     image: mysql:8.0.26
@@ -30,6 +47,8 @@ services:
       JASYPT_PASSWORD: ''
     ports:
       - "8080:8080"
+    depends_on:
+      - mysql
 
 networks:
   careers_network:
