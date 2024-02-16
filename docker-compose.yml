@@ -1,6 +1,5 @@
 version: '3'
 
-name: careers
 services:
   nginx:
     container_name: nginx
@@ -17,6 +16,8 @@ services:
     volumes:
       - /srv/careers/log/nginx:/var/log/nginx
       - /srv/careers/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - job
 
   mysql:
     container_name: mysql
@@ -47,10 +48,10 @@ services:
       PROFILE: 'dev'
       JASYPT_PASSWORD: ''
     ports:
-      - "${JOB_APP_PORT}:8080"
+      - "8080:8080"
     depends_on:
       - mysql
 
 networks:
   careers_network:
-    driver: bridge
+    external: true

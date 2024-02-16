@@ -1,6 +1,5 @@
 version: '3'
 
-name: careers
 services:
   nginx:
     container_name: nginx
@@ -17,6 +16,8 @@ services:
     volumes:
       - ../log/nginx:/var/log/nginx
       - ../nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - job
 
   mysql:
     container_name: mysql
@@ -38,7 +39,7 @@ services:
       - D:/data/docker/mysql/careers/conf.d:/etc/mysql/conf.d
 
   job:
-    container_name: job_8081
+    container_name: job_8080
     image: kyunkim/careers:job-0.0
     networks:
       - careers_network
@@ -47,10 +48,10 @@ services:
       PROFILE: 'dev'
       JASYPT_PASSWORD: ''
     ports:
-      - "${JOB_APP_PORT}:8080"
+      - "8080:8080"
     depends_on:
       - mysql
 
 networks:
   careers_network:
-    driver: bridge
+    external: true
