@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/java/jdk:17-zulu-alpine
 
-ARG APP_ROOT_PATH="/srv/careers"
+ARG APP_ROOT_PATH="/srv/careers/app"
 ARG JAR_FILE_ARG="job-1.0.0.jar"
 ARG PROFILE_ARG="dev"
 ARG JASYPT_PASSWORD_ARG="password"
