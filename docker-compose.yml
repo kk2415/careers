@@ -5,15 +5,15 @@ services:
   nginx:
     container_name: nginx
     hostname: nginx
-    image: nginx:latest
+    image: nginx:1.25.4
     networks:
       - careers_network
     environment:
       - TZ=Asia/Seoul
       - TIMEZONE=Asia/Seoul
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - /srv/careers/log/nginx:/var/log/nginx
       - /srv/careers/nginx/conf.d:/etc/nginx/conf.d
@@ -47,7 +47,7 @@ services:
       PROFILE: 'dev'
       JASYPT_PASSWORD: ''
     ports:
-      - "${JOB_APP_PORT}:${JOB_APP_PORT}"
+      - "${JOB_APP_PORT}:8080"
     depends_on:
       - mysql
 

@@ -12,7 +12,9 @@ services:
       PROFILE: 'dev'
       JASYPT_PASSWORD: ''
     ports:
-      - "${JOB_APP_PORT}:${JOB_APP_PORT}"
+      - "${JOB_APP_PORT}:8080"
+    depends_on:
+      - mysql
 
 networks:
   careers_network:

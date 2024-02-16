@@ -5,15 +5,15 @@ services:
   nginx:
     container_name: nginx
     hostname: nginx
-    image: nginx:latest
+    image: nginx:1.25.4
     networks:
       - careers_network
     environment:
       - TZ=Asia/Seoul
       - TIMEZONE=Asia/Seoul
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - ../log/nginx:/var/log/nginx
       - ../nginx/conf.d:/etc/nginx/conf.d
@@ -38,7 +38,7 @@ services:
       - D:/data/docker/mysql/careers/conf.d:/etc/mysql/conf.d
 
   job:
-    container_name: job_8080
+    container_name: job_8081
     image: kyunkim/careers:job-0.0
     networks:
       - careers_network
@@ -47,7 +47,9 @@ services:
       PROFILE: 'dev'
       JASYPT_PASSWORD: ''
     ports:
-      - "8080:8080"
+      - "${JOB_APP_PORT}:8080"
+    depends_on:
+      - mysql
 
 networks:
   careers_network:
