@@ -22,6 +22,9 @@ spring:
         default_batch_fetch_size: 100
     open-in-view: false
 
+logging:
+  config: classpath:log/logback.xml
+
 jwt:
   access-token:
     expiration: 10080 #분 단위
