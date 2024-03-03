@@ -1,0 +1,13 @@
+server:
+  port: 8888
+
+webdriver:
+  chrome:
+    driver:
+
+jwt:
+  access-token:
+    expiration: #분 단위
+
+job:
+  url:
